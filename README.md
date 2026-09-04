@@ -54,10 +54,10 @@ afterwards if you want it.
 
 ## Design notes
 
-The palette and type are sampled from the **live** theweddingexperts.gr, so the
-two sites read as one brand. Note that the `.gr` repo's bundled `style.css`
+The palette and type are sampled from the **live** production site, so the two
+read as one brand. Note that the main frontend repo's bundled `style.css`
 contains a crimson `#c10037` several hundred times: that is dead template CSS
-and appears nowhere on the real site. Do not reintroduce it.
+and appears nowhere on the rendered site. Do not reintroduce it.
 
 | Token | Value | What it is |
 |---|---|---|
@@ -67,8 +67,8 @@ and appears nowhere on the real site. Do not reintroduce it.
 | `--accent` | `#a85a42` | Brand terracotta. The only accent |
 | `--accent-dark` | `#8e4835` | CTA hover |
 | `--sage` | `#7d8a63` | Brand sage. List numerals only |
-| Display face | Playfair Display | Same as the `.gr` site |
-| Body face | Montserrat | Same as the `.gr` site |
+| Display face | Playfair Display | Same as the production site |
+| Body face | Montserrat | Same as the production site |
 
 Three rules worth keeping if you edit the CSS:
 
@@ -91,8 +91,8 @@ layer. Search for the sentence you want and change it.
 
 Two things worth knowing:
 
-- The proof section deliberately has **no supplier count** in it. Put the real,
-  verified number in if you want one. A comment in the markup marks the spot.
+- The page makes no claims about track record or supplier numbers. If you add
+  any, make sure the figures are real and verifiable.
 - Categories in the signup form are a plain `<select>`. Add or remove `<option>`
   lines to change them.
 
