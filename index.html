@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Wedding Experts UK | Launching soon</title>
+<meta name="description" content="The Wedding Experts is launching in the UK. The marketplace where couples find and book their wedding suppliers. Founding listings are open now.">
+<link rel="canonical" href="https://theweddingexperts.uk/">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Wedding Experts UK">
+<meta property="og:title" content="The Wedding Experts is coming to the UK">
+<meta property="og:description" content="The marketplace where couples find and book their wedding suppliers. Founding listings are open now.">
+<meta property="og:url" content="https://theweddingexperts.uk/">
+<meta property="og:image" content="https://theweddingexperts.uk/img/hero.jpg">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fcfaf7">
+
+<link rel="icon" href="img/logo-mark.webp" type="image/webp">
+<link rel="apple-touch-icon" href="img/logo-mark.webp">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="img/hero.jpg" media="(min-width:721px)" fetchpriority="high">
+<link rel="preload" as="image" href="img/hero-sm.jpg" media="(max-width:720px)" fetchpriority="high">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "The Wedding Experts UK",
+  "url": "https://theweddingexperts.uk/",
+  "logo": "https://theweddingexperts.uk/img/logo-lockup.webp",
+  "areaServed": "GB",
+  "description": "A marketplace where couples find and book wedding suppliers across the United Kingdom.",
+  "sameAs": ["https://theweddingexperts.gr/"]
+}
+</script>
+
+<style>
+/* ═══ Tokens ═══════════════════════════════════════════════
+   Sampled from the live theweddingexperts.gr, not from the old
+   bundled template CSS (whose #c10037 crimson is dead code and
+   appears nowhere on the real site).                           */
+:root{
+  --paper:      #fcfaf7;   /* exact ground of the .gr site */
+  --paper-warm: #f4efe8;   /* band tint, same family, no theme flip */
+  --paper-edge: #e7ded3;
+
+  --ink:        #111826;   /* 17.1:1 on paper */
+  --ink-soft:   #414651;   /* body copy. 9.1:1 */
+  --ink-faint:  #666666;   /* tertiary. 5.5:1 on paper, 5.0:1 on the band */
+
+  --accent:     #a85a42;   /* brand terracotta. THE accent. 4.8:1 on paper,
+                              and white on it is 5.0:1 */
+  --accent-dark:#8e4835;   /* CTA hover */
+  --sage:       #7d8a63;   /* brand sage. list numerals only, 3.5:1 which
+                              clears AA at their display size */
+
+  --r: 0px;                /* one shape system: square. editorial */
+  --gut: clamp(1.4rem, 5.5vw, 5.5rem);
+  --maxw: 1380px;
+  --ease: cubic-bezier(.16,1,.3,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:1rem; line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; display:block; height:auto}
+a{color:inherit}
+::selection{background:var(--accent); color:#fff}
+
+.wrap{width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:var(--gut)}
+
+/* ═══ Type scale ══════════════════════════════════════════ */
+.display{
+  font-family:"Playfair Display",Georgia,serif;
+  font-weight:400;
+  letter-spacing:-.02em;
+  line-height:1.06;
+  margin:0;
+}
+/* Sized so the headline holds 2 lines and the CTA stays above the fold. */
+h1.display{font-size:clamp(2.1rem,4.15vw,3.8rem)}
+h2.display{font-size:clamp(1.9rem,3.9vw,3.2rem); line-height:1.1}
+h3{
+  font-family:"Montserrat",sans-serif;
+  font-size:1rem; font-weight:600; letter-spacing:.005em;
+  line-height:1.4; margin:0;
+}
+p{margin:0}
+
+.kicker{
+  font-size:.7rem; font-weight:600;
+  letter-spacing:.26em; text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.lede{font-size:clamp(1.05rem,1.35vw,1.2rem); line-height:1.65; color:var(--ink-soft)}
+.body{color:var(--ink-soft)}
+
+/* ═══ Buttons ═════════════════════════════════════════════ */
+.cta{
+  display:inline-flex; align-items:center; gap:.7rem;
+  padding:1.05rem 2rem;
+  background:var(--accent); color:#fff;
+  font-family:inherit; font-size:.86rem; font-weight:600;
+  letter-spacing:.09em; text-transform:uppercase; white-space:nowrap;
+  text-decoration:none; border:0; border-radius:var(--r);
+  cursor:pointer;
+  transition:background-color .3s var(--ease), transform .12s var(--ease);
+}
+.cta:hover{background:var(--accent-dark)}
+.cta:active{transform:translateY(1px)}
+.cta:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
+.cta svg{width:15px; height:15px; flex:none; transition:transform .3s var(--ease)}
+.cta:hover svg{transform:translateX(4px)}
+
+.quiet{
+  display:inline-flex; align-items:center; gap:.55rem;
+  font-size:.76rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  text-decoration:none; color:var(--ink);
+  padding-bottom:.3rem; border-bottom:1px solid var(--ink);
+  transition:color .25s, border-color .25s;
+}
+.quiet:hover{color:var(--accent); border-color:var(--accent)}
+
+/* ═══ Hero: full bleed photograph ═════════════════════════ */
+.hero{
+  position:relative;
+  min-height:100dvh;
+  display:flex; flex-direction:column;
+  isolation:isolate;
+  overflow:hidden;
+}
+.hero-img{
+  position:absolute; inset:0; z-index:-2;
+  width:100%; height:100%; object-fit:cover;
+  object-position:60% 50%;
+}
+.hero::after{                       /* paper scrim, guarantees type contrast on any crop */
+  content:""; position:absolute; inset:0; z-index:-1;
+  background:
+    linear-gradient(100deg,
+      rgba(252,250,247,.94) 0%,
+      rgba(252,250,247,.86) 22%,
+      rgba(252,250,247,.48) 41%,
+      rgba(252,250,247,.10) 60%,
+      rgba(252,250,247,0)   74%),
+    linear-gradient(to bottom, rgba(252,250,247,.34), transparent 18%);
+}
+.hero-top{
+  position:relative;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:1.5rem;
+  padding-block:clamp(1.5rem,3vw,2.2rem);
+}
+.hero-top img{width:clamp(150px,15vw,196px); height:auto}
+@media (max-width:600px){ .hero-top .quiet{display:none} }
+
+.hero-body{
+  position:relative;
+  flex:1;
+  display:flex; align-items:center;
+  padding-block:clamp(2rem,5vw,4rem) clamp(3rem,7vw,5rem);
+}
+/* Size the column in rem, not ch: ch resolves against the body font and
+   collapses badly under a large display face. Balance the two lines. */
+.hero-copy{max-width:min(30rem,48vw)}
+.hero-copy h1{margin-bottom:clamp(1.4rem,2.2vw,1.9rem); text-wrap:balance}
+.hero-copy h1 em{
+  font-style:italic; font-weight:400;
+  line-height:1.1;                 /* descender clearance for the italic */
+  padding-bottom:.06em; display:inline-block;
+}
+.hero-copy .lede{max-width:34ch; margin-bottom:clamp(1.9rem,3vw,2.6rem)}
+.hero-copy .kicker{display:block; margin-bottom:clamp(1.1rem,2vw,1.6rem)}
+
+/* ═══ Hero, small screens ═════════════════════════════════
+   Every hero override lives here, AFTER the base rules. These share
+   specificity with the rules above, so source order is what decides
+   the winner. Keep this block last or the overrides silently lose.  */
+@media (max-width:900px){
+  .hero-copy{max-width:none; width:100%}
+  /* hero-sm.jpg is a portrait crop framed on the couple, so centre it. */
+  .hero-img{object-position:50% 26%}
+  /* Photograph owns the top of the screen, copy sits on paper beneath it.
+     Reads as a magazine cover, not type floating on a washed-out backdrop. */
+  .hero-body{align-items:flex-end; padding-bottom:clamp(2.5rem,7vw,4rem)}
+  .hero::after{
+    background:linear-gradient(to bottom,
+      rgba(252,250,247,.10)  0%,
+      rgba(252,250,247,.16) 30%,
+      rgba(252,250,247,.80) 45%,
+      rgba(252,250,247,.94) 60%,
+      rgba(252,250,247,.96) 100%);
+  }
+}
+
+/* ═══ Opening statement ═══════════════════════════════════ */
+.opening{padding-block:clamp(5rem,11vw,10rem)}
+/* em on the heading itself resolves against the display size, not the body font. */
+.opening-inner h2{max-width:12em; text-wrap:balance}
+.opening h2 + p{margin-top:clamp(1.8rem,3vw,2.4rem)}
+.opening p{max-width:52ch; font-size:clamp(1.05rem,1.35vw,1.2rem); line-height:1.7; color:var(--ink-soft)}
+
+/* ═══ Offer: tall image beside an editorial list ══════════ */
+.offer{padding-bottom:clamp(5rem,11vw,10rem)}
+.offer-grid{display:grid; grid-template-columns:1fr; gap:clamp(2.5rem,5vw,5rem); align-items:start}
+@media (min-width:900px){ .offer-grid{grid-template-columns:.95fr 1.05fr} }
+
+.offer-fig{position:relative}
+.offer-fig img{width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:var(--r)}
+
+.offer-list{list-style:none; margin:0; padding:0}
+.offer-list li{
+  display:grid; grid-template-columns:auto 1fr; gap:0 clamp(1.2rem,2.4vw,2.2rem);
+  padding-block:clamp(1.5rem,2.6vw,2rem);
+  border-top:1px solid var(--paper-edge);
+}
+.offer-list li:first-child{border-top:0; padding-top:0}
+.offer-list .n{
+  font-family:"Playfair Display",Georgia,serif;
+  font-size:clamp(1.7rem,2.6vw,2.2rem); font-weight:400; line-height:1;
+  color:var(--sage);
+  grid-row:span 2;
+}
+.offer-list h3{align-self:center}
+.offer-list p{font-size:.95rem; color:var(--ink-soft); margin-top:.45rem; max-width:46ch}
+
+/* ═══ Proof band ══════════════════════════════════════════ */
+.proof{background:var(--paper-warm); padding-block:clamp(4.5rem,10vw,8.5rem)}
+.proof-grid{display:grid; grid-template-columns:1fr; gap:clamp(2.5rem,5vw,4.5rem); align-items:center}
+@media (min-width:900px){ .proof-grid{grid-template-columns:1.1fr .9fr} }
+.proof h2{max-width:11em; text-wrap:balance}
+.proof h2 + p{margin-top:clamp(1.5rem,2.6vw,2rem)}
+.proof p{max-width:54ch; color:var(--ink-soft)}
+.proof p + p{margin-top:1.1rem}
+.proof-fig img{width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:var(--r)}
+.link{
+  color:var(--ink); text-decoration:none;
+  border-bottom:1px solid var(--accent); padding-bottom:1px;
+  transition:color .25s;
+}
+.link:hover{color:var(--accent)}
+
+/* ═══ Signup ══════════════════════════════════════════════ */
+.signup{padding-block:clamp(5rem,11vw,9rem)}
+.signup-grid{display:grid; grid-template-columns:1fr; gap:clamp(2.6rem,5vw,5rem)}
+@media (min-width:960px){ .signup-grid{grid-template-columns:.8fr 1.2fr; align-items:start} }
+.signup-copy h2{text-wrap:balance}
+.signup-copy h2 + p{margin-top:1.4rem}
+.signup-copy .aside{
+  margin-top:clamp(1.8rem,3vw,2.4rem); padding-top:1.4rem;
+  border-top:1px solid var(--paper-edge);
+  font-size:.88rem; color:var(--ink-faint); max-width:33ch;
+}
+
+form{display:grid; gap:1.5rem}
+.row{display:grid; grid-template-columns:1fr; gap:1.5rem}
+@media (min-width:640px){ .row{grid-template-columns:1fr 1fr} }
+
+.field{display:grid; gap:.4rem}
+.field label{
+  font-size:.72rem; font-weight:600; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.field label .opt{text-transform:none; letter-spacing:.02em; font-weight:400; color:var(--ink-faint)}
+.field input, .field select{
+  width:100%;
+  padding:.7rem 0;
+  font-family:inherit;
+  font-size:16px;                 /* 16px min, or iOS Safari zooms on focus */
+  color:var(--ink);
+  background:transparent;
+  border:0; border-bottom:1px solid var(--ink-faint);
+  border-radius:0;
+  appearance:none;
+  transition:border-color .25s;
+}
+.field input::placeholder{color:var(--ink-faint); opacity:1}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='1.6'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right .1rem center; background-size:18px;
+  padding-right:2rem; cursor:pointer;
+}
+.field input:focus, .field select:focus{outline:none; border-bottom-color:var(--accent); border-bottom-width:2px; padding-bottom:calc(.7rem - 1px)}
+.field .hint{font-size:.78rem; color:var(--ink-faint)}
+.field .err{font-size:.78rem; color:var(--accent); font-weight:500; display:none}
+.field[data-invalid="true"] input,
+.field[data-invalid="true"] select{border-bottom-color:var(--accent)}
+.field[data-invalid="true"] .err{display:block}
+
+.hp{position:absolute!important; left:-9999px; width:1px; height:1px; overflow:hidden}
+
+.form-foot{display:flex; flex-wrap:wrap; align-items:center; gap:1.2rem; margin-top:.6rem}
+.form-foot .small{font-size:.78rem; color:var(--ink-faint); max-width:36ch; line-height:1.55}
+.cta[disabled]{opacity:.55; cursor:not-allowed}
+.spinner{
+  width:13px; height:13px; flex:none;
+  border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){ .spinner{animation-duration:2.4s} }
+
+.formstate{padding:1.6rem 0 0; display:none}
+.formstate.on{display:block}
+.formstate .display{font-size:clamp(1.6rem,2.8vw,2.2rem); margin-bottom:.7rem}
+.formstate p{color:var(--ink-soft); max-width:44ch}
+.formstate.bad .display{color:var(--accent)}
+
+/* ═══ Footer ══════════════════════════════════════════════ */
+footer{border-top:1px solid var(--paper-edge); padding-block:clamp(2.5rem,4vw,3.5rem)}
+.foot{display:flex; flex-wrap:wrap; gap:1.6rem 3rem; align-items:center; justify-content:space-between}
+.foot img{width:150px; height:auto}
+.foot .fine{width:100%; font-size:.76rem; color:var(--ink-faint)}
+
+/* ═══ Motion ══════════════════════════════════════════════
+   Hidden state applies only when JS is confirmed running, so a
+   script failure can never leave a blank page.                */
+@media (prefers-reduced-motion:no-preference){
+  .js .rise{opacity:0; transform:translateY(22px); transition:opacity .9s var(--ease), transform .9s var(--ease)}
+  .js .rise.seen{opacity:1; transform:none}
+  .js .intro{opacity:0; animation:introIn 1.1s var(--ease) forwards}
+  .intro:nth-child(1){animation-delay:.1s}
+  .intro:nth-child(2){animation-delay:.24s}
+  .intro:nth-child(3){animation-delay:.38s}
+  .intro:nth-child(4){animation-delay:.52s}
+  @keyframes introIn{from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:none}}
+  .js .hero-img{animation:heroIn 1.6s var(--ease) forwards}
+  @keyframes heroIn{from{transform:scale(1.05)} to{transform:none}}
+}
+</style>
+
+<script>document.documentElement.className += ' js';</script>
+</head>
+
+<body>
+
+<!-- ═══ Hero ══════════════════════════════════════════════ -->
+<header class="hero">
+  <picture>
+    <source media="(max-width:720px)" srcset="img/hero-sm.jpg">
+    <img class="hero-img" src="img/hero.jpg"
+         alt="A bride and groom walking hand in hand through a sunlit English walled rose garden"
+         width="1800" height="1012" fetchpriority="high">
+  </picture>
+
+  <div class="wrap hero-top">
+    <a href="/" aria-label="The Wedding Experts UK, home">
+      <img src="img/logo-lockup.webp" alt="The Wedding Experts" width="361" height="112">
+    </a>
+    <a class="quiet" href="#get-listed">Get listed first</a>
+  </div>
+
+  <div class="wrap hero-body">
+    <div class="hero-copy">
+      <span class="kicker intro">Launching in the United Kingdom</span>
+      <h1 class="display intro">Coming <em>soon</em> to every county.</h1>
+      <p class="lede intro">The marketplace where couples find and book their wedding suppliers. Founding listings are open now.</p>
+      <a class="cta intro" href="#get-listed">
+        Get listed first
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ Opening statement ═════════════════════════════════ -->
+<section class="opening">
+  <div class="wrap">
+    <div class="opening-inner rise">
+      <h2 class="display">One place couples actually shortlist from.</h2>
+    </div>
+    <p class="rise" style="margin-top:clamp(1.8rem,3vw,2.4rem); max-width:52ch; font-size:clamp(1.05rem,1.35vw,1.2rem); line-height:1.7; color:var(--ink-soft)">
+      Not a directory that lists everyone and helps nobody. A profile that shows your work, your prices and the counties you cover, in front of couples who are ready to book.
+    </p>
+  </div>
+</section>
+
+<!-- ═══ What a listing gives you ══════════════════════════ -->
+<section class="offer">
+  <div class="wrap offer-grid">
+    <figure class="offer-fig rise" style="margin:0">
+      <img src="img/detail.jpg" alt="A wedding place setting with a letterpress menu card, antique silver cutlery and a posy of garden roses" width="900" height="1200" loading="lazy">
+    </figure>
+
+    <ol class="offer-list rise">
+      <li>
+        <span class="n">01</span>
+        <h3>Couples come to you</h3>
+        <p>Couples post what they need and when. You see the brief, and you send a quote only if it is a fit. No cold leads, no bidding wars.</p>
+      </li>
+      <li>
+        <span class="n">02</span>
+        <h3>A profile that does the selling</h3>
+        <p>A full gallery, your real starting prices, the areas you travel to, and reviews from couples you have already worked with.</p>
+      </li>
+      <li>
+        <span class="n">03</span>
+        <h3>Free to list</h3>
+        <p>A working profile costs nothing. Paid tiers exist for suppliers who want more reach, and they stay optional.</p>
+      </li>
+      <li>
+        <span class="n">04</span>
+        <h3>You keep control</h3>
+        <p>Update photos, prices and availability yourself, any time. No agency in the middle, no waiting on us to make a change.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ Proof ════════════════════════════════════════════ -->
+<section class="proof">
+  <div class="wrap proof-grid">
+    <div class="rise">
+      <h2 class="display">We have already built this once.</h2>
+      <!-- If you want a supplier count here, put the real verified number in. Left out on purpose. -->
+      <p>The Wedding Experts runs in Greece today, where wedding suppliers across the country use it to reach couples planning their day. The UK platform is the same product, adapted for UK categories, counties and currency.</p>
+      <p>Which means we are not starting from a blank page. We are opening to suppliers first, before couples arrive, so the listings are ready on day one. You can see the Greek site at <a class="link" href="https://theweddingexperts.gr" target="_blank" rel="noopener">theweddingexperts.gr</a>.</p>
+    </div>
+    <figure class="proof-fig rise" style="margin:0">
+      <img src="img/craft.jpg" alt="A florist arranging a white and blush wedding bouquet on a wooden worktable in daylight" width="1200" height="675" loading="lazy">
+    </figure>
+  </div>
+</section>
+
+<!-- ═══ Signup ═══════════════════════════════════════════ -->
+<section class="signup" id="get-listed">
+  <div class="wrap signup-grid">
+    <div class="signup-copy rise">
+      <h2 class="display">Get listed first.</h2>
+      <p class="lede">Tell us about your business and we will build your profile before launch, at no cost, and let you know the moment couples can find you.</p>
+      <p class="aside">Founding suppliers keep priority placement in their county through the first season.</p>
+    </div>
+
+    <div class="rise">
+      <div class="formstate" id="ok" role="status" aria-live="polite">
+        <p class="display">Thank you. You are on the list.</p>
+        <p>We will be in touch at the address you gave us, well before we open to couples.</p>
+      </div>
+      <div class="formstate bad" id="bad" role="alert">
+        <p class="display">That did not go through.</p>
+        <p>Please try again in a moment. If it keeps failing, your details have not reached us.</p>
+      </div>
+
+      <form id="signup-form" novalidate>
+        <div class="row">
+          <div class="field" id="f-business">
+            <label for="business">Business name</label>
+            <input type="text" id="business" name="business" autocomplete="organization" required>
+            <span class="err">Please tell us your business name.</span>
+          </div>
+          <div class="field" id="f-name">
+            <label for="name">Your name</label>
+            <input type="text" id="name" name="name" autocomplete="name" required>
+            <span class="err">Please tell us your name.</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field" id="f-email">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required>
+            <span class="err">Please enter a valid email address.</span>
+          </div>
+          <div class="field" id="f-area">
+            <label for="area">Town or county you cover</label>
+            <input type="text" id="area" name="area" placeholder="For example, Surrey" required>
+            <span class="err">Please tell us where you work.</span>
+          </div>
+        </div>
+
+        <div class="field" id="f-category">
+          <label for="category">What you do</label>
+          <select id="category" name="category" required>
+            <option value="" selected disabled>Choose a category</option>
+            <option>Venue</option>
+            <option>Photographer</option>
+            <option>Videographer</option>
+            <option>Florist</option>
+            <option>Catering</option>
+            <option>Cakes and desserts</option>
+            <option>Music, bands and DJs</option>
+            <option>Hair and make up</option>
+            <option>Bridal wear</option>
+            <option>Menswear</option>
+            <option>Transport</option>
+            <option>Wedding planning</option>
+            <option>Styling and decor</option>
+            <option>Stationery</option>
+            <option>Entertainment</option>
+            <option>Something else</option>
+          </select>
+          <span class="hint">Pick the closest fit. You can add more categories later.</span>
+          <span class="err">Please choose a category.</span>
+        </div>
+
+        <div class="field" id="f-website">
+          <label for="website">Website or social page <span class="opt">(optional)</span></label>
+          <input type="text" id="website" name="website" placeholder="https://" autocomplete="url">
+        </div>
+
+        <!-- honeypot, hidden from people, catches bots -->
+        <div class="hp" aria-hidden="true">
+          <label for="_honey">Leave this field empty</label>
+          <input type="text" id="_honey" name="_honey" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="form-foot">
+          <button type="submit" class="cta" id="submit">
+            <span id="submit-label">Get listed first</span>
+            <svg id="submit-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <p class="small">We will only use these details to set up your listing and tell you when we launch.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Footer ═══════════════════════════════════════════ -->
+<footer>
+  <div class="wrap foot">
+    <img src="img/logo-lockup.webp" alt="The Wedding Experts" width="361" height="112" loading="lazy">
+    <p class="fine">&copy; <span id="yr">2026</span> The Wedding Experts. Launching across the United Kingdom.</p>
+  </div>
+</footer>
+
+<script>
+/* ── Scroll reveal. IntersectionObserver, never a scroll listener ── */
+(function(){
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rises  = document.querySelectorAll('.rise');
+
+  if (reduce || !('IntersectionObserver' in window)) {
+    rises.forEach(function(el){ el.classList.add('seen'); });
+    return;
+  }
+
+  /* Anything already on screen is revealed synchronously, before any observer
+     or timer is involved. Background tabs throttle both, and a page whose
+     content depends on a callback firing is a page that can render empty. */
+  function revealIfVisible(el){
+    var r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight * 1.05 && r.bottom > 0){ el.classList.add('seen'); return true; }
+    return false;
+  }
+  var pending = [].filter.call(rises, function(el){ return !revealIfVisible(el); });
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
+    });
+  }, { threshold:.12, rootMargin:'0px 0px -6% 0px' });
+  pending.forEach(function(el){ io.observe(el); });
+
+  /* Last resort for the rest: if the observer never fires, show them anyway. */
+  setTimeout(function(){
+    pending.forEach(function(el){ el.classList.add('seen'); });
+  }, 2500);
+})();
+
+/* ── Form: validation, submit, success and failure states ── */
+(function(){
+  /* Address that receives signups. FormSubmit emails a one-time activation
+     link here on the very first submission; nothing is delivered until it is clicked. */
+  var ENDPOINT = 'https://formsubmit.co/ajax/admin@theweddingexperts.gr';
+
+  var form  = document.getElementById('signup-form');
+  var btn   = document.getElementById('submit');
+  var label = document.getElementById('submit-label');
+  var arrow = document.getElementById('submit-arrow');
+  var ok    = document.getElementById('ok');
+  var bad   = document.getElementById('bad');
+
+  var required = ['business','name','email','area','category'];
+  function fieldOf(id){ return document.getElementById('f-' + id); }
+
+  function validate(){
+    var good = true;
+    required.forEach(function(id){
+      var input = document.getElementById(id);
+      var value = (input.value || '').trim();
+      var isBad = !value;
+      if (id === 'email' && value) isBad = !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+      fieldOf(id).setAttribute('data-invalid', isBad ? 'true' : 'false');
+      if (isBad){ if (good) input.focus(); good = false; }
+    });
+    return good;
+  }
+
+  required.forEach(function(id){
+    document.getElementById(id).addEventListener('input', function(){
+      fieldOf(id).setAttribute('data-invalid','false');
+    });
+  });
+
+  function busy(on){
+    btn.disabled = on;
+    label.textContent = on ? 'Sending' : 'Get listed first';
+    arrow.style.display = on ? 'none' : '';
+    var sp = document.getElementById('sp');
+    if (on && !sp){
+      sp = document.createElement('span');
+      sp.className = 'spinner'; sp.id = 'sp';
+      btn.appendChild(sp);
+    } else if (!on && sp){ sp.remove(); }
+  }
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    ok.classList.remove('on');
+    bad.classList.remove('on');
+
+    if (document.getElementById('_honey').value) return;   /* bot */
+    if (!validate()) return;
+
+    busy(true);
+
+    var payload = {
+      _subject:  'UK founding listing: ' + document.getElementById('business').value,
+      _template: 'table',
+      business:  document.getElementById('business').value,
+      name:      document.getElementById('name').value,
+      email:     document.getElementById('email').value,
+      area:      document.getElementById('area').value,
+      category:  document.getElementById('category').value,
+      website:   document.getElementById('website').value
+    };
+
+    fetch(ENDPOINT, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(){
+      form.style.display = 'none';
+      ok.classList.add('on');
+      ok.scrollIntoView({ behavior:'smooth', block:'center' });
+    })
+    .catch(function(){
+      busy(false);
+      bad.classList.add('on');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
