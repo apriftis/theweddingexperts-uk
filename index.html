@@ -27,6 +27,15 @@
 <link rel="preload" as="image" href="img/hero-sm.jpg" media="(max-width:720px)" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RSM9TPGFJ1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-RSM9TPGFJ1');
+</script>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -361,7 +370,7 @@ footer{border-top:1px solid var(--paper-edge); padding-block:clamp(2.5rem,4vw,3.
     <a href="/" aria-label="The Wedding Experts UK, home">
       <img src="img/logo-lockup.webp" alt="The Wedding Experts" width="361" height="112">
     </a>
-    <a class="quiet" href="#get-listed">Get listed first</a>
+    <a class="quiet" href="#get-listed" data-ga-cta="nav">Get listed first</a>
   </div>
 
   <div class="wrap hero-body">
@@ -369,7 +378,7 @@ footer{border-top:1px solid var(--paper-edge); padding-block:clamp(2.5rem,4vw,3.
       <span class="kicker intro">Launching in the United Kingdom</span>
       <h1 class="display intro">Coming <em>soon</em> to every county.</h1>
       <p class="lede intro">The marketplace where couples find and book their wedding suppliers. Founding listings are open now.</p>
-      <a class="cta intro" href="#get-listed">
+      <a class="cta intro" href="#get-listed" data-ga-cta="hero">
         Get listed first
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
@@ -573,6 +582,15 @@ footer{border-top:1px solid var(--paper-edge); padding-block:clamp(2.5rem,4vw,3.
   }, 2500);
 })();
 
+/* ── Analytics: CTA clicks ── */
+(function(){
+  document.querySelectorAll('[data-ga-cta]').forEach(function(el){
+    el.addEventListener('click', function(){
+      gtag('event', 'cta_click', { cta_location: el.getAttribute('data-ga-cta') });
+    });
+  });
+})();
+
 /* ── Form: validation, submit, success and failure states ── */
 (function(){
   /* Address that receives signups. FormSubmit emails a one-time activation
@@ -602,9 +620,11 @@ footer{border-top:1px solid var(--paper-edge); padding-block:clamp(2.5rem,4vw,3.
     return good;
   }
 
+  var startedForm = false;
   required.forEach(function(id){
     document.getElementById(id).addEventListener('input', function(){
       fieldOf(id).setAttribute('data-invalid','false');
+      if (!startedForm){ startedForm = true; gtag('event', 'form_start', { form_id: 'signup-form' }); }
     });
   });
 
@@ -626,9 +646,10 @@ footer{border-top:1px solid var(--paper-edge); padding-block:clamp(2.5rem,4vw,3.
     bad.classList.remove('on');
 
     if (document.getElementById('_honey').value) return;   /* bot */
-    if (!validate()) return;
+    if (!validate()){ gtag('event', 'form_error', { error_reason: 'validation' }); return; }
 
     busy(true);
+    gtag('event', 'form_submit', { form_id: 'signup-form' });
 
     var payload = {
       _subject:  'UK founding listing: ' + document.getElementById('business').value,
@@ -648,11 +669,13 @@ footer{border-top:1px solid var(--paper-edge); padding-block:clamp(2.5rem,4vw,3.
     })
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(){
+      gtag('event', 'generate_lead', { category: document.getElementById('category').value });
       form.style.display = 'none';
       ok.classList.add('on');
       ok.scrollIntoView({ behavior:'smooth', block:'center' });
     })
     .catch(function(){
+      gtag('event', 'form_error', { error_reason: 'network' });
       busy(false);
       bad.classList.add('on');
     });
