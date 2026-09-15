@@ -1,1 +1,7 @@
 .DS_Store
+
+# Local tooling and design review captures
+.claude/
+.impeccable/review/
+.impeccable/build/
+.impeccable/hook.cache.json

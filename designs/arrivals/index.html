@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Wedding Experts UK | Get listed first</title>
+<meta name="description" content="Couples' wedding briefs, arriving in your county. Up to five suppliers per category can unlock each brief. Founding listings are open now.">
+<link rel="canonical" href="https://theweddingexperts.uk/">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0d1220">
+
+<link rel="icon" href="../../img/logo-mark.webp" type="image/webp">
+<link rel="apple-touch-icon" href="../../img/logo-mark.webp">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Big+Shoulders+Display:wght@700;800&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RSM9TPGFJ1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-RSM9TPGFJ1');
+</script>
+
+<style>
+/* Tokens: a station departures board. Navy-black ground, amber flaps,
+   platform-white type, one signal green that only ever means "seats open". */
+:root{
+  --board:   #0d1220;
+  --board-2: #121a2c;
+  --cell-t:  #2d3853;   /* tile face, a clear step above the housing */
+  --cell-b:  #252f48;
+  --hinge:   #070a12;
+  --rule:    #29324a;
+  --white:   #edeee8;   /* 15.9:1 on board */
+  --muted:   #a9b0bf;   /* 8.7:1 on board */
+  --amber:   #f4b53f;   /* 10.2:1 on board */
+  --amber-2: #ffc95e;
+  --green:   #4ade80;   /* seats open, nothing else */
+  --err:     #ff9b8a;   /* 8.6:1 on board */
+
+  --display: "Big Shoulders Display","Big Shoulders","Barlow Condensed","Arial Narrow",sans-serif;
+  --body:    "Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:    "JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+
+  --gut:  clamp(1rem, 4.5vw, 4.5rem);
+  --maxw: 1380px;
+  --row:  clamp(1rem, 1.6vw, 1.5rem);   /* the ledger lift: every vertical step is a multiple */
+  --ease: cubic-bezier(.16,1,.3,1);
+}
+
+*,*::before,*::after{box-sizing:border-box; border-radius:0}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth; scrollbar-color:var(--rule) var(--board)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0; background:var(--board); color:var(--white);
+  font-family:var(--body); font-size:1.0625rem; line-height:1.6;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  caret-color:var(--amber); accent-color:var(--amber);
+}
+img{max-width:100%; display:block; height:auto}
+a{color:inherit; text-underline-offset:.22em}
+p{margin:0}
+::selection{background:var(--amber); color:var(--board)}
+:focus-visible{outline:2px solid var(--amber); outline-offset:3px}
+[id]{scroll-margin-top:1.5rem}
+
+.wrap{width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:var(--gut)}
+.sr{position:absolute!important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+/* Type */
+.d{font-family:var(--display); font-weight:800; line-height:.94; letter-spacing:-.005em; margin:0; text-wrap:balance}
+h1.d{font-size:clamp(3rem,4.6vw,4.8rem)}
+h2.d{font-size:clamp(2.4rem,4.2vw,4rem)}
+h3{font-family:var(--body); font-size:1.125rem; font-weight:600; line-height:1.35; margin:0}
+.lede{font-size:clamp(1.1rem,1.35vw,1.25rem); color:var(--muted); max-width:34rem; line-height:1.55}
+.body{color:var(--muted); max-width:36rem}
+.body + .body{margin-top:calc(var(--row) * .75)}
+.caption{font-size:.875rem; color:var(--muted)}
+
+/* Buttons */
+.cta{
+  display:inline-flex; align-items:center; gap:.7rem;
+  min-height:3.25rem; padding:.85rem 1.6rem;
+  background:var(--amber); color:var(--board);
+  font-family:var(--body); font-size:1.0625rem; font-weight:600; white-space:nowrap;
+  text-decoration:none; border:0; cursor:pointer;
+  box-shadow:0 -2px 0 rgba(7,10,18,.35) inset, 0 8px 18px -10px rgba(3,5,10,.9);
+  transition:background-color .25s var(--ease), transform .12s var(--ease);
+}
+.cta:hover{background:var(--amber-2)}
+.cta:active{transform:translateY(1px)}
+.cta i{font-size:1.15rem; transition:transform .3s var(--ease)}
+.cta:hover i{transform:translateX(4px)}
+.cta[disabled]{opacity:.6; cursor:not-allowed}
+
+.navlink{font-weight:600; font-size:1rem; text-decoration:none; color:var(--white); padding:.6rem 0; border-bottom:1px solid var(--amber)}
+.navlink:hover{color:var(--amber)}
+
+/* Split-flap cells: monospaced by nature, so mono lives only here */
+.flaps{display:inline-flex; gap:2px; padding:2px; background:var(--hinge); vertical-align:middle}
+.c{
+  position:relative; display:inline-grid; place-items:center;
+  width:.78em; height:1.3em;
+  background:linear-gradient(var(--cell-t) 0 50%, var(--cell-b) 50% 100%);
+  box-shadow:0 1px 0 rgba(255,255,255,.07) inset;
+  font-family:var(--mono); font-weight:600; line-height:1; color:var(--amber);
+  perspective:12em; overflow:hidden;
+}
+.c::after{content:""; position:absolute; left:0; right:0; top:calc(50% - .5px); height:1px; background:var(--hinge); pointer-events:none}
+.c .g{display:block; font-size:1.08em; transform-origin:50% 50%; backface-visibility:hidden}
+.c.fa .g{animation:flapA .14s var(--ease)}
+.c.fb .g{animation:flapB .14s var(--ease)}
+@keyframes flapA{from{transform:rotateX(88deg); opacity:.35} to{transform:none; opacity:1}}
+@keyframes flapB{from{transform:rotateX(88deg); opacity:.35} to{transform:none; opacity:1}}
+.seat .c{color:var(--green)}
+
+/* ── Hero ───────────────────────────────────────────── */
+.hero{display:block}
+.top{display:flex; align-items:center; justify-content:space-between; gap:1.5rem; padding-block:clamp(1.1rem,2.4vw,1.8rem)}
+.top img{width:clamp(150px,14vw,190px); height:auto}
+.hero-body{display:grid; align-items:start; gap:clamp(2rem,4vw,4rem); padding-block:calc(var(--row) * 3) calc(var(--row) * 4)}
+@media (min-width:1000px){ .hero-body{grid-template-columns:4.4fr 7.6fr} }
+.hero-copy h1{margin-bottom:calc(var(--row) * 1.1)}
+.hero-copy .lede{margin-bottom:calc(var(--row) * 1.6); max-width:27rem}
+
+.board{
+  container-type:inline-size;
+  background:var(--board-2);
+  border:1px solid var(--rule);
+  padding:clamp(.9rem,1.6vw,1.4rem);
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.8);
+}
+.board table{border-collapse:separate; border-spacing:0; width:100%; font-size:clamp(10px, calc((100cqi - 92px) / 34), 24px)}
+.rail{display:flex; justify-content:space-between; align-items:center; gap:1rem; padding-bottom:.8rem; margin-bottom:.6rem; border-bottom:1px solid var(--rule)}
+.rail .flaps{font-size:clamp(15px,1.5vw,21px)}
+.board th{
+  font-family:var(--body); font-size:max(.78rem, 11px); font-weight:600; color:var(--muted);
+  text-align:left; padding:0 .6em .6rem 0; letter-spacing:.02em; white-space:nowrap;
+}
+.board td{padding:.4em .6em .4em 0; border-top:1px solid var(--rule); white-space:nowrap; vertical-align:middle}
+.board td:last-child, .board th:last-child{padding-right:0}
+.board tbody tr{cursor:pointer; transition:background-color .2s}
+.board tbody tr:hover, .board tbody tr:focus-within{background:rgba(244,181,63,.06)}
+.board .go{font-size:max(.78rem,11px); padding-left:.4em}
+.board .go a{color:var(--muted); text-decoration:none; display:inline-flex; align-items:center; gap:.3em}
+.board tr:hover .go a, .board .go a:focus-visible{color:var(--amber)}
+.board-foot{margin-top:.9rem; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap}
+
+/* Without JS the readable text is shown plainly; with JS the flaps take over */
+.js .sr-txt{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+html:not(.js) .flaps{display:none}
+html:not(.js) .ledger .sr-txt{font-family:var(--body); font-weight:600; color:var(--amber)}
+html:not(.js) .board td{font-family:var(--body); font-size:1rem; color:var(--amber)}
+
+@media (max-width:720px){
+  .board table, .board tbody{display:block}
+  .board table{font-size:clamp(14px, calc((100cqi - 34px) / 11.2), 26px)}
+  .board thead{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+  .board tbody tr{display:grid; grid-template-columns:auto 1fr; grid-template-areas:"date seat" "place place" "svc svc"; gap:.35em 0; padding:.8em 0; border-top:1px solid var(--rule)}
+  .board tbody tr:first-child{border-top:0; padding-top:0}
+  .board td{border:0; padding:0}
+  .board td:nth-child(1){grid-area:date}
+  .board td:nth-child(2){grid-area:place}
+  .board td:nth-child(3){grid-area:svc}
+  .board td:nth-child(4){grid-area:seat; justify-self:end}
+  .board .go{display:none}
+}
+</style>
+<style>
+/* ── Sections ───────────────────────────────────────── */
+.sec{padding-block:calc(var(--row) * 5) calc(var(--row) * 4); border-top:1px solid var(--rule)}
+.sec-head{max-width:44rem; margin-bottom:calc(var(--row) * 2.5)}
+.sec-head h2{margin-bottom:var(--row)}
+
+/* Screenshot plates. The image is the plate; annotations pin onto it. */
+.shot{margin:0; position:relative}
+.stage{position:relative}
+.plate{position:relative; border:1px solid var(--rule); background:#fff; line-height:0}
+.plate img{width:100%; height:auto}
+
+/* Leader-line annotations. --x and --y are fractions of the plate.
+   l: label in a left gutter, line runs right to the pin.
+   u: label above the plate, line drops to the pin.
+   d: label below the plate, line rises to the pin. */
+.anno{position:absolute; line-height:1.3; pointer-events:none}
+.anno::after{
+  content:""; position:absolute; width:9px; height:9px;
+  background:var(--amber); border:2px solid var(--board);
+}
+.lab{position:absolute; font-size:.9375rem; font-weight:600; color:var(--white); width:max-content; max-width:13rem}
+.lab small{display:block; font-weight:400; color:var(--muted); font-size:.8125rem; margin-top:.2rem}
+
+.anno.l{
+  top:calc(var(--y) * 100%); left:calc(-1 * var(--g));
+  width:calc(var(--g) + var(--x) * (100% + 0px)); height:1.5px;
+  background:linear-gradient(90deg, var(--amber) 0 calc(var(--g) - .75rem), var(--board) calc(var(--g) - .75rem) 100%);
+}
+.anno.l::after{right:-4.5px; top:-4px}
+.anno.l .lab{left:0; bottom:.55rem; max-width:calc(var(--g) - 1.5rem)}
+
+.anno.u, .anno.dn{left:calc(var(--x) * 100%); width:1.5px}
+.anno.u{top:calc(-1 * var(--gv)); height:calc(var(--gv) + var(--y) * 100%);
+  background:linear-gradient(180deg, var(--amber) 0 calc(var(--gv) - .5rem), var(--board) calc(var(--gv) - .5rem) 100%)}
+.anno.u::after{bottom:-4.5px; left:-4px}
+.anno.u .lab{top:0; left:.7rem}
+.anno.dn{top:calc(var(--y) * 100%); bottom:calc(-1 * var(--gv));
+  background:linear-gradient(0deg, var(--amber) 0 calc(var(--gv) - .5rem), var(--board) calc(var(--gv) - .5rem) 100%)}
+.anno.dn::after{top:-4.5px; left:-4px}
+.anno.dn .lab{bottom:0; left:.7rem}
+.anno.rt .lab{left:auto; right:.7rem; text-align:right; max-width:17rem}
+
+/* Elbows: the gutter segment ends at an elbow in whitespace, then
+   .ln segments run through whitespace to the pin. Coordinates are plate fractions. */
+.ln{position:absolute; background:var(--board); pointer-events:none}
+.ln.h{height:1.5px; top:calc(var(--y) * 100%); left:calc(var(--x1) * 100%); width:calc((var(--x2) - var(--x1)) * 100%)}
+.ln.v{width:1.5px; left:calc(var(--x) * 100%); top:calc(var(--y1) * 100%); height:calc((var(--y2) - var(--y1)) * 100%)}
+.pin{position:absolute; width:9px; height:9px; background:var(--amber); border:2px solid var(--board); left:calc(var(--x) * 100%); top:calc(var(--y) * 100%); transform:translate(-50%,-50%); pointer-events:none}
+@media (min-width:861px){ .anno.elb::after{display:none} }
+
+/* Board row highlight on the leads screen */
+.hit{position:absolute; outline:3px solid var(--amber); outline-offset:2px; box-shadow:0 0 0 7px rgba(13,18,32,.55); opacity:0; transition:opacity .35s var(--ease)}
+.plate[data-active="0"] .hit[data-i="0"], .plate[data-active="1"] .hit[data-i="1"],
+.plate[data-active="2"] .hit[data-i="2"], .plate[data-active="3"] .hit[data-i="3"]{opacity:1}
+
+/* Briefs: annotated leads screen, then the detail with its own gutter */
+.briefs-a{--g:clamp(11rem,17vw,15rem); padding-left:var(--g)}
+.briefs-b{display:grid; gap:calc(var(--row) * 2); margin-top:calc(var(--row) * 4); align-items:center}
+@media (min-width:1000px){ .briefs-b{grid-template-columns:4fr 8fr} }
+.detail{--g:clamp(11rem,16vw,14rem); padding-left:var(--g); max-width:44rem; justify-self:end; width:100%}
+.shot figcaption{margin-top:.7rem; line-height:1.5}
+.m-only{display:none}
+
+/* Profile: wide desktop screen with the phone sitting on its edge */
+.prof{display:grid; gap:calc(var(--row) * 2); align-items:end}
+@media (min-width:1000px){ .prof{grid-template-columns:9fr 3fr} }
+.prof-wide{--gv:4.6rem; margin-bottom:var(--gv)}
+.phone{margin:0}
+.phone .plate{aspect-ratio:780/1300; overflow:hidden; border-width:6px; border-color:var(--board-2); outline:1px solid var(--rule)}
+.phone .plate img{height:100%; object-fit:cover; object-position:top}
+@media (min-width:1000px){ .phone{margin-bottom:calc(var(--gv, 4.6rem) + 0px); transform:translateY(calc(var(--row) * 2))} }
+
+/* Analytics: text column beside the screen, labels above */
+.stats{display:grid; gap:calc(var(--row) * 2.5); align-items:start}
+@media (min-width:1000px){ .stats{grid-template-columns:4fr 8fr} }
+.stats-shot{--gv:4.2rem; margin-top:var(--gv)}
+.stats .sec-head{margin-bottom:0; position:sticky; top:2rem}
+
+/* Founding: a timetable ledger. Every row is the same height, one baseline. */
+.ledger{list-style:none; margin:0; padding:0; border-top:1px solid var(--rule)}
+.ledger li{
+  display:grid; grid-template-columns:minmax(0,13em) 1fr; align-items:center; gap:clamp(1rem,3vw,3rem);
+  min-height:calc(var(--row) * 4.5); border-bottom:1px solid var(--rule);
+}
+.ledger .flaps{font-size:clamp(20px,2vw,28px)}
+.ledger strong{font-family:var(--display); font-weight:700; font-size:clamp(1.6rem,2.6vw,2.4rem); line-height:1; letter-spacing:.005em}
+.found{display:grid; gap:calc(var(--row) * 2.5)}
+@media (min-width:1000px){ .found{grid-template-columns:5fr 7fr; align-items:end} }
+
+.plans{padding-block:calc(var(--row) * 3); border-top:1px solid var(--rule); background:var(--board-2)}
+.plans p{font-family:var(--display); font-weight:700; font-size:clamp(1.6rem,2.8vw,2.6rem); line-height:1.08; max-width:38em; text-wrap:balance}
+.plans p span{color:var(--muted)}
+
+/* Signup */
+.signup-grid{display:grid; gap:calc(var(--row) * 2.5)}
+@media (min-width:1000px){ .signup-grid{grid-template-columns:5fr 7fr; align-items:start} }
+.signup-copy .lede{margin-top:var(--row)}
+.aside{margin-top:calc(var(--row) * 1.5); padding-top:var(--row); border-top:1px solid var(--rule); color:var(--white); max-width:24rem}
+.aside i{color:var(--amber); margin-right:.4rem}
+
+form{display:grid; gap:calc(var(--row) * 1.1); background:var(--board-2); border:1px solid var(--rule); padding:clamp(1.1rem,3vw,2.2rem)}
+.row{display:grid; gap:calc(var(--row) * 1.1)}
+@media (min-width:640px){ .row{grid-template-columns:1fr 1fr} }
+.field{display:grid; gap:.4rem; align-content:start}
+.field label{font-size:.9375rem; font-weight:600; color:var(--white)}
+.field label .opt{font-weight:400; color:var(--muted)}
+.field input, .field select{
+  width:100%; min-height:3rem; padding:.7rem .85rem;
+  font-family:var(--body); font-size:16px; color:var(--white);
+  background:var(--board); border:1px solid #4a546d; appearance:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+.field input::placeholder{color:#8e96a8; opacity:1}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a9b0bf' stroke-width='1.8'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right .7rem center; background-size:18px; padding-right:2.4rem; cursor:pointer;
+}
+.field select option{background:var(--board); color:var(--white)}
+.field input:hover, .field select:hover{border-color:var(--muted)}
+.field input:focus, .field select:focus{outline:none; border-color:var(--amber); box-shadow:0 0 0 1px var(--amber)}
+.field .hint{font-size:.875rem; color:var(--muted)}
+.field .err{font-size:.875rem; color:var(--err); font-weight:500; display:none}
+.field[data-invalid="true"] input, .field[data-invalid="true"] select{border-color:var(--err)}
+.field[data-invalid="true"] .err{display:block}
+.hp{position:absolute!important; left:-9999px; width:1px; height:1px; overflow:hidden}
+.form-foot{display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.4rem; margin-top:.3rem}
+.form-foot .small{font-size:.875rem; color:var(--muted); max-width:30ch; line-height:1.5}
+.spinner{width:14px; height:14px; flex:none; border:2px solid rgba(13,18,32,.3); border-top-color:var(--board); border-radius:50%; animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){ .spinner{animation-duration:2.4s} }
+.formstate{display:none; background:var(--board-2); border:1px solid var(--rule); padding:clamp(1.1rem,3vw,2.2rem)}
+.formstate.on{display:block}
+.formstate .d{font-size:clamp(1.9rem,3vw,2.6rem); margin-bottom:.6rem}
+.formstate p{color:var(--muted); max-width:44ch}
+.formstate.good{border-color:var(--amber)}
+.formstate.good .d{color:var(--white)}
+.formstate.bad{border-color:var(--err); margin-bottom:var(--row)}
+.formstate.bad .d{color:var(--err)}
+
+/* FAQ */
+.faq-grid{display:grid; gap:calc(var(--row) * 2)}
+@media (min-width:1000px){ .faq-grid{grid-template-columns:5fr 7fr} }
+.faq details{border-bottom:1px solid var(--rule)}
+.faq details:first-child{border-top:1px solid var(--rule)}
+.faq summary{
+  list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:1rem;
+  min-height:calc(var(--row) * 3.5); font-weight:600; font-size:1.125rem;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary i{color:var(--amber); font-size:1.2rem; transition:transform .3s var(--ease); flex:none}
+.faq details[open] summary i{transform:rotate(45deg)}
+.faq summary:hover{color:var(--amber)}
+.faq details p{color:var(--muted); max-width:40rem; padding-bottom:var(--row)}
+
+footer{border-top:1px solid var(--rule); padding-block:calc(var(--row) * 2.5)}
+.foot{display:flex; flex-wrap:wrap; gap:1rem 3rem; align-items:center; justify-content:space-between}
+.foot img{width:160px; height:auto}
+.foot p{font-size:.875rem; color:var(--muted)}
+
+/* Reveal: hidden state only once JS is confirmed running */
+@media (prefers-reduced-motion:no-preference){
+  .js .rise{opacity:0; transform:translateY(18px); transition:opacity .8s var(--ease), transform .8s var(--ease)}
+  .js .rise.seen{opacity:1; transform:none}
+}
+
+/* Small screens: gutters collapse, annotations become a note list under the plate */
+@media (max-width:860px){
+  .briefs-a, .detail{padding-left:0}
+  .prof-wide, .stats-shot{margin:0}
+  .stage{display:flex; flex-direction:column}
+  .briefs-a{margin-top:0!important}
+  .anno{width:auto!important; height:auto!important; background:none!important; padding:.75rem 0 0 1.1rem; order:2; position:relative; inset:auto!important}
+  .anno::after{left:0!important; top:1.05rem!important; right:auto!important; bottom:auto!important; width:8px; height:8px; border:0}
+  .lab{position:static; max-width:none!important; text-align:left!important; width:auto}
+  .hit, .ln, .pin{display:none}
+  .shot figcaption{order:3}
+}
+@media (max-width:720px){
+  .briefs-a .plate{max-width:21rem; aspect-ratio:780/1300; overflow:hidden}
+  .briefs-a picture, .briefs-a .plate img{display:block; height:100%; object-fit:cover; object-position:top}
+  /* Real phone captures instead of desktop plates, framed like the phone plate */
+  .stats-shot .plate, .detail .plate{max-width:21rem; border:6px solid var(--board-2); outline:1px solid var(--rule)}
+  .stats-shot picture, .detail picture{display:block}
+  .no-m{display:none}
+  .shot .m-only{display:block}
+  .prof-wide .plate{display:none}
+  .prof .phone{order:-1; max-width:18rem}
+  .phone .plate{aspect-ratio:auto}
+  .phone .plate img{height:auto}
+}
+@media (max-width:640px){
+  .ledger li{grid-template-columns:1fr; gap:.6rem; padding-block:var(--row)}
+  .ledger strong{font-size:1.9rem}
+}
+@media (max-width:999px){ .stats .sec-head{position:static} .phone{max-width:16rem} }
+</style>
+<script>document.documentElement.className += ' js';</script>
+</head>
+
+<body>
+<header class="hero">
+  <div class="wrap top">
+    <a href="#" aria-label="The Wedding Experts UK, home">
+      <img src="../../img/logo-lockup.webp" alt="The Wedding Experts" width="361" height="112">
+    </a>
+    <a class="navlink" href="#get-listed" data-ga-cta="nav">Get listed first</a>
+  </div>
+
+  <div class="wrap hero-body">
+    <div class="hero-copy">
+      <h1 class="d">Briefs arriving in your county.</h1>
+      <p class="lede">Couples post what they need. Up to five suppliers per category can unlock each brief. Be listed before they arrive.</p>
+      <a class="cta" href="#get-listed" data-ga-cta="hero">Get listed first <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+    </div>
+
+    <div class="board" id="board">
+      <div class="rail">
+        <span class="caption">Example briefs</span>
+        <span class="flaps" id="clock" aria-hidden="true" data-w="5"></span>
+      </div>
+      <table aria-describedby="board-note">
+        <thead>
+          <tr><th scope="col">Date</th><th scope="col">Place</th><th scope="col">Service</th><th scope="col">Seats open</th><th scope="col"><span class="sr">In the app</span></th></tr>
+        </thead>
+        <tbody>
+          <tr data-i="0">
+            <td><span class="sr-txt">19 June 2027</span><span class="flaps" aria-hidden="true" data-w="9" data-v="19 JUN 27"></span></td>
+            <td><span class="sr-txt">Painswick, Gloucestershire. 120 guests</span><span class="flaps" aria-hidden="true" data-w="14" data-v="PAINSWICK GLOS" data-alt="120 GUESTS"></span></td>
+            <td><span class="sr-txt">Photographer</span><span class="flaps" aria-hidden="true" data-w="13" data-v="PHOTOGRAPHER"></span></td>
+            <td class="seat"><span class="sr-txt">3 of 5 seats open</span><span class="flaps" aria-hidden="true" data-w="3" data-v="3/5"></span></td>
+            <td class="go"><a href="#briefs" data-brief="0"><i class="ph ph-arrow-down-right" aria-hidden="true"></i><span class="sr">See the Painswick brief in the app</span></a></td>
+          </tr>
+          <tr data-i="1">
+            <td><span class="sr-txt">August 2027, exact date not set</span><span class="flaps" aria-hidden="true" data-w="9" data-v="   AUG 27"></span></td>
+            <td><span class="sr-txt">Bath, Somerset. 85 guests</span><span class="flaps" aria-hidden="true" data-w="14" data-v="BATH SOMERSET" data-alt="85 GUESTS"></span></td>
+            <td><span class="sr-txt">Photographer, also looking for a videographer</span><span class="flaps" aria-hidden="true" data-w="13" data-v="PHOTO + VIDEO"></span></td>
+            <td class="seat"><span class="sr-txt">5 of 5 seats open</span><span class="flaps" aria-hidden="true" data-w="3" data-v="5/5"></span></td>
+            <td class="go"><a href="#briefs" data-brief="1"><i class="ph ph-arrow-down-right" aria-hidden="true"></i><span class="sr">See the Bath brief in the app</span></a></td>
+          </tr>
+          <tr data-i="2">
+            <td><span class="sr-txt">29 May 2027</span><span class="flaps" aria-hidden="true" data-w="9" data-v="29 MAY 27"></span></td>
+            <td><span class="sr-txt">Burford, Oxfordshire. 160 guests</span><span class="flaps" aria-hidden="true" data-w="14" data-v="BURFORD OXON" data-alt="160 GUESTS"></span></td>
+            <td><span class="sr-txt">Photographer</span><span class="flaps" aria-hidden="true" data-w="13" data-v="PHOTOGRAPHER"></span></td>
+            <td class="seat"><span class="sr-txt">1 of 5 seats open</span><span class="flaps" aria-hidden="true" data-w="3" data-v="1/5"></span></td>
+            <td class="go"><a href="#briefs" data-brief="2"><i class="ph ph-arrow-down-right" aria-hidden="true"></i><span class="sr">See the Burford brief in the app</span></a></td>
+          </tr>
+          <tr data-i="3">
+            <td><span class="sr-txt">11 September 2027</span><span class="flaps" aria-hidden="true" data-w="9" data-v="11 SEP 27"></span></td>
+            <td><span class="sr-txt">Stroud, Gloucestershire. 60 guests</span><span class="flaps" aria-hidden="true" data-w="14" data-v="STROUD GLOS" data-alt="60 GUESTS"></span></td>
+            <td><span class="sr-txt">Photographer, also looking for a videographer</span><span class="flaps" aria-hidden="true" data-w="13" data-v="PHOTO + VIDEO"></span></td>
+            <td class="seat"><span class="sr-txt">4 of 5 seats open</span><span class="flaps" aria-hidden="true" data-w="3" data-v="4/5"></span></td>
+            <td class="go"><a href="#briefs" data-brief="3"><i class="ph ph-arrow-down-right" aria-hidden="true"></i><span class="sr">See the Stroud brief in the app</span></a></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="board-foot">
+        <p class="caption" id="board-note">Sample data from the app. Each category on a brief has its own five seats.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="sec" id="briefs">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="d">A brief tells you where, when and how many.</h2>
+      <p class="body">Our team approves every brief before you see it. Couples stay anonymous until you unlock their details, and each category has up to five seats.</p>
+    </div>
+
+    <figure class="shot briefs-a rise">
+      <div class="stage">
+        <div class="plate" id="leads-plate">
+          <picture>
+            <source media="(max-width:720px)" srcset="../../img/app/app-leads-phone.jpg" width="780" height="1688">
+            <img src="../../img/app/app-leads.jpg" alt="The Leads page in the app, showing anonymous wedding briefs in Painswick, Bath, Burford and Stroud, each for a photographer with open seats and a View details button" width="1800" height="1157" loading="lazy">
+          </picture>
+          <span class="hit" data-i="0" style="left:1.9%;top:15.2%;width:47.1%;height:40.4%"></span>
+          <span class="hit" data-i="1" style="left:50.9%;top:15.1%;width:47.1%;height:40.4%"></span>
+          <span class="hit" data-i="2" style="left:1.9%;top:57.6%;width:47.1%;height:37.2%"></span>
+          <span class="hit" data-i="3" style="left:50.9%;top:57.6%;width:47.1%;height:37.2%"></span>
+        </div>
+        <span class="anno l" style="--x:.036;--y:.216"><span class="lab">Date and place<small>No names, no contact details</small></span></span>
+        <span class="anno l elb" style="--x:.36;--y:.4235"><span class="lab">Seats open in this category</span></span>
+        <span class="ln v" style="--x:.36;--y1:.382;--y2:.4235"></span>
+        <span class="pin" style="--x:.36;--y:.382"></span>
+        <span class="anno l" style="--x:.028;--y:.504"><span class="lab">Anonymous until you unlock</span></span>
+      </div>
+      <figcaption class="caption">Real app screens. Example data.</figcaption>
+    </figure>
+
+    <div class="briefs-b">
+      <div>
+        <h3>Open a brief to see the detail.</h3>
+        <p class="body" style="margin-top:.6rem">Venue, church, guest numbers and the best time to call. Unlock it and you get the couple's name, email and phone, then message them directly.</p>
+      </div>
+      <figure class="shot detail rise">
+        <div class="stage">
+          <div class="plate">
+            <picture>
+              <source media="(max-width:720px)" srcset="../../img/app/app-lead-detail-phone.jpg" width="716" height="1800">
+              <img src="../../img/app/app-lead-detail.jpg" alt="The Request details window for the Painswick brief: venue, St Mary's Church, 120 guests, afternoon contact, 3 of 5 seats available and an Unlock customer details button" width="1280" height="1416" loading="lazy">
+            </picture>
+          </div>
+          <span class="anno l" style="--x:.018;--y:.363"><span class="lab">Where, when and how many</span></span>
+          <span class="anno l" style="--x:.02;--y:.612"><span class="lab">Five seats per category</span></span>
+          <span class="anno l" style="--x:.06;--y:.822"><span class="lab">Unlock for name, email and phone</span></span>
+        </div>
+        <figcaption class="caption m-only">Example data.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+<section class="sec" id="profile">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="d">Your profile does the selling.</h2>
+      <p class="body">A full profile on a paid plan leads with your gallery, and couples can message you or send a quote request straight from your page.</p>
+    </div>
+    <div class="prof">
+      <figure class="shot prof-wide rise">
+        <div class="stage">
+          <div class="plate">
+            <img src="../../img/app/app-profile.jpg" alt="A public supplier profile for Hartwell and Finch Photography, with a gallery strip, Message and Request Quote buttons, Call Now, and a Replies within 24 hours badge" width="1800" height="1020" loading="lazy">
+          </div>
+          <span class="anno dn" style="--x:.025;--y:.3"><span class="lab">Your gallery comes first</span></span>
+          <span class="anno dn rt elb" style="--x:.729;--y:.691"><span class="lab">Message and Request Quote</span></span>
+          <span class="ln h" style="--y:.691;--x1:.41;--x2:.729"></span>
+          <span class="ln v" style="--x:.41;--y1:.649;--y2:.691"></span>
+          <span class="pin" style="--x:.41;--y:.649"></span>
+          <span class="anno dn" style="--x:.747;--y:.786"><span class="lab">Replies within 24 hours<small>A badge on the Premium plan</small></span></span>
+        </div>
+      </figure>
+      <figure class="phone rise">
+        <div class="plate">
+          <img src="../../img/app/app-profile-phone.jpg" alt="The same supplier profile on a phone, with the gallery, business name and a Request quote button" width="780" height="1688" loading="lazy">
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="analytics">
+  <div class="wrap stats">
+    <div class="sec-head">
+      <h2 class="d">See what is working.</h2>
+      <p class="body">Each month you see how many couples visited, showed interest and got in touch, with tips on what to improve next.</p>
+    </div>
+    <figure class="shot stats-shot rise">
+      <div class="stage">
+        <div class="plate">
+          <picture>
+            <source media="(max-width:720px)" srcset="../../img/app/app-analytics-phone.jpg" width="684" height="1384">
+            <img src="../../img/app/app-analytics.jpg" alt="The Analytics page: Your visitor journey with Visits 412, Interest 68 and Work opportunities 19 compared with last month, and three What to do next tips" width="1800" height="952" loading="lazy">
+          </picture>
+        </div>
+        <span class="anno u rt elb" style="--x:.422;--y:.113"><span class="lab">Change against last month</span></span>
+        <span class="ln h" style="--y:.113;--x1:.225;--x2:.422"></span>
+        <span class="ln v" style="--x:.225;--y1:.113;--y2:.31"></span>
+        <span class="pin" style="--x:.225;--y:.31"></span>
+        <span class="anno u rt no-m" style="--x:.885;--y:.215"><span class="lab">Messages, quote requests and leads</span></span>
+      </div>
+      <figcaption class="caption m-only">Example data.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="sec" id="founding">
+  <div class="wrap found">
+    <div class="sec-head" style="margin-bottom:0">
+      <h2 class="d">On the board before couples arrive.</h2>
+      <p class="body">We are building founding profiles now, before we open to couples in the UK. Waiting only means arriving after everyone else.</p>
+    </div>
+    <ul class="ledger">
+      <li><span><span class="sr-txt">Now</span><span class="flaps" aria-hidden="true" data-w="8" data-v="NOW" data-static></span></span><strong>We build your profile, at no cost.</strong></li>
+      <li><span><span class="sr-txt">At launch</span><span class="flaps" aria-hidden="true" data-w="8" data-v="LAUNCH" data-static></span></span><strong>Couples find you already listed.</strong></li>
+      <li><span><span class="sr-txt">First season</span><span class="flaps" aria-hidden="true" data-w="8" data-v="SEASON 1" data-static></span></span><strong>Priority placement in your county.</strong></li>
+    </ul>
+  </div>
+</section>
+
+<section class="plans">
+  <div class="wrap">
+    <p>Free to list. <span>Paid plans are optional and add a gallery, reviews and chat, or top placement in search. UK prices are set at launch.</span></p>
+  </div>
+</section>
+<section class="sec" id="get-listed">
+  <div class="wrap signup-grid">
+    <div class="signup-copy">
+      <h2 class="d">Get listed first.</h2>
+      <p class="lede">Tell us about your business. We will build your profile before launch, at no cost, and tell you the moment couples can find you.</p>
+      <p class="aside"><i class="ph ph-map-pin" aria-hidden="true"></i>Founding suppliers keep priority placement in their county through the first season.</p>
+    </div>
+
+    <div>
+      <div class="formstate good" id="ok" role="status" aria-live="polite">
+        <p class="d">Thank you. You are on the list.</p>
+        <p>We will be in touch at the address you gave us, well before we open to couples.</p>
+      </div>
+      <div class="formstate bad" id="bad" role="alert">
+        <p class="d">That did not go through.</p>
+        <p>Please try again in a moment. If it keeps failing, your details have not reached us.</p>
+      </div>
+
+      <form id="signup-form" novalidate>
+        <div class="row">
+          <div class="field" id="f-business">
+            <label for="business">Business name</label>
+            <input type="text" id="business" name="business" autocomplete="organization" required>
+            <span class="err">Please tell us your business name.</span>
+          </div>
+          <div class="field" id="f-name">
+            <label for="name">Your name</label>
+            <input type="text" id="name" name="name" autocomplete="name" required>
+            <span class="err">Please tell us your name.</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field" id="f-email">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required>
+            <span class="err">Please enter a valid email address.</span>
+          </div>
+          <div class="field" id="f-area">
+            <label for="area">Town or county you cover</label>
+            <input type="text" id="area" name="area" placeholder="For example, Surrey" required>
+            <span class="err">Please tell us where you work.</span>
+          </div>
+        </div>
+
+        <div class="field" id="f-category">
+          <label for="category">What you do</label>
+          <select id="category" name="category" required>
+            <option value="" selected disabled>Choose a category</option>
+            <option>Venue</option>
+            <option>Photographer</option>
+            <option>Videographer</option>
+            <option>Florist</option>
+            <option>Catering</option>
+            <option>Cakes and desserts</option>
+            <option>Music, bands and DJs</option>
+            <option>Hair and make up</option>
+            <option>Bridal wear</option>
+            <option>Menswear</option>
+            <option>Transport</option>
+            <option>Wedding planning</option>
+            <option>Styling and decor</option>
+            <option>Stationery</option>
+            <option>Entertainment</option>
+            <option>Something else</option>
+          </select>
+          <span class="hint">Pick the closest fit. You can add more categories later.</span>
+          <span class="err">Please choose a category.</span>
+        </div>
+
+        <div class="field" id="f-website">
+          <label for="website">Website or social page <span class="opt">(optional)</span></label>
+          <input type="text" id="website" name="website" placeholder="https://" autocomplete="url">
+        </div>
+
+        <!-- honeypot, hidden from people, catches bots -->
+        <div class="hp" aria-hidden="true">
+          <label for="_honey">Leave this field empty</label>
+          <input type="text" id="_honey" name="_honey" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="form-foot">
+          <button type="submit" class="cta" id="submit">
+            <span id="submit-label">Get listed first</span>
+            <i id="submit-arrow" class="ph ph-arrow-right" aria-hidden="true"></i>
+          </button>
+          <p class="small">We will only use these details to set up your listing and tell you when we launch.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="sec faq" id="faq">
+  <div class="wrap faq-grid">
+    <h2 class="d">Before you sign up.</h2>
+    <div>
+      <details>
+        <summary>Does a listing cost anything?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <p>No. A listing is free, and founding profiles are built at no cost. Paid plans are optional, and UK prices are set at launch.</p>
+      </details>
+      <details>
+        <summary>How do couples reach me?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <p>In three ways. They can call you straight from your profile. They can send you a request from your profile, with their date, guests and a message. Or they post a brief with the services they need, and once our team approves it, up to five suppliers per category in that area can unlock their details and get in touch.</p>
+      </details>
+      <details>
+        <summary>Why only five suppliers per category?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <p>So a brief is not sent to every supplier in the county. Up to five suppliers in each category can unlock a couple's name, email and phone.</p>
+      </details>
+      <details>
+        <summary>Do I send quotes through the app?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <p>No. You unlock a brief and message the couple directly. Couples can also send you a quote request from your profile.</p>
+      </details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <img src="../../img/logo-lockup.webp" alt="The Wedding Experts" width="361" height="112" loading="lazy">
+    <p>&copy; <span id="yr">2026</span> The Wedding Experts. Launching across the United Kingdom. App screens show example data.</p>
+  </div>
+</footer>
+
+<script>
+/* Scroll reveal. IntersectionObserver, never a scroll listener */
+(function(){
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rises  = document.querySelectorAll('.rise');
+  if (reduce || !('IntersectionObserver' in window)) {
+    rises.forEach(function(el){ el.classList.add('seen'); });
+    return;
+  }
+  /* Anything already on screen is revealed synchronously: background tabs
+     throttle observers and timers, and content must never depend on them. */
+  function revealIfVisible(el){
+    var r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight * 1.05 && r.bottom > 0){ el.classList.add('seen'); return true; }
+    return false;
+  }
+  var pending = [].filter.call(rises, function(el){ return !revealIfVisible(el); });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
+    });
+  }, { threshold:.12, rootMargin:'0px 0px -6% 0px' });
+  pending.forEach(function(el){ io.observe(el); });
+  setTimeout(function(){ pending.forEach(function(el){ el.classList.add('seen'); }); }, 2500);
+})();
+
+/* Split-flap board */
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/';
+  function pad(s, w){ s = s.slice(0, w); while (s.length < w) s += ' '; return s; }
+  function build(el){
+    var w = +el.getAttribute('data-w'), cells = [];
+    for (var i = 0; i < w; i++){
+      var c = document.createElement('span'); c.className = 'c';
+      var g = document.createElement('span'); g.className = 'g'; g.textContent = ' ';
+      c.appendChild(g); el.appendChild(c); cells.push(c);
+    }
+    el._cells = cells;
+  }
+  function show(c, ch, anim){
+    c.firstChild.textContent = ch === ' ' ? ' ' : ch;
+    if (anim){ var a = c.classList.contains('fa'); c.classList.toggle('fa', !a); c.classList.toggle('fb', a); }
+  }
+  function settle(el, str){ var s = pad(str, el._cells.length); el._cells.forEach(function(c, i){ show(c, s[i], false); }); }
+  function flipTo(el, str, delay){
+    var s = pad(str, el._cells.length);
+    el._cells.forEach(function(c, i){
+      var steps = 2 + Math.floor(Math.random() * 5), n = 0;
+      setTimeout(function tick(){
+        if (n < steps){ show(c, CH[Math.floor(Math.random() * CH.length)], true); n++; setTimeout(tick, 55); }
+        else show(c, s[i], true);
+      }, delay + i * 26);
+    });
+  }
+
+  var all = document.querySelectorAll('.flaps');
+  all.forEach(build);
+  document.querySelectorAll('.flaps[data-static]').forEach(function(el){ settle(el, el.getAttribute('data-v')); });
+
+  var board = document.getElementById('board');
+  var rows = [].slice.call(board.querySelectorAll('tbody tr'));
+  var boardFlaps = board.querySelectorAll('tbody .flaps');
+
+  /* Header rail clock: the visitor's local time, flipping on the minute */
+  var clock = document.getElementById('clock');
+  function hhmm(){ var d = new Date(); return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+  var shownTime = hhmm();
+  settle(clock, shownTime);
+  setInterval(function(){
+    var t = hhmm();
+    if (t === shownTime) return;
+    shownTime = t;
+    if (reduce || document.hidden) settle(clock, t); else flipTo(clock, t, 0);
+  }, 5000);
+
+  if (reduce || document.hidden){
+    boardFlaps.forEach(function(el){ settle(el, el.getAttribute('data-v')); });
+  } else {
+    rows.forEach(function(tr, r){
+      var offset = 0;
+      tr.querySelectorAll('.flaps').forEach(function(el){
+        flipTo(el, el.getAttribute('data-v'), 250 + r * 170 + offset * 26);
+        offset += el._cells.length + 2;
+      });
+    });
+    /* Safety: whatever the timers did, the board reads correctly after 3s */
+    setTimeout(function(){ boardFlaps.forEach(function(el){ settle(el, el.getAttribute('data-v')); }); }, 3200);
+
+    /* One row at a time swaps its place for its guest count, like a board cycling calling points */
+    var inView = true, k = 0;
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(e){ inView = e[0].isIntersecting; }).observe(board);
+    }
+    setTimeout(function(){
+      setInterval(function(){
+        if (document.hidden || !inView) return;
+        var el = rows[k % rows.length].querySelectorAll('.flaps')[1]; k++;
+        el._alt = !el._alt;
+        flipTo(el, el.getAttribute(el._alt ? 'data-alt' : 'data-v'), 0);
+      }, 3800);
+    }, 3600);
+  }
+
+  /* Row to screenshot: pick a brief on the board, see it in the app below */
+  var plate = document.getElementById('leads-plate');
+  rows.forEach(function(tr){
+    var i = tr.getAttribute('data-i');
+    var link = tr.querySelector('a');
+    function mark(){ plate.setAttribute('data-active', i); }
+    tr.addEventListener('mouseenter', mark);
+    link.addEventListener('focus', mark);
+    tr.addEventListener('click', function(ev){
+      mark();
+      if (!ev.target.closest('a')){
+        document.getElementById('briefs').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+      }
+    });
+  });
+})();
+
+/* Analytics: CTA clicks */
+(function(){
+  document.querySelectorAll('[data-ga-cta]').forEach(function(el){
+    el.addEventListener('click', function(){
+      gtag('event', 'cta_click', { cta_location: el.getAttribute('data-ga-cta') });
+    });
+  });
+})();
+
+/* Form: validation, submit, success and failure states */
+(function(){
+  /* Address that receives signups. FormSubmit emails a one-time activation
+     link here on the very first submission; nothing is delivered until it is clicked. */
+  var ENDPOINT = 'https://formsubmit.co/ajax/admin@theweddingexperts.gr';
+
+  var form  = document.getElementById('signup-form');
+  var btn   = document.getElementById('submit');
+  var label = document.getElementById('submit-label');
+  var arrow = document.getElementById('submit-arrow');
+  var ok    = document.getElementById('ok');
+  var bad   = document.getElementById('bad');
+
+  var required = ['business','name','email','area','category'];
+  function fieldOf(id){ return document.getElementById('f-' + id); }
+
+  function validate(){
+    var good = true;
+    required.forEach(function(id){
+      var input = document.getElementById(id);
+      var value = (input.value || '').trim();
+      var isBad = !value;
+      if (id === 'email' && value) isBad = !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+      fieldOf(id).setAttribute('data-invalid', isBad ? 'true' : 'false');
+      if (isBad){ if (good) input.focus(); good = false; }
+    });
+    return good;
+  }
+
+  var startedForm = false;
+  required.forEach(function(id){
+    var el = document.getElementById(id);
+    function onInput(){
+      fieldOf(id).setAttribute('data-invalid','false');
+      if (!startedForm){ startedForm = true; gtag('event', 'form_start', { form_id: 'signup-form' }); }
+    }
+    el.addEventListener('input', onInput);
+    if (el.tagName === 'SELECT') el.addEventListener('change', onInput);
+  });
+
+  function busy(on){
+    btn.disabled = on;
+    label.textContent = on ? 'Sending' : 'Get listed first';
+    arrow.style.display = on ? 'none' : '';
+    var sp = document.getElementById('sp');
+    if (on && !sp){
+      sp = document.createElement('span');
+      sp.className = 'spinner'; sp.id = 'sp';
+      btn.appendChild(sp);
+    } else if (!on && sp){ sp.remove(); }
+  }
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    ok.classList.remove('on');
+    bad.classList.remove('on');
+
+    if (document.getElementById('_honey').value) return;   /* bot */
+    if (!validate()){ gtag('event', 'form_error', { error_reason: 'validation' }); return; }
+
+    busy(true);
+    gtag('event', 'form_submit', { form_id: 'signup-form' });
+
+    var payload = {
+      _subject:  'UK founding listing: ' + document.getElementById('business').value,
+      _template: 'table',
+      business:  document.getElementById('business').value,
+      name:      document.getElementById('name').value,
+      email:     document.getElementById('email').value,
+      area:      document.getElementById('area').value,
+      category:  document.getElementById('category').value,
+      website:   document.getElementById('website').value
+    };
+
+    fetch(ENDPOINT, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(){
+      gtag('event', 'generate_lead', { category: document.getElementById('category').value });
+      form.style.display = 'none';
+      ok.classList.add('on');
+      ok.scrollIntoView({ behavior:'smooth', block:'center' });
+    })
+    .catch(function(){
+      gtag('event', 'form_error', { error_reason: 'network' });
+      busy(false);
+      bad.classList.add('on');
+    });
+  });
+})();
+</script>
+
+<!-- Mobile sticky CTA: appears once the hero button has scrolled away, hides again when the signup form is reached. -->
+<div class="sticky-cta" id="sticky-cta" aria-hidden="true" inert>
+  <a class="cta" href="#get-listed" data-ga-cta="sticky">Get listed first <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+</div>
+<style>
+.sticky-cta{display:none}
+@media (max-width:720px){
+  .sticky-cta{
+    display:block; position:fixed; left:0; right:0; bottom:0; z-index:50;
+    padding:.75rem 1rem calc(.75rem + env(safe-area-inset-bottom));
+    background:rgba(13,18,32,.96); border-top:1px solid var(--rule);
+    box-shadow:0 -10px 24px -18px rgba(0,0,0,.8);
+    transform:translateY(calc(100% + 8px)); visibility:hidden;
+    transition:transform .38s cubic-bezier(.16,1,.3,1), visibility 0s linear .38s;
+  }
+  .sticky-cta.on{transform:none; visibility:visible; transition:transform .38s cubic-bezier(.16,1,.3,1), visibility 0s}
+  .sticky-cta a{display:flex; width:100%; justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){ .sticky-cta, .sticky-cta.on{transition:none} }
+</style>
+<script>
+(function(){
+  var bar = document.getElementById('sticky-cta');
+  var hero = document.querySelector('[data-ga-cta="hero"]');
+  var signup = document.getElementById('get-listed');
+  if (!bar || !hero || !signup || !('IntersectionObserver' in window)) return;
+  var pastHero = false, atForm = false;
+  function update(){
+    var on = pastHero && !atForm;
+    bar.classList.toggle('on', on);
+    bar.setAttribute('aria-hidden', on ? 'false' : 'true');
+    if (on) bar.removeAttribute('inert'); else bar.setAttribute('inert', '');
+  }
+  new IntersectionObserver(function(entries){
+    var e = entries[entries.length - 1];
+    pastHero = !e.isIntersecting && e.boundingClientRect.top < 0;
+    update();
+  }).observe(hero);
+  new IntersectionObserver(function(entries){
+    var e = entries[entries.length - 1];
+    atForm = e.isIntersecting || e.boundingClientRect.top < 0;
+    update();
+  }, { rootMargin: '0px 0px -20% 0px' }).observe(signup);
+  bar.querySelector('a').addEventListener('click', function(){
+    if (typeof gtag === 'function') gtag('event', 'cta_click', { cta_location: 'sticky' });
+  });
+})();
+</script>
+</body>
+</html>

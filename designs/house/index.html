@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Wedding Experts UK | Launching soon</title>
+<meta name="description" content="The Wedding Experts is launching in the UK. Founding listings for wedding suppliers are open now, built at no cost before couples arrive.">
+<link rel="canonical" href="https://theweddingexperts.uk/">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#fcfaf7">
+
+<link rel="icon" href="../../img/logo-mark.webp" type="image/webp">
+<link rel="apple-touch-icon" href="../../img/logo-mark.webp">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="../../img/hero.jpg" media="(min-width:721px)" fetchpriority="high">
+<link rel="preload" as="image" href="../../img/hero-sm.jpg" media="(max-width:720px)" fetchpriority="high">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RSM9TPGFJ1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-RSM9TPGFJ1');
+</script>
+
+<style>
+/* House style. Tokens taken from the app itself:
+   theweddingexperts-frontend/src/assets/scss/base/colors.scss and typography.scss.
+   Buttons and inputs use the app's 6px radius, cards and plates its 10px. */
+:root{
+  --paper:#fcfaf7;        /* $bg__page */
+  --paper-deep:#f4ede4;   /* one step deeper, same family, for the single band */
+  --white:#ffffff;
+  --line:#ebe3da;
+  --ink:#3a3a3a;          /* $text__ink, 11.0:1 on paper */
+  --ink-soft:#5a534d;     /* 7.3:1 on paper, 6.6:1 on the band */
+  --ink-faint:#6e665f;    /* 5.6:1 on paper, 5.1:1 on the band */
+  --brand:#c97b63;        /* $brand, used as a tint only, never behind white text */
+  --brand-ink:#a85a42;    /* $brand__ink, text and button fill, white on it 5.0:1 */
+  --brand-deep:#8e4835;
+  --sage:#7d8a63;         /* $secondary__btn, one rare non-text marker only */
+  --sage-ink:#66754d;
+  --field-edge:#8f857d;   /* input outline, 3.7:1 on white */
+  --error:#9e3b2b;
+
+  --r-btn:6px;
+  --r-card:10px;
+  --shadow-plate:0 1px 2px rgba(92,60,44,.06), 0 28px 60px -28px rgba(120,74,52,.30);
+  --shadow-float:0 2px 6px rgba(92,60,44,.08), 0 30px 60px -20px rgba(110,66,46,.38);
+
+  --gut:clamp(1rem,5vw,5rem);
+  --maxw:1320px;
+  --section:clamp(6rem,12vw,11rem);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:1rem; line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%; height:auto; display:block}
+a{color:inherit}
+p{margin:0}
+figure{margin:0}
+::selection{background:#ecd5ca; color:var(--ink)}
+input,select,textarea{caret-color:var(--brand-ink)}
+:focus-visible{outline:2px solid var(--brand-ink); outline-offset:3px; border-radius:2px}
+
+.wrap{width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:var(--gut)}
+
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif; font-weight:400; margin:0; color:var(--ink); text-wrap:balance}
+h1{font-size:clamp(2.2rem,3.45vw,3.2rem); line-height:1.1; letter-spacing:-.015em}
+h1 em{font-style:italic; color:var(--brand-ink); padding-bottom:.06em; display:inline-block}
+h2{font-size:clamp(1.9rem,3.2vw,2.85rem); line-height:1.14; letter-spacing:-.01em}
+h3{font-size:clamp(1.3rem,1.8vw,1.55rem); line-height:1.25}
+.lede{font-size:clamp(1.02rem,1.25vw,1.15rem); line-height:1.7; color:var(--ink-soft)}
+.caption{font-size:.8rem; line-height:1.5; color:var(--ink-faint); margin-top:1rem}
+
+/* Buttons: the app's primary button, sentence case, 6px */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.6rem;
+  min-height:3.25rem; padding:.85rem 1.9rem;
+  background:var(--brand-ink); color:#fff;
+  font:500 1rem/1.2 "Montserrat",system-ui,sans-serif; white-space:nowrap;
+  text-decoration:none; border:0; border-radius:var(--r-btn); cursor:pointer;
+  box-shadow:0 10px 24px -14px rgba(142,72,53,.7);
+  transition:background-color .3s var(--ease), transform .15s var(--ease), box-shadow .3s var(--ease);
+}
+.btn:hover{background:var(--brand-deep); box-shadow:0 14px 28px -14px rgba(142,72,53,.75)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.6; cursor:not-allowed}
+.navlink{
+  font-size:.95rem; font-weight:500; color:var(--brand-ink); text-decoration:none;
+  padding-block:.35rem; background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;
+  transition:background-size .35s var(--ease);
+}
+.navlink:hover{background-size:100% 1px}
+
+/* Plates: real product screens, calm and softly shadowed */
+.plate{
+  position:relative; overflow:hidden;
+  background:var(--white); border:1px solid var(--line); border-radius:var(--r-card);
+  box-shadow:var(--shadow-plate);
+}
+.plate img{max-width:none}
+
+/* ═══ Hero ═══════════════════════════════════════════════ */
+.hero{min-height:100dvh; display:flex; flex-direction:column}
+.topbar{display:flex; align-items:center; justify-content:space-between; gap:1rem; padding-block:clamp(1rem,2.2vw,1.6rem)}
+.topbar img{width:clamp(132px,12vw,170px)}
+
+.hero-grid{
+  flex:1; display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr);
+  gap:clamp(2rem,4.5vw,4rem); align-items:stretch;
+  padding-bottom:clamp(4.5rem,7vw,5.5rem);
+}
+.hero-copy{align-self:center; max-width:29rem; padding-block:2rem}
+.hero-copy h1{margin-bottom:1.4rem}
+.hero-copy .lede{max-width:30ch; margin-bottom:2.2rem}
+
+.hero-media{position:relative; min-height:520px}
+.hero-photo{position:absolute; inset:0; display:block; border-radius:var(--r-card); overflow:hidden; background:#e9e1d6}
+/* Taller than its box and anchored to the bottom, so the bright sky is cropped
+   and the top edge lands on wall and foliage that read against the paper. */
+.hero-photo img{position:absolute; left:0; bottom:0; width:100%; height:128%; object-fit:cover; object-position:50% 100%; max-width:none}
+.hero-photo::after{content:""; position:absolute; inset:0; border-radius:inherit; box-shadow:inset 0 0 0 1px rgba(58,42,32,.08); pointer-events:none}
+
+/* the one signature moment: the lead card rises into the scene */
+.lead-card{
+  position:absolute; left:clamp(-4.5rem,-4vw,-2rem); bottom:-1.75rem;
+  width:clamp(210px,18.5vw,280px);
+}
+.lead-card .plate{aspect-ratio:620/704; border-radius:14px; box-shadow:var(--shadow-float); border-color:#eee4da}
+.lead-card .plate img{width:125.81%; margin-left:-12.9%; margin-top:-56.13%}
+.lead-card figcaption{position:absolute; top:calc(100% + .6rem); left:0; white-space:nowrap; margin:0}
+@media (prefers-reduced-motion:no-preference){
+  .lead-card .plate{animation:rise 1.3s .35s var(--ease) both}
+  @keyframes rise{
+    from{transform:translateY(56px); box-shadow:0 1px 2px rgba(92,60,44,.04), 0 8px 20px -12px rgba(110,66,46,.2)}
+    to{transform:none; box-shadow:var(--shadow-float)}
+  }
+}
+
+/* ═══ Sections ═══════════════════════════════════════════ */
+section{padding-block:var(--section) 0}
+.head{max-width:34rem; margin-bottom:clamp(2.5rem,5vw,4rem)}
+.head p{margin-top:1.1rem}
+
+/* What arrives */
+.leads-plate{aspect-ratio:1800/1157}
+.leads-plate img{width:100%}
+.leads-plate-sm{display:none; aspect-ratio:620/832}
+.leads-plate-sm img{width:125.81%; margin-left:-12.9%; margin-top:-56.13%}
+.notes{
+  list-style:none; margin:clamp(2rem,4vw,3rem) 0 0; padding:0;
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.5rem clamp(2rem,5vw,4.5rem);
+}
+.notes li{color:var(--ink-soft); max-width:28ch}
+.notes li::before{content:""; display:block; width:28px; height:2px; margin-bottom:.9rem; background:var(--sage)}
+
+/* Unlock and reply */
+.split{display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:clamp(2.5rem,6vw,6rem); align-items:center}
+.split-copy h2{margin-bottom:1.3rem}
+.split-copy .lede{max-width:40ch}
+.detail-plate{aspect-ratio:1280/1262}
+.detail-plate img{width:100%}
+.detail-plate-sm{display:none; aspect-ratio:716/1640}
+.detail-plate-sm img{width:100%}
+
+/* Profile: two screens side by side, neither covering the other */
+.profile-stage{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:clamp(2rem,4vw,3.5rem); align-items:end}
+.profile-plate{aspect-ratio:1800/720}
+.profile-plate img{width:100%}
+.phone{
+  background:var(--white); border:1px solid #e6dcd2; border-radius:34px; padding:7px;
+  box-shadow:var(--shadow-float);
+}
+.phone img{border-radius:27px}
+.profile-phone{width:clamp(180px,17vw,230px)}
+.profile-stage .caption{grid-column:1 / -1; margin-top:0}
+
+/* Early and free band */
+.band{background:var(--paper-deep); margin-top:var(--section); padding-block:clamp(5rem,10vw,9rem)}
+.band-grid{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,6fr); gap:clamp(2.5rem,7vw,7rem); align-items:center}
+.band-photo{border-radius:var(--r-card); overflow:hidden; aspect-ratio:4/5}
+.band-photo img{width:100%; height:100%; object-fit:cover; object-position:62% 50%}
+.band-copy h2{margin-bottom:1.4rem}
+.band-copy p{max-width:44ch; color:var(--ink-soft)}
+.band-copy p + p{margin-top:1.1rem}
+.band-copy .lede{color:var(--ink)}
+
+/* Signup */
+.signup{padding-block:var(--section)}
+.signup-grid{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:clamp(2.5rem,6vw,6rem); align-items:start}
+.signup-copy h2{margin-bottom:1.3rem}
+
+.form-card{background:var(--white); border:1px solid var(--line); border-radius:var(--r-card); box-shadow:var(--shadow-plate); padding:clamp(1.5rem,3.5vw,2.75rem)}
+form{display:grid; gap:1.35rem}
+.row{display:grid; grid-template-columns:1fr 1fr; gap:1.35rem}
+.field{display:grid; gap:.45rem; align-content:start}
+.field label{font-size:.9rem; font-weight:600; color:var(--ink)}
+.field label .opt{font-weight:400; color:var(--ink-faint)}
+.field input,.field select{
+  width:100%; min-height:3.25rem; padding:.7rem .95rem;
+  font:400 16px/1.3 "Montserrat",system-ui,sans-serif; color:var(--ink);
+  background:var(--white); border:1px solid var(--field-edge); border-radius:var(--r-btn);
+  appearance:none; -webkit-appearance:none;
+  transition:border-color .25s, box-shadow .25s;
+}
+.field input::placeholder{color:var(--ink-faint); opacity:1}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a534d' stroke-width='1.8'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right .9rem center; background-size:18px;
+  padding-right:2.6rem; cursor:pointer;
+}
+.field input:hover,.field select:hover{border-color:var(--ink-soft)}
+.field input:focus,.field select:focus{outline:none; border-color:var(--brand-ink); box-shadow:0 0 0 3px rgba(168,90,66,.2)}
+.field .hint{font-size:.8rem; color:var(--ink-faint)}
+.field .err{font-size:.82rem; font-weight:500; color:var(--error); display:none}
+.field[data-invalid="true"] input,.field[data-invalid="true"] select{border-color:var(--error)}
+.field[data-invalid="true"] .err{display:block}
+.hp{position:absolute!important; left:-9999px; width:1px; height:1px; overflow:hidden}
+.form-foot{display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.5rem; margin-top:.4rem}
+.form-foot .small{font-size:.8rem; line-height:1.55; color:var(--ink-faint); max-width:34ch}
+.spinner{width:14px; height:14px; flex:none; border:2px solid rgba(255,255,255,.45); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){ .spinner{animation-duration:2.4s} }
+.formstate{display:none}
+.formstate.on{display:block}
+.formstate h3{margin-bottom:.6rem}
+.formstate p{color:var(--ink-soft); max-width:44ch}
+.formstate.bad{margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--line)}
+.formstate.bad h3{color:var(--error)}
+
+/* FAQ */
+.faq{margin-top:clamp(5rem,9vw,8rem)}
+.faq-list{border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{
+  list-style:none; cursor:pointer; position:relative;
+  padding:1.4rem 3rem 1.4rem 0;
+  font-family:"Playfair Display",Georgia,serif; font-size:clamp(1.15rem,1.6vw,1.35rem); line-height:1.35;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before,.faq summary::after{
+  content:""; position:absolute; right:.4rem; top:50%; width:14px; height:1.5px; background:var(--brand-ink);
+  transition:transform .35s var(--ease);
+}
+.faq summary::after{transform:rotate(90deg)}
+.faq details[open] summary::after{transform:rotate(0deg)}
+.faq summary:hover{color:var(--brand-ink)}
+.faq details p{padding:0 3rem 1.6rem 0; color:var(--ink-soft); max-width:62ch}
+
+/* Footer */
+footer{border-top:1px solid var(--line); padding-block:clamp(2.5rem,4vw,3.5rem)}
+.foot{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1.2rem 3rem}
+.foot img{width:140px}
+.foot p{font-size:.8rem; color:var(--ink-faint)}
+
+/* Reveal: hidden state only when JS is confirmed running */
+@media (prefers-reduced-motion:no-preference){
+  .js .rise{opacity:0; transform:translateY(20px); transition:opacity 1s var(--ease), transform 1s var(--ease)}
+  .js .rise.seen{opacity:1; transform:none}
+}
+
+/* ═══ Small screens. Kept last so these overrides win. ═══ */
+@media (max-width:900px){
+  .hero-grid{display:flex; flex-direction:column-reverse; justify-content:flex-end; gap:0; padding-bottom:2.5rem}
+  .hero-media{flex:1 1 auto; min-height:290px}
+  .hero-photo img{height:125%}
+  .hero-copy{align-self:stretch; max-width:none; padding-block:2.25rem 0}
+  .hero-copy .lede{margin-bottom:1.6rem}
+  /* On phones the lead card is too small to read; the briefs section shows it at full width. */
+  .lead-card{display:none}
+
+  .notes{grid-template-columns:1fr; gap:1rem}
+  .notes li{max-width:none}
+  .split{grid-template-columns:1fr}
+  .split-copy{order:-1}
+  .band-grid,.signup-grid{grid-template-columns:1fr}
+  .band-photo{aspect-ratio:4/3}
+}
+@media (max-width:720px){
+  .topbar img{width:128px}
+  .navlink{font-size:.9rem}
+  .leads-plate{display:none}
+  .leads-plate-sm{display:block}
+  .detail-plate{display:none}
+  .detail-plate-sm{display:block}
+  .profile-stage{grid-template-columns:1fr}
+  .profile-plate{display:none}
+  .profile-phone{width:min(74%,270px); margin:0 auto}
+  .row{grid-template-columns:1fr}
+  .form-foot .btn{width:100%}
+}
+</style>
+
+<script>document.documentElement.className += ' js';</script>
+</head>
+
+<body>
+
+<!-- ═══ Hero ══════════════════════════════════════════════ -->
+<header class="hero">
+  <div class="wrap topbar">
+    <a href="/" aria-label="The Wedding Experts UK, home">
+      <img src="../../img/logo-lockup.webp" alt="The Wedding Experts" width="361" height="112">
+    </a>
+    <a class="navlink" href="#get-listed" data-ga-cta="nav">Get listed first</a>
+  </div>
+
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1>Be <em>found</em> by couples across the UK.</h1>
+      <p class="lede">Founding listings for wedding suppliers are open now, built at no cost before couples arrive.</p>
+      <a class="btn" href="#get-listed" data-ga-cta="hero">Get listed first</a>
+    </div>
+
+    <div class="hero-media">
+      <picture class="hero-photo">
+        <source media="(max-width:720px)" srcset="../../img/hero-sm.jpg" width="900" height="1200">
+        <img src="../../img/hero.jpg" width="1800" height="1012" fetchpriority="high"
+             alt="A bride and groom walking hand in hand through a sunlit English walled rose garden">
+      </picture>
+      <figure class="lead-card">
+        <div class="plate">
+          <img src="../../img/app/app-leads-phone.jpg" width="780" height="1688"
+               alt="A lead card from the app: Request 2417, a wedding in Painswick, Gloucestershire on 19 June 2027, 120 guests at St Mary's Church, photographer seats 3 of 5 open, anonymous until unlocked, View details">
+        </div>
+        <figcaption class="caption">Real app screen. Example data.</figcaption>
+      </figure>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══ What arrives ══════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="head rise">
+      <h2>Briefs from couples in your area.</h2>
+    </div>
+    <figure class="rise">
+      <div class="plate leads-plate">
+        <img src="../../img/app/app-leads.jpg" width="1800" height="1157" loading="lazy"
+             alt="The Leads page in the app, showing four anonymous wedding briefs in Painswick, Bath, Burford and Stroud, each with guest numbers, seats open and a View details button">
+      </div>
+      <div class="plate leads-plate-sm">
+        <img src="../../img/app/app-leads-phone.jpg" width="780" height="1688" loading="lazy"
+             alt="A lead card on a phone: Request 2417, a wedding in Painswick, Gloucestershire on 19 June 2027, 120 guests at St Mary's Church, photographer seats 3 of 5 open, anonymous until unlocked, View details">
+      </div>
+      <figcaption class="caption">Real app screen. Example data.</figcaption>
+    </figure>
+    <ul class="notes rise">
+      <li>Every brief is approved by our team for your categories and areas.</li>
+      <li>Couples stay anonymous until you choose to unlock their details.</li>
+      <li>Each brief opens to no more than five suppliers per category.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ Unlock and reply ══════════════════════════════════ -->
+<section>
+  <div class="wrap split">
+    <figure class="rise">
+      <div class="plate detail-plate">
+        <img src="../../img/app/app-lead-detail.jpg" width="1280" height="1416" loading="lazy"
+             alt="Request details in the app: venue Painswick, Gloucestershire, St Mary's Church, 120 guests, afternoon contact, photographer, 3 of 5 seats available, and an Unlock customer details button">
+      </div>
+      <div class="plate detail-plate-sm">
+        <img src="../../img/app/app-lead-detail-phone.jpg" width="716" height="1800" loading="lazy"
+             alt="Request details on a phone: venue Painswick, Gloucestershire, St Mary's Church, 120 guests, photographer, 3 of 5 seats available, and an Unlock customer details button">
+      </div>
+      <figcaption class="caption">Real app screen. Example data.</figcaption>
+    </figure>
+    <div class="split-copy rise">
+      <h2>Unlock the brief, then reply.</h2>
+      <p class="lede">When a wedding suits you, unlock the couple's name, email and phone, then message them directly. The brief is never sent to everyone, so your reply is one of a few.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Your profile ══════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="head rise">
+      <h2>A profile worth shortlisting.</h2>
+      <p class="lede">With a full profile, couples see your work and can message you or send a quote request from the page.</p>
+    </div>
+    <figure class="profile-stage rise">
+      <div class="plate profile-plate">
+        <img src="../../img/app/app-profile.jpg" width="1800" height="1020" loading="lazy"
+             alt="A supplier profile in the app for Hartwell and Finch Photography, with a strip of wedding photographs and Message, Request Quote and Call Now buttons">
+      </div>
+      <div class="phone profile-phone">
+        <img src="../../img/app/app-profile-phone.jpg" width="780" height="1688" loading="lazy"
+             alt="The same profile on a phone, with gallery photographs, Message and Request Quote buttons and a Request quote bar">
+      </div>
+      <figcaption class="caption">Real app screens. Example data.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ═══ Early and free ════════════════════════════════════ -->
+<div class="band">
+  <div class="wrap band-grid">
+    <figure class="band-photo rise">
+      <img src="../../img/craft.jpg" width="1200" height="675" loading="lazy"
+           alt="A florist tying a white and blush wedding bouquet with ribbon on a wooden worktable in daylight">
+    </figure>
+    <div class="band-copy rise">
+      <h2>Listed early, placed first.</h2>
+      <p class="lede">Founding suppliers keep priority placement in their county through the first season.</p>
+      <p>A listing with your name, description and phone is free. Paid plans add a gallery, reviews, messages and a starting price. They are optional, and UK prices will be confirmed at launch.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Signup ═══════════════════════════════════════════ -->
+<section class="signup" id="get-listed">
+  <div class="wrap">
+    <div class="signup-grid">
+      <div class="signup-copy rise">
+        <h2>Get listed first.</h2>
+        <p class="lede">Tell us about your business and we will build your profile before launch, at no cost, and let you know the moment couples can find you.</p>
+      </div>
+
+      <div class="form-card rise">
+        <div class="formstate" id="ok" role="status" aria-live="polite">
+          <h3>Thank you. You are on the list.</h3>
+          <p>We will be in touch at the address you gave us, well before we open to couples.</p>
+        </div>
+        <div class="formstate bad" id="bad" role="alert">
+          <h3>That did not go through.</h3>
+          <p>Please try again in a moment. If it keeps failing, your details have not reached us.</p>
+        </div>
+
+        <form id="signup-form" novalidate>
+          <div class="row">
+            <div class="field" id="f-business">
+              <label for="business">Business name</label>
+              <input type="text" id="business" name="business" autocomplete="organization" required>
+              <span class="err">Please tell us your business name.</span>
+            </div>
+            <div class="field" id="f-name">
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" autocomplete="name" required>
+              <span class="err">Please tell us your name.</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field" id="f-email">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email" required>
+              <span class="err">Please enter a valid email address.</span>
+            </div>
+            <div class="field" id="f-area">
+              <label for="area">Town or county you cover</label>
+              <input type="text" id="area" name="area" placeholder="For example, Surrey" required>
+              <span class="err">Please tell us where you work.</span>
+            </div>
+          </div>
+
+          <div class="field" id="f-category">
+            <label for="category">What you do</label>
+            <select id="category" name="category" required>
+              <option value="" selected disabled>Choose a category</option>
+              <option>Venue</option>
+              <option>Photographer</option>
+              <option>Videographer</option>
+              <option>Florist</option>
+              <option>Catering</option>
+              <option>Cakes and desserts</option>
+              <option>Music, bands and DJs</option>
+              <option>Hair and make up</option>
+              <option>Bridal wear</option>
+              <option>Menswear</option>
+              <option>Transport</option>
+              <option>Wedding planning</option>
+              <option>Styling and decor</option>
+              <option>Stationery</option>
+              <option>Entertainment</option>
+              <option>Something else</option>
+            </select>
+            <span class="hint">Pick the closest fit. You can add more categories later.</span>
+            <span class="err">Please choose a category.</span>
+          </div>
+
+          <div class="field" id="f-website">
+            <label for="website">Website or social page <span class="opt">(optional)</span></label>
+            <input type="text" id="website" name="website" placeholder="https://" autocomplete="url">
+          </div>
+
+          <!-- honeypot, hidden from people, catches bots -->
+          <div class="hp" aria-hidden="true">
+            <label for="_honey">Leave this field empty</label>
+            <input type="text" id="_honey" name="_honey" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="form-foot">
+            <button type="submit" class="btn" id="submit">
+              <span id="submit-label">Get listed first</span>
+            </button>
+            <p class="small">We will only use these details to set up your listing and tell you when we launch.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="signup-grid faq">
+      <div class="rise">
+        <h2>Questions.</h2>
+      </div>
+      <div class="faq-list rise">
+        <details>
+          <summary>What does a listing cost?</summary>
+          <p>Nothing. A free listing includes your business name, description and phone number. Paid plans add a gallery, reviews, messages and a starting price, and are optional. UK prices will be confirmed before launch.</p>
+        </details>
+        <details>
+          <summary>How do couples reach me?</summary>
+          <p>In three ways. They can call you straight from your profile. They can send you a request from your profile, with their date, guests and a message. Or they post a brief with the services they need, and once our team approves it, up to five suppliers per category in that area can unlock their details and get in touch.</p>
+        </details>
+        <details>
+          <summary>Why sign up before launch?</summary>
+          <p>We build founding profiles at no cost before couples arrive, so you are already listed on day one. Founding suppliers also keep priority placement in their county through the first season.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <img src="../../img/logo-lockup.webp" alt="The Wedding Experts" width="361" height="112" loading="lazy">
+    <p>&copy; <span id="yr">2026</span> The Wedding Experts. Launching across the United Kingdom.</p>
+  </div>
+</footer>
+
+<script>
+/* ── Reveal. IntersectionObserver, never a scroll listener ── */
+(function(){
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rises  = document.querySelectorAll('.rise');
+
+  if (reduce || !('IntersectionObserver' in window)) {
+    rises.forEach(function(el){ el.classList.add('seen'); });
+    return;
+  }
+
+  /* Anything already on screen is revealed synchronously, before any observer
+     or timer is involved. Background tabs throttle both. */
+  function revealIfVisible(el){
+    var r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight * 1.05 && r.bottom > 0){ el.classList.add('seen'); return true; }
+    return false;
+  }
+  var pending = [].filter.call(rises, function(el){ return !revealIfVisible(el); });
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
+    });
+  }, { threshold:.12, rootMargin:'0px 0px -6% 0px' });
+  pending.forEach(function(el){ io.observe(el); });
+
+  /* Last resort: if the observer never fires, show them anyway. */
+  setTimeout(function(){
+    pending.forEach(function(el){ el.classList.add('seen'); });
+  }, 2500);
+})();
+
+/* ── Analytics: CTA clicks ── */
+(function(){
+  document.querySelectorAll('[data-ga-cta]').forEach(function(el){
+    el.addEventListener('click', function(){
+      gtag('event', 'cta_click', { cta_location: el.getAttribute('data-ga-cta') });
+    });
+  });
+})();
+
+/* ── Form: validation, submit, success and failure states ── */
+(function(){
+  /* Address that receives signups. FormSubmit emails a one-time activation
+     link here on the very first submission; nothing is delivered until it is clicked. */
+  var ENDPOINT = 'https://formsubmit.co/ajax/admin@theweddingexperts.gr';
+
+  var form  = document.getElementById('signup-form');
+  var btn   = document.getElementById('submit');
+  var label = document.getElementById('submit-label');
+  var ok    = document.getElementById('ok');
+  var bad   = document.getElementById('bad');
+
+  var required = ['business','name','email','area','category'];
+  function fieldOf(id){ return document.getElementById('f-' + id); }
+
+  function validate(){
+    var good = true;
+    required.forEach(function(id){
+      var input = document.getElementById(id);
+      var value = (input.value || '').trim();
+      var isBad = !value;
+      if (id === 'email' && value) isBad = !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+      fieldOf(id).setAttribute('data-invalid', isBad ? 'true' : 'false');
+      if (isBad){ if (good) input.focus(); good = false; }
+    });
+    return good;
+  }
+
+  var startedForm = false;
+  required.forEach(function(id){
+    document.getElementById(id).addEventListener('input', function(){
+      fieldOf(id).setAttribute('data-invalid','false');
+      if (!startedForm){ startedForm = true; gtag('event', 'form_start', { form_id: 'signup-form' }); }
+    });
+  });
+
+  function busy(on){
+    btn.disabled = on;
+    label.textContent = on ? 'Sending' : 'Get listed first';
+    var sp = document.getElementById('sp');
+    if (on && !sp){
+      sp = document.createElement('span');
+      sp.className = 'spinner'; sp.id = 'sp';
+      btn.appendChild(sp);
+    } else if (!on && sp){ sp.remove(); }
+  }
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    ok.classList.remove('on');
+    bad.classList.remove('on');
+
+    if (document.getElementById('_honey').value) return;   /* bot */
+    if (!validate()){ gtag('event', 'form_error', { error_reason: 'validation' }); return; }
+
+    busy(true);
+    gtag('event', 'form_submit', { form_id: 'signup-form' });
+
+    var payload = {
+      _subject:  'UK founding listing: ' + document.getElementById('business').value,
+      _template: 'table',
+      business:  document.getElementById('business').value,
+      name:      document.getElementById('name').value,
+      email:     document.getElementById('email').value,
+      area:      document.getElementById('area').value,
+      category:  document.getElementById('category').value,
+      website:   document.getElementById('website').value
+    };
+
+    fetch(ENDPOINT, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(){
+      gtag('event', 'generate_lead', { category: document.getElementById('category').value });
+      form.style.display = 'none';
+      ok.classList.add('on');
+      ok.scrollIntoView({ behavior:'smooth', block:'center' });
+    })
+    .catch(function(){
+      gtag('event', 'form_error', { error_reason: 'network' });
+      busy(false);
+      bad.classList.add('on');
+    });
+  });
+})();
+</script>
+
+<!-- Mobile sticky CTA: appears once the hero button has scrolled away, hides again when the signup form is reached. -->
+<div class="sticky-cta" id="sticky-cta" aria-hidden="true" inert>
+  <a class="btn" href="#get-listed" data-ga-cta="sticky">Get listed first</a>
+</div>
+<style>
+.sticky-cta{display:none}
+@media (max-width:720px){
+  .sticky-cta{
+    display:block; position:fixed; left:0; right:0; bottom:0; z-index:50;
+    padding:.75rem 1rem calc(.75rem + env(safe-area-inset-bottom));
+    background:rgba(252,250,247,.96); border-top:1px solid var(--line);
+    box-shadow:0 -10px 24px -18px rgba(142,72,53,.3);
+    transform:translateY(calc(100% + 8px)); visibility:hidden;
+    transition:transform .38s cubic-bezier(.16,1,.3,1), visibility 0s linear .38s;
+  }
+  .sticky-cta.on{transform:none; visibility:visible; transition:transform .38s cubic-bezier(.16,1,.3,1), visibility 0s}
+  .sticky-cta a{display:flex; width:100%; justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){ .sticky-cta, .sticky-cta.on{transition:none} }
+</style>
+<script>
+(function(){
+  var bar = document.getElementById('sticky-cta');
+  var hero = document.querySelector('[data-ga-cta="hero"]');
+  var signup = document.getElementById('get-listed');
+  if (!bar || !hero || !signup || !('IntersectionObserver' in window)) return;
+  var pastHero = false, atForm = false;
+  function update(){
+    var on = pastHero && !atForm;
+    bar.classList.toggle('on', on);
+    bar.setAttribute('aria-hidden', on ? 'false' : 'true');
+    if (on) bar.removeAttribute('inert'); else bar.setAttribute('inert', '');
+  }
+  new IntersectionObserver(function(entries){
+    var e = entries[entries.length - 1];
+    pastHero = !e.isIntersecting && e.boundingClientRect.top < 0;
+    update();
+  }).observe(hero);
+  new IntersectionObserver(function(entries){
+    var e = entries[entries.length - 1];
+    atForm = e.isIntersecting || e.boundingClientRect.top < 0;
+    update();
+  }, { rootMargin: '0px 0px -20% 0px' }).observe(signup);
+  bar.querySelector('a').addEventListener('click', function(){
+    if (typeof gtag === 'function') gtag('event', 'cta_click', { cta_location: 'sticky' });
+  });
+})();
+</script>
+</body>
+</html>
