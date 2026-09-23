@@ -57,7 +57,7 @@ gtag('config', 'G-RSM9TPGFJ1');
   --sage:      #3d6a62;   /* THE action colour. White on it is 5.9:1 */
   --sage-dark: #2c514b;   /* hover */
 
-  --gold:      #c4a24c;   /* hairlines, rings, wave edge */
+  --gold:      #c4a24c;   /* hairlines, rings, dividers */
   --gold-ink:  #8a6d22;   /* gold used as text, 5.2:1 on paper */
   --gold-num:  #a88834;   /* large numerals only */
   --gold-rule: #d4b86a;   /* dividers */
@@ -129,8 +129,36 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 }
 .cta-ghost:hover{background:var(--sage); color:#fff}
 
-/* ═══ Header ══════════════════════════════════════════════ */
-.top{display:flex; align-items:center; justify-content:space-between; gap:1.5rem; padding-block:clamp(1.1rem,2vw,1.75rem)}
+/* ═══ Header and hero ═════════════════════════════════════
+   v1's treatment: one full-bleed photograph, a pale wash over it so
+   the type always has contrast, and the copy sitting on the wash.   */
+.hero{
+  position:relative;
+  min-height:100dvh;
+  display:flex; flex-direction:column;
+  isolation:isolate; overflow:hidden;
+}
+.hero-img{
+  position:absolute; inset:0; z-index:-2;
+  width:100%; height:100%; object-fit:cover; object-position:58% 55%;
+}
+.hero::after{                      /* wash, so the type reads on any crop */
+  content:""; position:absolute; inset:0; z-index:-1;
+  background:
+    linear-gradient(100deg,
+      rgba(244,246,244,.96) 0%,
+      rgba(244,246,244,.90) 24%,
+      rgba(244,246,244,.80) 42%,
+      rgba(244,246,244,.45) 58%,
+      rgba(244,246,244,.12) 72%,
+      rgba(244,246,244,0)   88%),
+    linear-gradient(to bottom, rgba(244,246,244,.72), rgba(244,246,244,.30) 9%, transparent 18%);
+}
+.top{
+  position:relative;
+  display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
+  padding-block:clamp(1.1rem,2vw,1.75rem);
+}
 .top img{width:clamp(136px,13vw,180px)}
 .nav{display:flex; gap:2rem; font-size:.95rem; font-weight:500}
 .nav a{color:var(--soft)}
@@ -138,54 +166,64 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 .top-right{display:flex; align-items:center; gap:2.5rem}
 @media (max-width:900px){ .nav{display:none} }
 
-/* ═══ Hero ════════════════════════════════════════════════ */
-.hero{display:grid; grid-template-columns:1fr; gap:clamp(2rem,4vw,4.5rem); align-items:center; padding-block:clamp(1.5rem,3vw,3.5rem) clamp(2.5rem,4vw,4rem)}
-@media (min-width:900px){ .hero{grid-template-columns:repeat(2,minmax(0,1fr))} }
-.hero-copy{display:flex; flex-direction:column; gap:clamp(1.1rem,1.8vw,1.75rem); align-items:flex-start}
-.hero-copy .lede{max-width:34rem}
+.hero-body{
+  position:relative; flex:1;
+  display:flex; align-items:center;
+  padding-block:clamp(2rem,5vw,4rem) clamp(3rem,7vw,5.5rem);
+}
+.hero-copy{display:flex; flex-direction:column; gap:clamp(1.1rem,1.8vw,1.75rem); align-items:flex-start; max-width:min(36rem,52vw)}
 .hero-actions{display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.5rem; margin-top:.5rem}
 .hero-actions .note{font-size:.95rem; color:var(--faint)}
 @media (max-width:560px){ .hero-actions .cta{width:100%} .hero-actions .note{width:100%; text-align:center} }
 
-.hero-fig{position:relative; order:-1}
-@media (min-width:900px){ .hero-fig{order:0} }
-.hero-fig img{
-  width:100%; height:clamp(260px,42vw,600px); object-fit:cover; object-position:50% 55%;
-  border-radius:clamp(14px,1.6vw,24px);
+/* Small screens: the photograph owns the top of the screen and the copy
+   sits on the wash beneath it, as on v1. Overrides come after the base
+   rules on purpose — same specificity, so source order decides.       */
+@media (max-width:900px){
+  .hero-copy{max-width:none; width:100%}
+  .hero-body{align-items:flex-end; padding-bottom:clamp(2.5rem,7vw,4rem)}
+  .hero::after{
+    background:linear-gradient(to bottom,
+      rgba(244,246,244,.70)  0%,
+      rgba(244,246,244,.26) 12%,
+      rgba(244,246,244,.20) 30%,
+      rgba(244,246,244,.82) 44%,
+      rgba(244,246,244,.95) 58%,
+      rgba(244,246,244,.97) 100%);
+  }
 }
-/* The example card sits over the blurred guests, never over the bride. */
-.lead-card{
-  width:min(300px,86%);
-  background:rgba(251,252,251,.94);
-  border:1px solid #dde5e0; border-radius:16px;
-  padding:1.25rem 1.35rem;
-  display:flex; flex-direction:column; gap:.6rem;
-  box-shadow:0 18px 40px -24px rgba(29,43,42,.35);
-  /* Below the photo on small screens: overlapping it put the label on top of
-     the picture, where the tinted card never read cleanly. */
-  background:#fbfcfb;
-  margin:1rem auto 0;
-}
-@media (min-width:900px){
-  .lead-card{position:absolute; right:-2.5rem; bottom:2.25rem; margin:0; background:rgba(251,252,251,.94)}
-}
-@media (min-width:900px) and (max-width:1200px){ .lead-card{right:1rem} }
-.lead-card .row{display:flex; align-items:center; justify-content:space-between; gap:1rem}
-.lead-card .tag{font-size:.72rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--gold-ink)}
-.lead-card .ex{font-size:.75rem; color:var(--faint)}
-.lead-card .when{font-size:1.5rem}
-.lead-card .where{font-size:.88rem; color:var(--soft)}
-.lead-card .seats{display:flex; align-items:center; gap:.6rem; padding-top:.45rem; border-top:1px solid #e3e9e5}
-.dots{display:flex; gap:5px}
-.dots span{width:8px; height:8px; border-radius:50%; background:var(--line)}
-.dots span.on{background:var(--sage)}
-.lead-card .seats small{font-size:.8rem; color:var(--soft)}
 
-/* ═══ Wave divider ════════════════════════════════════════
-   Three layers, each casting a shadow on the one behind, so the
-   sections fold over each other instead of meeting on a flat line. */
-.wave{display:block; line-height:0; background:var(--mist)}
-.wave svg{display:block; width:100%; height:clamp(54px,9vw,180px)}
+/* Example request card, drawn like a real request card in the app.
+   It lives beside the leads copy now, never over a photograph.       */
+.lead-card{
+  width:100%; max-width:22rem;
+  background:var(--paper);
+  border:1px solid #e6e2da; border-radius:14px;
+  padding:1.15rem 1.25rem;
+  display:flex; flex-direction:column; gap:.8rem;
+  box-shadow:0 18px 40px -30px rgba(29,43,42,.4);
+  margin-top:1.5rem;
+}
+.lc-top{display:flex; gap:.9rem; align-items:flex-start}
+.lc-date{flex:none; width:58px; border:1px solid #f0e6e1; border-radius:10px; background:#fdf7f5; padding:.4rem 0; text-align:center; line-height:1.2}
+.lc-date .m{display:block; font-size:.7rem; font-weight:600; color:#a9543c}
+.lc-date .d{display:block; font-family:"Newsreader",Georgia,serif; font-size:1.5rem; color:var(--ink)}
+.lc-date .y{display:block; font-size:.68rem; color:var(--faint)}
+.lc-ref{display:flex; flex-wrap:wrap; align-items:center; gap:.35rem; font-size:.76rem; color:var(--faint)}
+.lc-new{font-size:.62rem; font-weight:700; letter-spacing:.06em; color:#a9543c; background:#f7e4de; border-radius:4px; padding:.1rem .35rem}
+.lc-kind{font-family:"Newsreader",Georgia,serif; font-size:1.3rem; margin-top:.1rem}
+.lc-loc{display:flex; gap:.35rem; align-items:flex-start; font-size:.85rem; color:var(--soft); margin-top:.15rem}
+.lc-loc svg,.lc-facts svg{width:14px; height:14px; flex:none; margin-top:3px}
+.lc-facts{display:flex; flex-wrap:wrap; gap:.35rem .9rem; padding-top:.7rem; border-top:1px solid #ece8e1; font-size:.82rem; color:var(--soft)}
+.lc-facts span{display:inline-flex; gap:.35rem; align-items:flex-start}
+.lc-cat{background:#f6f6f2; border-radius:8px; padding:.6rem .7rem; display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .6rem}
+.lc-cat strong{font-size:.85rem; font-weight:600}
+.lc-cat .dots{margin-left:auto}
+.lc-cat small{font-size:.78rem; color:var(--soft)}
+.dots{display:flex; gap:4px}
+.dots span{width:7px; height:7px; border-radius:50%; background:#e0dcd2}
+.dots span.on{background:#4f7042}
+.lc-foot{display:flex; justify-content:space-between; gap:1rem; font-size:.78rem; color:var(--faint)}
 
 /* ═══ How it works ════════════════════════════════════════ */
 .how{background:var(--band); padding-block:clamp(2.5rem,4vw,4rem) clamp(3.5rem,7vw,7rem)}
@@ -218,19 +256,17 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 .shot img{border-radius:10px}
 .caption{font-size:.82rem; color:var(--faint); margin-top:.7rem; padding-left:.5rem}
 
-/* ═══ Early advantage ═════════════════════════════════════ */
-.early{
-  margin-inline:var(--gut); background:var(--deep);
-  border-radius:clamp(16px,2vw,28px);
-  box-shadow:inset 0 0 0 1px rgba(212,184,74,.6);
-  padding:clamp(2.25rem,5vw,5.5rem) clamp(1.5rem,5vw,6rem);
-  display:grid; grid-template-columns:1fr; gap:clamp(1.25rem,3vw,5rem); align-items:center;
+/* ═══ Ahead of launch ═════════════════════════════════════ */
+.ahead{
+  display:grid; grid-template-columns:1fr; gap:clamp(1.75rem,3.5vw,5rem); align-items:start;
+  padding-block:clamp(3rem,6vw,6rem);
 }
-@media (min-width:900px){ .early{grid-template-columns:repeat(2,minmax(0,1fr))} }
-.early h2{color:#f5f2e8}
-.early em{font-style:italic; color:#dcc47e}
-.early p{color:#d3ddd9; font-size:clamp(1rem,1.2vw,1.12rem); line-height:1.65}
-.early p + p{margin-top:1rem}
+@media (min-width:1000px){ .ahead{grid-template-columns:5fr 7fr} }
+.ahead-copy{display:flex; flex-direction:column; gap:1rem}
+.timeline{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr; gap:1.75rem}
+@media (min-width:760px){ .timeline{grid-template-columns:repeat(3,minmax(0,1fr)); gap:2rem} }
+.timeline li{position:relative; border-top:1px solid var(--gold-rule); padding-top:1.6rem; display:flex; flex-direction:column; gap:.5rem}
+.timeline .dot{position:absolute; left:0; top:-6px; width:11px; height:11px; border-radius:50%; border:1px solid var(--gold); background:var(--mist)}
 
 /* ═══ Questions ═══════════════════════════════════════════ */
 .faq{display:grid; grid-template-columns:1fr; gap:clamp(1.75rem,4vw,5rem); padding-block:clamp(3.5rem,7vw,7.5rem)}
@@ -319,73 +355,42 @@ footer .fine{font-size:.85rem; color:var(--faint)}
 
 <body>
 
-<header class="wrap top">
-  <a href="/" aria-label="The Wedding Experts UK, home">
-    <img src="../img/logo-lockup.webp" alt="The Wedding Experts" width="361" height="112">
-  </a>
-  <div class="top-right">
-    <nav class="nav" aria-label="Sections">
-      <a href="#how">How it works</a>
-      <a href="#leads">Leads</a>
-      <a href="#faq">Questions</a>
-    </nav>
-    <a class="cta-ghost" href="#signup" data-ga-cta="nav">Sign up</a>
+<!-- ═══ Header and hero ══════════════════════════════════ -->
+<header class="hero">
+  <picture>
+    <source media="(max-width:780px)" srcset="../img/cotswolds-sm.jpg">
+    <img class="hero-img" src="../img/cotswolds.jpg" width="1600" height="1200" fetchpriority="high"
+         alt="A wedding reception on the lawn of a honey-stone Cotswold manor house, with guests at long tables in the evening sun">
+  </picture>
+
+  <div class="wrap top">
+    <a href="/v2/" aria-label="The Wedding Experts UK, home">
+      <img src="../img/logo-lockup.webp" alt="The Wedding Experts" width="361" height="112">
+    </a>
+    <div class="top-right">
+      <nav class="nav" aria-label="Sections">
+        <a href="#how">How it works</a>
+        <a href="#faq">Questions</a>
+      </nav>
+      <a class="cta-ghost" href="#signup" data-ga-cta="nav">Sign up</a>
+    </div>
+  </div>
+
+  <div class="wrap hero-body">
+    <div class="hero-copy">
+      <span class="kicker">For UK wedding professionals · Opening to couples soon</span>
+      <h1 class="serif">Meet couples looking for <em style="font-style:italic; color:var(--sage)">exactly what you offer.</em></h1>
+      <p class="lede">The Wedding Experts is opening to couples across the UK. Register your interest now and we will build your profile at no cost, ready for the day they arrive.</p>
+      <div class="hero-actions">
+        <a class="cta" href="#signup" data-ga-cta="hero">
+          Register your interest
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <span class="note">Free to list.</span>
+      </div>
+    </div>
   </div>
 </header>
-
-<!-- ═══ Hero ══════════════════════════════════════════════ -->
-<section class="wrap hero">
-  <div class="hero-copy">
-    <span class="kicker">For UK wedding professionals · Opening to couples soon</span>
-    <h1 class="serif">Meet couples looking for <em style="font-style:italic; color:var(--sage)">exactly what you offer.</em></h1>
-    <p class="lede">The Wedding Experts is opening to couples across the UK. Register your interest now and we will build your profile at no cost, ready for the day they arrive.</p>
-    <div class="hero-actions">
-      <a class="cta" href="#signup" data-ga-cta="hero">
-        Register your interest
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <span class="note">Free to list. Six short questions.</span>
-    </div>
-  </div>
-
-  <figure class="hero-fig" style="margin:0">
-    <picture>
-      <source media="(max-width:780px)" srcset="../img/cotswolds-sm.jpg">
-      <img src="../img/cotswolds.jpg" width="1600" height="1200" fetchpriority="high"
-           alt="A wedding reception on the lawn of a honey-stone Cotswold manor house, with guests at long tables in the evening sun">
-    </picture>
-    <div class="lead-card">
-      <div class="row">
-        <span class="tag">New lead</span>
-        <span class="ex">Example</span>
-      </div>
-      <p class="serif when">Wedding · June 2027</p>
-      <p class="where">Painswick, Gloucestershire · 120 guests</p>
-      <div class="seats">
-        <span class="dots" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span>
-        <small>Photographer · 3 of 5 seats open</small>
-      </div>
-    </div>
-  </figure>
-</section>
-
-<!-- ═══ Wave into How it works ════════════════════════════ -->
-<div class="wave" aria-hidden="true">
-  <svg viewBox="0 0 1440 180" preserveAspectRatio="none" focusable="false">
-    <defs>
-      <linearGradient id="w-back" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fae9f"/><stop offset="1" stop-color="#c6d6cd"/></linearGradient>
-      <linearGradient id="w-mid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b3c9bd"/><stop offset="0.55" stop-color="#cfddd5"/><stop offset="1" stop-color="#dfe8e3"/></linearGradient>
-      <linearGradient id="w-front" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f9f7"/><stop offset="0.4" stop-color="#e7ede9"/><stop offset="1" stop-color="#e7ede9"/></linearGradient>
-      <linearGradient id="w-gold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9d9a4"/><stop offset="0.35" stop-color="#b08b34"/><stop offset="0.6" stop-color="#f0e2b0"/><stop offset="1" stop-color="#a88430"/></linearGradient>
-      <filter id="w-lift" x="-5%" y="-50%" width="110%" height="200%"><feDropShadow dx="0" dy="-8" stdDeviation="12" flood-color="#1d2b2a" flood-opacity="0.24"/></filter>
-    </defs>
-    <path d="M0,80 C200,0 440,-10 680,55 C920,120 1180,20 1440,5 L1440,180 L0,180 Z" fill="url(#w-back)" opacity="0.9"/>
-    <path d="M0,120 C240,45 500,40 760,110 C1000,170 1230,90 1440,60 L1440,180 L0,180 Z" fill="url(#w-mid)" filter="url(#w-lift)"/>
-    <path d="M0,120 C240,45 500,40 760,110 C1000,170 1230,90 1440,60" fill="none" stroke="url(#w-gold)" stroke-width="2" vector-effect="non-scaling-stroke"/>
-    <path d="M0,158 C290,105 560,118 830,150 C1070,178 1270,130 1440,120 L1440,180 L0,180 Z" fill="url(#w-front)" filter="url(#w-lift)"/>
-    <path d="M0,158 C290,105 560,118 830,150 C1070,178 1270,130 1440,120" fill="none" stroke="#ffffff" stroke-opacity="0.8" stroke-width="1.5" vector-effect="non-scaling-stroke" transform="translate(0 2)"/>
-  </svg>
-</div>
 
 <!-- ═══ How it works ══════════════════════════════════════ -->
 <section class="how" id="how">
@@ -399,27 +404,25 @@ footer .fine{font-size:.85rem; color:var(--faint)}
       <div class="step rise">
         <span class="num" aria-hidden="true">1</span>
         <div class="txt">
-          <h3 class="serif">You register your business</h3>
-          <p class="body">Tell us what you do and where you work. We build your profile with your photos, services and starting price.</p>
+          <h3 class="serif">Register your business</h3>
+          <p class="body">Tell us what you do and the areas you cover. We build your profile from the details you send.</p>
         </div>
       </div>
       <div class="step rise">
         <span class="num" aria-hidden="true">2</span>
         <div class="txt">
           <h3 class="serif">Couples tell us what they need</h3>
-          <p class="body">They share their date, location, guest numbers and the services they are looking for.</p>
+          <p class="body">Their date, place, guest numbers and the services they are looking for. Every couple is verified by mobile and email, so the requests you see are real.</p>
         </div>
       </div>
       <div class="step rise">
         <span class="num" aria-hidden="true">3</span>
         <div class="txt">
-          <h3 class="serif">We match couples with the best options</h3>
-          <p class="body">We look at what each couple needs and put their request in front of the professionals who fit best.</p>
+          <h3 class="serif">We connect you with the couple</h3>
+          <p class="body">We match each request with the professionals who fit best. Couples can also call or message you straight from your profile.</p>
         </div>
       </div>
     </div>
-
-    <p class="body how-foot rise">Couples can also call you or request a quote straight from your profile.</p>
   </div>
 </section>
 
@@ -427,8 +430,8 @@ footer .fine{font-size:.85rem; color:var(--faint)}
 <section class="wrap leads" id="leads">
   <div class="leads-copy rise">
     <span class="kicker">Your leads screen</span>
-    <h2 class="serif">A brief reaches a few professionals, not everyone.</h2>
-    <p class="lede">Each category has a limited number of seats per lead, so you are not one of hundreds replying to the same couple.</p>
+    <h2 class="serif">A request reaches a few professionals, not everyone.</h2>
+    <p class="lede">Each category has a limited number of seats per request, so you are not one of hundreds replying to the same couple.</p>
     <div class="ticks">
       <p class="tick">
         <svg viewBox="0 0 24 24" fill="none" stroke="#3d6a62" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
@@ -443,6 +446,28 @@ footer .fine{font-size:.85rem; color:var(--faint)}
         <span>Message the couple directly once you have unlocked</span>
       </p>
     </div>
+
+    <div class="lead-card">
+      <div class="lc-top">
+        <div class="lc-date"><span class="m">Jun</span><span class="d">19</span><span class="y">2027</span></div>
+        <div>
+          <p class="lc-ref">Request #2417 · submitted 14-09-2026 <span class="lc-new">NEW</span></p>
+          <p class="lc-kind">Wedding</p>
+          <p class="lc-loc"><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Painswick, Gloucestershire</span></p>
+        </div>
+      </div>
+      <div class="lc-facts">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M17 11.5a3 3 0 0 0 0-6"/></svg>120 guests</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V20H4z"/><path d="M12 5V2.5"/><path d="M10 20v-4.5h4V20"/></svg>St Mary's Church</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>Contact: Afternoon</span>
+      </div>
+      <div class="lc-cat">
+        <strong>Photographer</strong>
+        <span class="dots" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span>
+        <small>3 of 5 open</small>
+      </div>
+      <p class="lc-foot"><span>Anonymous until unlocked</span><span>Example</span></p>
+    </div>
   </div>
 
   <figure class="rise" style="margin:0">
@@ -450,20 +475,37 @@ footer .fine{font-size:.85rem; color:var(--faint)}
       <picture>
         <source media="(max-width:780px)" srcset="../img/app/app-leads-phone.jpg">
         <img src="../img/app/app-leads.jpg" width="1800" height="1157" loading="lazy"
-             alt="The Leads screen in the app, showing four anonymous wedding briefs with their dates, places and open seats">
+             alt="The Leads screen in the app, showing four anonymous couple requests with their dates, places and open seats">
       </picture>
     </div>
     <figcaption class="caption">The real Leads screen, shown with example UK data.</figcaption>
   </figure>
 </section>
 
-<!-- ═══ Early advantage ══════════════════════════════════ -->
-<section class="early rise">
-  <h2 class="serif">Being there on <em>day one</em> is the whole point.</h2>
-  <div>
-    <p>When we open to couples, they will choose from the professionals already listed. Register now and your profile is ready from the first day.</p>
-    <p>So we are building them now, at no cost, and holding priority placement in each county through the first season.</p>
+<!-- ═══ Ahead of launch ══════════════════════════════════ -->
+<section class="wrap ahead rise">
+  <div class="ahead-copy">
+    <span class="kicker">Before launch</span>
+    <h2 class="serif">Be there the day couples arrive.</h2>
+    <p class="lede">Register now and your profile is ready from the first day, when couples start searching and the professionals already listed are the ones they find.</p>
   </div>
+  <ol class="timeline">
+    <li>
+      <span class="dot" aria-hidden="true"></span>
+      <h3 class="serif">Now</h3>
+      <p class="body">We build your profile from your details, at no cost.</p>
+    </li>
+    <li>
+      <span class="dot" aria-hidden="true"></span>
+      <h3 class="serif">Launch day</h3>
+      <p class="body">Couples search the UK site and find you in the results.</p>
+    </li>
+    <li>
+      <span class="dot" aria-hidden="true"></span>
+      <h3 class="serif">First season</h3>
+      <p class="body">You keep priority placement in your county.</p>
+    </li>
+  </ol>
 </section>
 
 <!-- ═══ Questions ════════════════════════════════════════ -->
@@ -476,11 +518,11 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   <div class="rise">
     <div class="qa">
       <h3 class="serif">Does it cost anything?</h3>
-      <p class="body">Registering and listing your business is free. Paid plans add a larger gallery, reviews, chat and higher placement. They are optional, and UK prices will be shared before launch.</p>
+      <p class="body">Registering and listing your business is free, and stays free. Paid plans add a larger gallery, reviews, chat and higher placement, and the first three months on a paid plan cost nothing. UK prices will be shared before launch.</p>
     </div>
     <div class="qa">
-      <h3 class="serif">Do I have to quote inside the app?</h3>
-      <p class="body">No. You unlock a lead and message the couple, or take their call. How you price and quote stays your own.</p>
+      <h3 class="serif">Do I have to send quotes in the app?</h3>
+      <p class="body">No. We put you and the couple in touch: unlock the request and message them, or take their call. How you price is up to you.</p>
     </div>
     <div class="qa">
       <h3 class="serif">Who builds my profile?</h3>
