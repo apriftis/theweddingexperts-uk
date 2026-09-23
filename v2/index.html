@@ -227,7 +227,9 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 /* ═══ Wave divider ════════════════════════════════════════
    Three layers, each casting a shadow on the one behind, so the
    sections fold over each other instead of meeting on a flat line. */
-.wave{display:block; line-height:0; background:var(--mist)}
+.wave{display:block; line-height:0; position:relative; background:transparent;
+     /* pulled up over the photograph, so the waves rise straight out of it */
+     margin-top:calc(-1 * clamp(54px,9vw,180px))}
 .wave svg{display:block; width:100%; height:clamp(54px,9vw,180px)}
 
 /* ═══ How it works ════════════════════════════════════════ */
