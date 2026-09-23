@@ -218,19 +218,17 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 .shot img{border-radius:10px}
 .caption{font-size:.82rem; color:var(--faint); margin-top:.7rem; padding-left:.5rem}
 
-/* ═══ Early advantage ═════════════════════════════════════ */
-.early{
-  margin-inline:var(--gut); background:var(--deep);
-  border-radius:clamp(16px,2vw,28px);
-  box-shadow:inset 0 0 0 1px rgba(212,184,74,.6);
-  padding:clamp(2.25rem,5vw,5.5rem) clamp(1.5rem,5vw,6rem);
-  display:grid; grid-template-columns:1fr; gap:clamp(1.25rem,3vw,5rem); align-items:center;
+/* ═══ Ahead of launch ═════════════════════════════════════ */
+.ahead{
+  display:grid; grid-template-columns:1fr; gap:clamp(1.75rem,3.5vw,5rem); align-items:start;
+  padding-block:clamp(3rem,6vw,6rem);
 }
-@media (min-width:900px){ .early{grid-template-columns:repeat(2,minmax(0,1fr))} }
-.early h2{color:#f5f2e8}
-.early em{font-style:italic; color:#dcc47e}
-.early p{color:#d3ddd9; font-size:clamp(1rem,1.2vw,1.12rem); line-height:1.65}
-.early p + p{margin-top:1rem}
+@media (min-width:1000px){ .ahead{grid-template-columns:5fr 7fr} }
+.ahead-copy{display:flex; flex-direction:column; gap:1rem}
+.timeline{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr; gap:1.75rem}
+@media (min-width:760px){ .timeline{grid-template-columns:repeat(3,minmax(0,1fr)); gap:2rem} }
+.timeline li{position:relative; border-top:1px solid var(--gold-rule); padding-top:1.6rem; display:flex; flex-direction:column; gap:.5rem}
+.timeline .dot{position:absolute; left:0; top:-6px; width:11px; height:11px; border-radius:50%; border:1px solid var(--gold); background:var(--mist)}
 
 /* ═══ Questions ═══════════════════════════════════════════ */
 .faq{display:grid; grid-template-columns:1fr; gap:clamp(1.75rem,4vw,5rem); padding-block:clamp(3.5rem,7vw,7.5rem)}
@@ -344,7 +342,7 @@ footer .fine{font-size:.85rem; color:var(--faint)}
         Register your interest
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
-      <span class="note">Free to list. Six short questions.</span>
+      <span class="note">Free to list.</span>
     </div>
   </div>
 
@@ -399,27 +397,25 @@ footer .fine{font-size:.85rem; color:var(--faint)}
       <div class="step rise">
         <span class="num" aria-hidden="true">1</span>
         <div class="txt">
-          <h3 class="serif">You register your business</h3>
-          <p class="body">Tell us what you do and where you work. We build your profile with your photos, services and starting price.</p>
+          <h3 class="serif">Register your business</h3>
+          <p class="body">Tell us what you do and the areas you cover. We build your profile from the details you send.</p>
         </div>
       </div>
       <div class="step rise">
         <span class="num" aria-hidden="true">2</span>
         <div class="txt">
           <h3 class="serif">Couples tell us what they need</h3>
-          <p class="body">They share their date, location, guest numbers and the services they are looking for.</p>
+          <p class="body">Their date, place, guest numbers and the services they are looking for. Every couple is verified by mobile and email, so the requests you see are real.</p>
         </div>
       </div>
       <div class="step rise">
         <span class="num" aria-hidden="true">3</span>
         <div class="txt">
-          <h3 class="serif">We match couples with the best options</h3>
-          <p class="body">We look at what each couple needs and put their request in front of the professionals who fit best.</p>
+          <h3 class="serif">We connect you with the couple</h3>
+          <p class="body">We match each request with the professionals who fit best. Couples can also call or message you straight from your profile.</p>
         </div>
       </div>
     </div>
-
-    <p class="body how-foot rise">Couples can also call you or request a quote straight from your profile.</p>
   </div>
 </section>
 
@@ -427,8 +423,8 @@ footer .fine{font-size:.85rem; color:var(--faint)}
 <section class="wrap leads" id="leads">
   <div class="leads-copy rise">
     <span class="kicker">Your leads screen</span>
-    <h2 class="serif">A brief reaches a few professionals, not everyone.</h2>
-    <p class="lede">Each category has a limited number of seats per lead, so you are not one of hundreds replying to the same couple.</p>
+    <h2 class="serif">A request reaches a few professionals, not everyone.</h2>
+    <p class="lede">Each category has a limited number of seats per request, so you are not one of hundreds replying to the same couple.</p>
     <div class="ticks">
       <p class="tick">
         <svg viewBox="0 0 24 24" fill="none" stroke="#3d6a62" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
@@ -450,20 +446,37 @@ footer .fine{font-size:.85rem; color:var(--faint)}
       <picture>
         <source media="(max-width:780px)" srcset="../img/app/app-leads-phone.jpg">
         <img src="../img/app/app-leads.jpg" width="1800" height="1157" loading="lazy"
-             alt="The Leads screen in the app, showing four anonymous wedding briefs with their dates, places and open seats">
+             alt="The Leads screen in the app, showing four anonymous couple requests with their dates, places and open seats">
       </picture>
     </div>
     <figcaption class="caption">The real Leads screen, shown with example UK data.</figcaption>
   </figure>
 </section>
 
-<!-- ═══ Early advantage ══════════════════════════════════ -->
-<section class="early rise">
-  <h2 class="serif">Being there on <em>day one</em> is the whole point.</h2>
-  <div>
-    <p>When we open to couples, they will choose from the professionals already listed. Register now and your profile is ready from the first day.</p>
-    <p>So we are building them now, at no cost, and holding priority placement in each county through the first season.</p>
+<!-- ═══ Ahead of launch ══════════════════════════════════ -->
+<section class="wrap ahead rise">
+  <div class="ahead-copy">
+    <span class="kicker">Before launch</span>
+    <h2 class="serif">Be there the day couples arrive.</h2>
+    <p class="lede">Register now and your profile is ready from the first day, when couples start searching and the professionals already listed are the ones they find.</p>
   </div>
+  <ol class="timeline">
+    <li>
+      <span class="dot" aria-hidden="true"></span>
+      <h3 class="serif">Now</h3>
+      <p class="body">We build your profile from your details, at no cost.</p>
+    </li>
+    <li>
+      <span class="dot" aria-hidden="true"></span>
+      <h3 class="serif">Launch day</h3>
+      <p class="body">Couples search the UK site and find you in the results.</p>
+    </li>
+    <li>
+      <span class="dot" aria-hidden="true"></span>
+      <h3 class="serif">First season</h3>
+      <p class="body">You keep priority placement in your county.</p>
+    </li>
+  </ol>
 </section>
 
 <!-- ═══ Questions ════════════════════════════════════════ -->
@@ -476,11 +489,11 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   <div class="rise">
     <div class="qa">
       <h3 class="serif">Does it cost anything?</h3>
-      <p class="body">Registering and listing your business is free. Paid plans add a larger gallery, reviews, chat and higher placement. They are optional, and UK prices will be shared before launch.</p>
+      <p class="body">Registering and listing your business is free, and stays free. Paid plans add a larger gallery, reviews, chat and higher placement, and the first three months on a paid plan cost nothing. UK prices will be shared before launch.</p>
     </div>
     <div class="qa">
-      <h3 class="serif">Do I have to quote inside the app?</h3>
-      <p class="body">No. You unlock a lead and message the couple, or take their call. How you price and quote stays your own.</p>
+      <h3 class="serif">Do I have to send quotes in the app?</h3>
+      <p class="body">No. We put you and the couple in touch: unlock the request and message them, or take their call. How you price is up to you.</p>
     </div>
     <div class="qa">
       <h3 class="serif">Who builds my profile?</h3>
