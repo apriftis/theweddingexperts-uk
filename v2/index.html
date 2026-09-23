@@ -39,6 +39,21 @@ gtag('js', new Date());
 gtag('config', 'G-RSM9TPGFJ1');
 </script>
 
+<!-- Meta Pixel. Same dataset as the live page; events carry page_variant 'v2'.
+     Set the ID to '' to switch it off: the script is then never loaded. -->
+<script>
+var META_PIXEL_ID = '1081044958136877';
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];if(!META_PIXEL_ID)return;
+t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+/* The CTAs jump to #signup; without this the Pixel counts each jump as a new PageView. */
+fbq.disablePushState = true;
+if (META_PIXEL_ID){ fbq('init', META_PIXEL_ID); fbq('track', 'PageView'); }
+</script>
+
 <style>
 /* ═══ Tokens ═══════════════════════════════════════════════
    Calm green palette with the brand gold kept for detail only.
@@ -354,6 +369,7 @@ footer .fine{font-size:.85rem; color:var(--faint)}
 </head>
 
 <body>
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=1081044958136877&amp;ev=PageView&amp;noscript=1"></noscript>
 
 <!-- ═══ Header and hero ══════════════════════════════════ -->
 <header class="hero">
@@ -679,6 +695,7 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   document.querySelectorAll('[data-ga-cta]').forEach(function(el){
     el.addEventListener('click', function(){
       gtag('event', 'cta_click', { cta_location: el.getAttribute('data-ga-cta'), page_variant: 'v2' });
+      fbq('trackCustom', 'CTAClick', { cta_location: el.getAttribute('data-ga-cta'), page_variant: 'v2' });
     });
   });
 })();
@@ -716,7 +733,11 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   required.forEach(function(id){
     document.getElementById(id).addEventListener('input', function(){
       fieldOf(id).setAttribute('data-invalid','false');
-      if (!startedForm){ startedForm = true; gtag('event', 'form_start', { form_id: 'signup-form', page_variant: 'v2' }); }
+      if (!startedForm){
+        startedForm = true;
+        gtag('event', 'form_start', { form_id: 'signup-form', page_variant: 'v2' });
+        fbq('trackCustom', 'FormStart', { form_id: 'signup-form', page_variant: 'v2' });
+      }
     });
   });
 
@@ -761,7 +782,15 @@ footer .fine{font-size:.85rem; color:var(--faint)}
     })
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(){
-      gtag('event', 'generate_lead', { category: document.getElementById('category').value, page_variant: 'v2' });
+      var category = document.getElementById('category').value;
+      gtag('event', 'generate_lead', { category: category, page_variant: 'v2' });
+      /* Advanced matching: re-init with the email so Meta can match the Lead
+         to an account (the Pixel hashes it in the browser before sending).
+         eventID lets a future Conversions API call send the same Lead
+         without Meta counting it twice, so reuse leadEventId there. */
+      var leadEventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+      if (META_PIXEL_ID) fbq('init', META_PIXEL_ID, { em: payload.email.trim().toLowerCase() });
+      fbq('track', 'Lead', { content_category: category, page_variant: 'v2' }, { eventID: leadEventId });
       form.style.display = 'none';
       ok.classList.add('on');
       ok.scrollIntoView({ behavior:'smooth', block:'center' });

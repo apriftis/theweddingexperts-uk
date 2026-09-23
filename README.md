@@ -52,6 +52,35 @@ afterwards if you want it.
 **3. Turn Pages on.** Repo Settings, Pages, source `main`, folder `/`. Tick
 "Enforce HTTPS" once the certificate is issued.
 
+**4. Meta Pixel.** The Pixel (dataset) ID from Events Manager is set in
+`index.html`:
+
+```js
+var META_PIXEL_ID = '1081044958136877';
+```
+
+Set it back to `''` to switch the Pixel off: the script is then never loaded
+and nothing reaches Meta. While it is set, the page sends:
+
+| Meta event | When | Mirrors GA4 |
+|---|---|---|
+| `PageView` | Page load | `page_view` |
+| `CTAClick` (custom) | Any "Get listed first" button, with `cta_location` | `cta_click` |
+| `FormStart` (custom) | First keystroke in the signup form | `form_start` |
+| `Lead` | Signup delivered successfully, with `content_category` and the hashed email | `generate_lead` |
+
+Optimise lead campaigns for `Lead`. Check each event in Events Manager's Test
+Events tab before spending anything.
+
+The page has **no cookie banner**, so the Pixel and GA4 set cookies without
+asking. UK PECR requires opt-in consent for advertising cookies. Add a banner
+before scaling spend.
+
+**Conversions API is not set up yet.** It needs a server to hold the access
+token (the page is static). When you add one, send the server-side `Lead` with
+the same `event_id` as the browser's `eventID` (the `leadEventId` variable in
+the form script), or Meta counts every signup twice.
+
 ## Design notes
 
 The palette and type are sampled from the **live** production site, so the two
