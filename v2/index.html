@@ -164,8 +164,11 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
   margin:1rem auto 0;
 }
 @media (min-width:900px){
-  .lead-card{position:absolute; left:50%; transform:translateX(-50%); bottom:1.75rem; margin:0; background:rgba(251,252,251,.97)}
+  .lead-card{position:absolute; left:0; transform:translateX(-18%); bottom:2.5rem; margin:0; background:rgba(251,252,251,.97)}
 }
+/* Narrower desktops: the copy column reaches further right, so the card
+   sits fully inside the photo rather than over the text. */
+@media (min-width:900px) and (max-width:1250px){ .lead-card{transform:none} }
 .lc-top{display:flex; gap:.9rem; align-items:flex-start}
 .lc-date{flex:none; width:58px; border:1px solid #f0e6e1; border-radius:10px; background:#fdf7f5; padding:.4rem 0; text-align:center; line-height:1.2}
 .lc-date .m{display:block; font-size:.7rem; font-weight:600; color:#a9543c}
