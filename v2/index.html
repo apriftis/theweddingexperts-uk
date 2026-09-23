@@ -57,7 +57,7 @@ gtag('config', 'G-RSM9TPGFJ1');
   --sage:      #3d6a62;   /* THE action colour. White on it is 5.9:1 */
   --sage-dark: #2c514b;   /* hover */
 
-  --gold:      #c4a24c;   /* hairlines, rings, wave edge */
+  --gold:      #c4a24c;   /* hairlines, rings, dividers */
   --gold-ink:  #8a6d22;   /* gold used as text, 5.2:1 on paper */
   --gold-num:  #a88834;   /* large numerals only */
   --gold-rule: #d4b86a;   /* dividers */
@@ -169,7 +169,7 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 .hero-body{
   position:relative; flex:1;
   display:flex; align-items:center;
-  padding-block:clamp(2rem,5vw,4rem) calc(clamp(3rem,7vw,5.5rem) + clamp(54px,9vw,180px));
+  padding-block:clamp(2rem,5vw,4rem) clamp(3rem,7vw,5.5rem);
 }
 .hero-copy{display:flex; flex-direction:column; gap:clamp(1.1rem,1.8vw,1.75rem); align-items:flex-start; max-width:min(36rem,52vw)}
 .hero-actions{display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.5rem; margin-top:.5rem}
@@ -224,14 +224,6 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 .dots span{width:7px; height:7px; border-radius:50%; background:#e0dcd2}
 .dots span.on{background:#4f7042}
 .lc-foot{display:flex; justify-content:space-between; gap:1rem; font-size:.78rem; color:var(--faint)}
-
-/* ═══ Wave divider ════════════════════════════════════════
-   Three layers, each casting a shadow on the one behind, so the
-   sections fold over each other instead of meeting on a flat line. */
-.wave{display:block; line-height:0; position:relative; background:transparent;
-     /* pulled up over the photograph, so the waves rise straight out of it */
-     margin-top:calc(-1 * clamp(54px,9vw,180px))}
-.wave svg{display:block; width:100%; height:clamp(54px,9vw,180px)}
 
 /* ═══ How it works ════════════════════════════════════════ */
 .how{background:var(--band); padding-block:clamp(2.5rem,4vw,4rem) clamp(3.5rem,7vw,7rem)}
@@ -399,24 +391,6 @@ footer .fine{font-size:.85rem; color:var(--faint)}
     </div>
   </div>
 </header>
-
-<!-- ═══ Wave into How it works ════════════════════════════ -->
-<div class="wave" aria-hidden="true">
-  <svg viewBox="0 0 1440 180" preserveAspectRatio="none" focusable="false">
-    <defs>
-      <linearGradient id="w-back" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fae9f"/><stop offset="1" stop-color="#c6d6cd"/></linearGradient>
-      <linearGradient id="w-mid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b3c9bd"/><stop offset="0.55" stop-color="#cfddd5"/><stop offset="1" stop-color="#dfe8e3"/></linearGradient>
-      <linearGradient id="w-front" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f9f7"/><stop offset="0.4" stop-color="#e7ede9"/><stop offset="1" stop-color="#e7ede9"/></linearGradient>
-      <linearGradient id="w-gold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9d9a4"/><stop offset="0.35" stop-color="#b08b34"/><stop offset="0.6" stop-color="#f0e2b0"/><stop offset="1" stop-color="#a88430"/></linearGradient>
-      <filter id="w-lift" x="-5%" y="-50%" width="110%" height="200%"><feDropShadow dx="0" dy="-8" stdDeviation="12" flood-color="#1d2b2a" flood-opacity="0.24"/></filter>
-    </defs>
-    <path d="M0,80 C200,0 440,-10 680,55 C920,120 1180,20 1440,5 L1440,180 L0,180 Z" fill="url(#w-back)" opacity="0.9"/>
-    <path d="M0,120 C240,45 500,40 760,110 C1000,170 1230,90 1440,60 L1440,180 L0,180 Z" fill="url(#w-mid)" filter="url(#w-lift)"/>
-    <path d="M0,120 C240,45 500,40 760,110 C1000,170 1230,90 1440,60" fill="none" stroke="url(#w-gold)" stroke-width="2" vector-effect="non-scaling-stroke"/>
-    <path d="M0,158 C290,105 560,118 830,150 C1070,178 1270,130 1440,120 L1440,180 L0,180 Z" fill="url(#w-front)" filter="url(#w-lift)"/>
-    <path d="M0,158 C290,105 560,118 830,150 C1070,178 1270,130 1440,120" fill="none" stroke="#ffffff" stroke-opacity="0.8" stroke-width="1.5" vector-effect="non-scaling-stroke" transform="translate(0 2)"/>
-  </svg>
-</div>
 
 <!-- ═══ How it works ══════════════════════════════════════ -->
 <section class="how" id="how">
