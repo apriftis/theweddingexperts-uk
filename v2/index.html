@@ -152,7 +152,7 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
       rgba(244,246,244,.45) 58%,
       rgba(244,246,244,.12) 72%,
       rgba(244,246,244,0)   88%),
-    linear-gradient(to bottom, rgba(244,246,244,.40), transparent 20%);
+    linear-gradient(to bottom, rgba(244,246,244,.72), rgba(244,246,244,.30) 9%, transparent 18%);
 }
 .top{
   position:relative;
@@ -169,7 +169,7 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 .hero-body{
   position:relative; flex:1;
   display:flex; align-items:center;
-  padding-block:clamp(2rem,5vw,4rem) clamp(3rem,7vw,5.5rem);
+  padding-block:clamp(2rem,5vw,4rem) calc(clamp(3rem,7vw,5.5rem) + clamp(54px,9vw,180px));
 }
 .hero-copy{display:flex; flex-direction:column; gap:clamp(1.1rem,1.8vw,1.75rem); align-items:flex-start; max-width:min(36rem,52vw)}
 .hero-actions{display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.5rem; margin-top:.5rem}
@@ -184,8 +184,9 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
   .hero-body{align-items:flex-end; padding-bottom:clamp(2.5rem,7vw,4rem)}
   .hero::after{
     background:linear-gradient(to bottom,
-      rgba(244,246,244,.12)  0%,
-      rgba(244,246,244,.18) 28%,
+      rgba(244,246,244,.70)  0%,
+      rgba(244,246,244,.26) 12%,
+      rgba(244,246,244,.20) 30%,
       rgba(244,246,244,.82) 44%,
       rgba(244,246,244,.95) 58%,
       rgba(244,246,244,.97) 100%);
