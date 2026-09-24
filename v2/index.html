@@ -353,6 +353,24 @@ footer .foot{
 footer img{width:150px}
 footer .fine{font-size:.85rem; color:var(--faint)}
 
+/* ═══ Sticky CTA, phones only ══════════════════════════════
+   Slides up once the hero button has scrolled away and drops
+   out again as the form arrives. Same pattern as the live page. */
+.sticky-cta{display:none}
+@media (max-width:780px){
+  .sticky-cta{
+    display:block; position:fixed; left:0; right:0; bottom:0; z-index:50;
+    padding:.75rem var(--gut) calc(.75rem + env(safe-area-inset-bottom));
+    background:rgba(244,246,244,.96); border-top:1px solid var(--line);
+    box-shadow:0 -10px 24px -18px rgba(44,81,75,.35);
+    transform:translateY(calc(100% + 8px)); visibility:hidden;
+    transition:transform .38s var(--ease), visibility 0s linear .38s;
+  }
+  .sticky-cta.on{transform:none; visibility:visible; transition:transform .38s var(--ease), visibility 0s}
+  .sticky-cta .cta{display:flex; width:100%}
+}
+@media (prefers-reduced-motion:reduce){ .sticky-cta, .sticky-cta.on{transition:none} }
+
 /* ═══ Motion ══════════════════════════════════════════════
    Only applied once JS confirms it is running, so a script failure
    can never leave a blank page.                                 */
@@ -632,6 +650,14 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   </div>
 </footer>
 
+<!-- Sticky CTA, phones only. Sits before the script so the CTA click tracking picks it up. -->
+<div class="sticky-cta" id="sticky-cta" aria-hidden="true" inert>
+  <a class="cta" href="#signup" data-ga-cta="sticky">
+    Register your interest
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </a>
+</div>
+
 <script>
 /* ── Scroll reveal. IntersectionObserver, never a scroll listener ── */
 (function(){
@@ -710,6 +736,33 @@ footer .fine{font-size:.85rem; color:var(--faint)}
     gtag('event', 'form_view', { form_id: 'signup-form', page_variant: 'v2' });
   }, { rootMargin: '0px 0px -30% 0px' });
   io.observe(form);
+})();
+
+/* ── Sticky CTA: on once the hero button is fully off the top of the screen,
+   off again once the form is in the top 80%, so it never covers the form. ── */
+(function(){
+  var bar  = document.getElementById('sticky-cta');
+  var hero = document.querySelector('[data-ga-cta="hero"]');
+  var form = document.getElementById('signup-form');
+  if (!bar || !hero || !form || !('IntersectionObserver' in window)) return;
+  var pastHero = false, atForm = false;
+  function update(){
+    /* The success handler hides the form. Once someone has registered, the bar stays away. */
+    var on = pastHero && !atForm && form.style.display !== 'none';
+    bar.classList.toggle('on', on);
+    bar.setAttribute('aria-hidden', on ? 'false' : 'true');
+    if (on) bar.removeAttribute('inert'); else bar.setAttribute('inert', '');
+  }
+  new IntersectionObserver(function(entries){
+    var e = entries[entries.length - 1];
+    pastHero = !e.isIntersecting && e.boundingClientRect.top < 0;
+    update();
+  }).observe(hero);
+  new IntersectionObserver(function(entries){
+    var e = entries[entries.length - 1];
+    atForm = e.isIntersecting || e.boundingClientRect.top < 0;
+    update();
+  }, { rootMargin: '0px 0px -20% 0px' }).observe(form);
 })();
 
 /* ── Form: validation, submit, success and failure states ── */
