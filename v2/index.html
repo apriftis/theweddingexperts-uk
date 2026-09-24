@@ -145,30 +145,42 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 .cta-ghost:hover{background:var(--sage); color:#fff}
 
 /* ═══ Header and hero ═════════════════════════════════════
-   v1's treatment: one full-bleed photograph, a pale wash over it so
-   the type always has contrast, and the copy sitting on the wash.   */
+   The whole photograph shows through one dark scrim, with the type
+   reversed out of it. Nothing is painted over the picture.         */
 .hero{
   position:relative;
   min-height:100dvh;
   display:flex; flex-direction:column;
   isolation:isolate; overflow:hidden;
+  background:#121e1c;
 }
 .hero-img{
   position:absolute; inset:0; z-index:-2;
-  width:100%; height:100%; object-fit:cover; object-position:44% 55%;
+  width:100%; height:100%; object-fit:cover; object-position:50% 52%;
 }
-.hero::after{                      /* wash, so the type reads on any crop */
+.hero::after{                      /* scrim: deepest where the copy sits */
   content:""; position:absolute; inset:0; z-index:-1;
   background:
-    linear-gradient(260deg,
-      rgba(244,246,244,.96) 0%,
-      rgba(244,246,244,.90) 24%,
-      rgba(244,246,244,.80) 42%,
-      rgba(244,246,244,.45) 58%,
-      rgba(244,246,244,.12) 72%,
-      rgba(244,246,244,0)   88%),
-    linear-gradient(to bottom, rgba(244,246,244,.72), rgba(244,246,244,.30) 9%, transparent 18%);
+    linear-gradient(to bottom, rgba(18,30,28,.80), rgba(18,30,28,.34) 10%, rgba(18,30,28,0) 20%),
+    linear-gradient(to top,
+      rgba(18,30,28,.90)  0%,
+      rgba(18,30,28,.74) 26%,
+      rgba(18,30,28,.42) 55%,
+      rgba(18,30,28,.28) 100%);
 }
+@media (max-width:900px){
+  .hero-img{object-position:42% 48%}
+  .hero::after{
+    background:
+      linear-gradient(to bottom, rgba(18,30,28,.80), rgba(18,30,28,.34) 12%, rgba(18,30,28,0) 24%),
+      linear-gradient(to top,
+        rgba(18,30,28,.92)  0%,
+        rgba(18,30,28,.80) 34%,
+        rgba(18,30,28,.46) 62%,
+        rgba(18,30,28,.30) 100%);
+  }
+}
+
 .top{
   position:relative;
   display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
@@ -176,38 +188,27 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 }
 .top img{width:clamp(136px,13vw,180px)}
 .nav{display:flex; gap:2rem; font-size:.95rem; font-weight:500}
-.nav a{color:var(--soft)}
-.nav a:hover{color:var(--sage)}
+.nav a{color:#fff}
+.nav a:hover{color:var(--band)}
 .top-right{display:flex; align-items:center; gap:2.5rem}
 @media (max-width:900px){ .nav{display:none} }
 
+.hero .cta-ghost{border-color:rgba(255,255,255,.75); color:#fff}
+.hero .cta-ghost:hover{background:#fff; color:var(--ink)}
+.hero .kicker{color:#e4d9b4}
+.hero .kicker::before{background:var(--gold-rule)}
+
 .hero-body{
   position:relative; flex:1;
-  display:flex; align-items:center; justify-content:flex-end;
+  display:flex; align-items:flex-end;
   padding-block:clamp(2rem,5vw,4rem) clamp(3rem,7vw,5.5rem);
 }
-.hero-copy{display:flex; flex-direction:column; gap:clamp(1.1rem,1.8vw,1.75rem); align-items:flex-start; max-width:min(36rem,52vw)}
+.hero-copy{display:flex; flex-direction:column; gap:clamp(1.1rem,1.8vw,1.6rem); align-items:flex-start; max-width:min(46rem,100%)}
+.hero-copy h1{color:#fff}
+.hero-copy .lede{color:rgba(255,255,255,.88); max-width:36rem}
 .hero-actions{display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.5rem; margin-top:.5rem}
-.hero-actions .note{font-size:.95rem; color:var(--faint)}
+.hero-actions .note{font-size:.95rem; color:rgba(255,255,255,.82)}
 @media (max-width:560px){ .hero-actions .cta{width:100%} .hero-actions .note{width:100%; text-align:center} }
-
-/* Small screens: the photograph owns the top of the screen and the copy
-   sits on the wash beneath it, as on v1. Overrides come after the base
-   rules on purpose — same specificity, so source order decides.       */
-@media (max-width:900px){
-  .hero-copy{max-width:none; width:100%}
-  .hero-img{object-position:14% 45%; transform:scale(1.18); transform-origin:24% 60%}
-  .hero-body{align-items:flex-end; padding-bottom:clamp(2.5rem,7vw,4rem)}
-  .hero::after{
-    background:linear-gradient(to bottom,
-      rgba(244,246,244,.70)  0%,
-      rgba(244,246,244,.26) 12%,
-      rgba(244,246,244,.18) 40%,
-      rgba(244,246,244,.84) 49%,
-      rgba(244,246,244,.95) 61%,
-      rgba(244,246,244,.97) 100%);
-  }
-}
 
 /* Example request card, drawn like a real request card in the app.
    It lives beside the leads copy now, never over a photograph.       */
@@ -393,7 +394,7 @@ footer .fine{font-size:.8rem; color:var(--faint)}
   <div class="wrap hero-body">
     <div class="hero-copy">
       <span class="kicker">For UK wedding professionals · Opening to couples soon</span>
-      <h1 class="serif">Connect with couples who need <em style="font-style: italic; color: var(--sage)">what you do best.</em></h1>
+      <h1 class="serif">Connect with couples who need <em style="font-style: italic; color: #e4d9b4">what you do best.</em></h1>
       <p class="lede">The Wedding Experts is opening to couples across the UK. Register your interest now and we will build your profile at no cost, ready for the day they arrive.</p>
       <div class="hero-actions">
         <a class="cta" href="#signup" data-ga-cta="hero">
