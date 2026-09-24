@@ -9,6 +9,7 @@ dependencies. Served by GitHub Pages straight from `main`.
 |---|---|
 | `index.html` | The entire page. CSS and JS are inline. Its design is called v3 in analytics. |
 | `v2/index.html` | An earlier ad variant, kept out of search (`noindex`). |
+| `favicon.ico`, `apple-touch-icon.png` | Tab icon (16, 32 and 48px) and home-screen icon (180px): the gold mark on the hero's night green, at the root paths browsers look for. Both pages link them. Made from `img/logo-mark.webp`. |
 | `CNAME` | Tells GitHub Pages the custom domain. Do not delete. |
 | `img/` | Hero photograph (`meadow-1600`/`-2400` for desktop, `meadow-sm` portrait crop for phones), app screenshots in `img/app/`, gold logo lockup and mark. `cotswolds*` is `/v2/`'s hero; `hero*`, `craft` and `detail` belong to the earlier main page. |
 | `robots.txt`, `sitemap.xml` | So the page can be indexed before launch. |
