@@ -81,6 +81,33 @@ token (the page is static). When you add one, send the server-side `Lead` with
 the same `event_id` as the browser's `eventID` (the `leadEventId` variable in
 the form script), or Meta counts every signup twice.
 
+## Google Analytics
+
+Both pages report to the GA4 property **Weddings UK** (`G-RSM9TPGFJ1`), which is
+separate from the `.gr` site's property. Local testing reports there too, with
+hostname `localhost`, so filter on `hostName = theweddingexperts.uk` when you
+read the numbers. Every event on `/v2/` also carries `page_variant: 'v2'`.
+
+| GA4 event | When | Parameters |
+|---|---|---|
+| `page_view` | Page load | |
+| `scroll_25`, `scroll_50`, `scroll_75` | The bottom of the screen passes that share of the page, once each per page load | `percent_scrolled` |
+| `scroll` | Same at 90%. Sent by GA4 enhanced measurement, not the page | `percent_scrolled` |
+| `cta_click` | Any button that jumps to the signup form | `cta_location` |
+| `form_view` | The signup form reaches the top 70% of the screen | `form_id` |
+| `form_field_focus` | First tap or tab into each field, before typing | `form_field` (`name`, `email`, `category`) |
+| `form_start` | First keystroke in the form | `form_id` |
+| `form_error` | Validation failed or the network request failed | `error_reason` |
+| `form_submit` | Form passed validation and is being sent | `form_id` |
+| `generate_lead` | Signup delivered | `category` |
+
+The scroll steps are separate event names so they can be counted without any
+setup. To break down by `cta_location`, `form_field` or `page_variant`, register
+each as an **event-scoped custom dimension** (Admin, Custom definitions). GA only
+fills a custom dimension from the day it is created; earlier data stays unsplit.
+
+The scroll, form view and field focus events go to GA4 only, not the Meta Pixel.
+
 ## Design notes
 
 The palette and type are sampled from the **live** production site, so the two
