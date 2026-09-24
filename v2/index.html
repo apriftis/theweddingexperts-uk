@@ -353,6 +353,24 @@ footer .foot{
 footer img{width:150px}
 footer .fine{font-size:.85rem; color:var(--faint)}
 
+/* ═══ Sticky CTA, phones only ══════════════════════════════
+   Slides up once the hero button has scrolled away and drops
+   out again as the form arrives. Same pattern as the live page. */
+.sticky-cta{display:none}
+@media (max-width:780px){
+  .sticky-cta{
+    display:block; position:fixed; left:0; right:0; bottom:0; z-index:50;
+    padding:.75rem var(--gut) calc(.75rem + env(safe-area-inset-bottom));
+    background:rgba(244,246,244,.96); border-top:1px solid var(--line);
+    box-shadow:0 -10px 24px -18px rgba(44,81,75,.35);
+    transform:translateY(calc(100% + 8px)); visibility:hidden;
+    transition:transform .38s var(--ease), visibility 0s linear .38s;
+  }
+  .sticky-cta.on{transform:none; visibility:visible; transition:transform .38s var(--ease), visibility 0s}
+  .sticky-cta .cta{display:flex; width:100%}
+}
+@media (prefers-reduced-motion:reduce){ .sticky-cta, .sticky-cta.on{transition:none} }
+
 /* ═══ Motion ══════════════════════════════════════════════
    Only applied once JS confirms it is running, so a script failure
    can never leave a blank page.                                 */
@@ -486,7 +504,7 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   <figure class="rise" style="margin:0">
     <div class="shot">
       <picture>
-        <source media="(max-width:780px)" srcset="../img/app/app-leads-phone.jpg">
+        <source media="(max-width:780px)" srcset="../img/app/app-leads-phone.jpg" width="780" height="1688">
         <img src="../img/app/app-leads.jpg" width="1800" height="1157" loading="lazy"
              alt="The Leads screen in the app, showing four anonymous couple requests with their dates, places and open seats">
       </picture>
@@ -632,6 +650,14 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   </div>
 </footer>
 
+<!-- Sticky CTA, phones only. Sits before the script so the CTA click tracking picks it up. -->
+<div class="sticky-cta" id="sticky-cta" aria-hidden="true" inert>
+  <a class="cta" href="#signup" data-ga-cta="sticky">
+    Register your interest
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </a>
+</div>
+
 <script>
 /* ── Scroll reveal. IntersectionObserver, never a scroll listener ── */
 (function(){
@@ -678,6 +704,67 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   });
 })();
 
+/* ── Analytics: scroll depth and form view ──
+   GA4's enhanced measurement already sends `scroll` at 90%, so this adds the
+   steps below it. Each step is its own event name so it can be counted
+   straight away, without registering a custom dimension first. */
+(function(){
+  var steps = [25, 50, 75];
+  var ticking = false;
+  function check(){
+    ticking = false;
+    var reached = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+    while (steps.length && reached >= steps[0]){
+      var pct = steps.shift();
+      gtag('event', 'scroll_' + pct, { percent_scrolled: pct, page_variant: 'v2' });
+    }
+    if (!steps.length) window.removeEventListener('scroll', onScroll);
+  }
+  /* Passive, one read per frame, and detached once the last step has fired. */
+  function onScroll(){
+    if (!ticking){ ticking = true; requestAnimationFrame(check); }
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+
+  /* form_view fires once the form is in the top 70% of the screen, so a sliver
+     peeking in at the bottom edge does not count. */
+  var form = document.getElementById('signup-form');
+  if (!form || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    if (!entries[entries.length - 1].isIntersecting) return;
+    io.disconnect();
+    gtag('event', 'form_view', { form_id: 'signup-form', page_variant: 'v2' });
+  }, { rootMargin: '0px 0px -30% 0px' });
+  io.observe(form);
+})();
+
+/* ── Sticky CTA: on once the hero button is fully off the top of the screen,
+   off again once the form is in the top 80%, so it never covers the form. ── */
+(function(){
+  var bar  = document.getElementById('sticky-cta');
+  var hero = document.querySelector('[data-ga-cta="hero"]');
+  var form = document.getElementById('signup-form');
+  if (!bar || !hero || !form || !('IntersectionObserver' in window)) return;
+  var pastHero = false, atForm = false;
+  function update(){
+    /* The success handler hides the form. Once someone has registered, the bar stays away. */
+    var on = pastHero && !atForm && form.style.display !== 'none';
+    bar.classList.toggle('on', on);
+    bar.setAttribute('aria-hidden', on ? 'false' : 'true');
+    if (on) bar.removeAttribute('inert'); else bar.setAttribute('inert', '');
+  }
+  new IntersectionObserver(function(entries){
+    var e = entries[entries.length - 1];
+    pastHero = !e.isIntersecting && e.boundingClientRect.top < 0;
+    update();
+  }).observe(hero);
+  new IntersectionObserver(function(entries){
+    var e = entries[entries.length - 1];
+    atForm = e.isIntersecting || e.boundingClientRect.top < 0;
+    update();
+  }, { rootMargin: '0px 0px -20% 0px' }).observe(form);
+})();
+
 /* ── Form: validation, submit, success and failure states ── */
 (function(){
   /* Address that receives signups. FormSubmit emails a one-time activation
@@ -694,6 +781,9 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   var required = ['name','email','category'];
   function fieldOf(id){ return document.getElementById('f-' + id); }
 
+  /* True while validate() moves focus, which is not the visitor choosing a field. */
+  var refocusing = false;
+
   function validate(){
     var good = true;
     required.forEach(function(id){
@@ -702,10 +792,21 @@ footer .fine{font-size:.85rem; color:var(--faint)}
       var isBad = !value;
       if (id === 'email' && value) isBad = !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
       fieldOf(id).setAttribute('data-invalid', isBad ? 'true' : 'false');
-      if (isBad){ if (good) input.focus(); good = false; }
+      if (isBad){ if (good){ refocusing = true; input.focus(); refocusing = false; } good = false; }
     });
     return good;
   }
+
+  /* form_field_focus: the first time the visitor taps or tabs into each field,
+     whether or not they go on to type. form_start still marks the first keystroke. */
+  var focused = {};
+  required.forEach(function(id){
+    document.getElementById(id).addEventListener('focus', function(){
+      if (refocusing || focused[id]) return;
+      focused[id] = true;
+      gtag('event', 'form_field_focus', { form_id: 'signup-form', form_field: id, page_variant: 'v2' });
+    });
+  });
 
   var startedForm = false;
   required.forEach(function(id){
