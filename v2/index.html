@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Wedding Experts UK | Register your interest</title>
-<meta name="description" content="The Wedding Experts is opening to couples across the UK. Wedding professionals can register their interest now and we will build their profile at no cost.">
+<meta name="description" content="The Wedding Experts is opening to couples and professionals across the UK. Register your interest and we will build your profile at no cost.">
 
 <!-- Variant page for review. Kept out of search so it cannot compete with the
      main page; remove this line and add a canonical if v2 ever becomes the
@@ -13,8 +13,8 @@
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="The Wedding Experts UK">
-<meta property="og:title" content="Meet couples looking for exactly what you offer">
-<meta property="og:description" content="The Wedding Experts is opening to couples across the UK. Register your interest and we will build your profile at no cost.">
+<meta property="og:title" content="Connect with couples who need what you do best">
+<meta property="og:description" content="We are opening to couples and professionals across the UK. Register your interest and we will build your profile at no cost.">
 <meta property="og:url" content="https://theweddingexperts.uk/v2/">
 <meta property="og:image" content="https://theweddingexperts.uk/img/cotswolds.jpg">
 <meta property="og:locale" content="en_GB">
@@ -67,7 +67,7 @@ if (META_PIXEL_ID){ fbq('init', META_PIXEL_ID); fbq('track', 'PageView'); }
 
   --ink:       #1d2b2a;   /* 14.8:1 on the ground */
   --soft:      #4a5956;   /* body copy, 7.7:1 */
-  --faint:     #6b7875;   /* tertiary, 4.9:1 */
+  --faint:     #5e6c69;   /* tertiary, 5.1:1 on the ground, 4.6:1 on the band */
 
   --sage:      #3d6a62;   /* THE action colour. White on it is 5.9:1 */
   --sage-dark: #2c514b;   /* hover */
@@ -145,30 +145,42 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 .cta-ghost:hover{background:var(--sage); color:#fff}
 
 /* ═══ Header and hero ═════════════════════════════════════
-   v1's treatment: one full-bleed photograph, a pale wash over it so
-   the type always has contrast, and the copy sitting on the wash.   */
+   The whole photograph shows through one dark scrim, with the type
+   reversed out of it. Nothing is painted over the picture.         */
 .hero{
   position:relative;
   min-height:100dvh;
   display:flex; flex-direction:column;
   isolation:isolate; overflow:hidden;
+  background:#121e1c;
 }
 .hero-img{
   position:absolute; inset:0; z-index:-2;
-  width:100%; height:100%; object-fit:cover; object-position:58% 55%;
+  width:100%; height:100%; object-fit:cover; object-position:50% 52%;
 }
-.hero::after{                      /* wash, so the type reads on any crop */
+.hero::after{                      /* scrim: deepest where the copy sits */
   content:""; position:absolute; inset:0; z-index:-1;
   background:
-    linear-gradient(100deg,
-      rgba(244,246,244,.96) 0%,
-      rgba(244,246,244,.90) 24%,
-      rgba(244,246,244,.80) 42%,
-      rgba(244,246,244,.45) 58%,
-      rgba(244,246,244,.12) 72%,
-      rgba(244,246,244,0)   88%),
-    linear-gradient(to bottom, rgba(244,246,244,.72), rgba(244,246,244,.30) 9%, transparent 18%);
+    linear-gradient(to bottom, rgba(18,30,28,.80), rgba(18,30,28,.34) 10%, rgba(18,30,28,0) 20%),
+    linear-gradient(to top,
+      rgba(18,30,28,.90)  0%,
+      rgba(18,30,28,.74) 26%,
+      rgba(18,30,28,.42) 55%,
+      rgba(18,30,28,.28) 100%);
 }
+@media (max-width:900px){
+  .hero-img{object-position:42% 48%}
+  .hero::after{
+    background:
+      linear-gradient(to bottom, rgba(18,30,28,.80), rgba(18,30,28,.34) 12%, rgba(18,30,28,0) 24%),
+      linear-gradient(to top,
+        rgba(18,30,28,.92)  0%,
+        rgba(18,30,28,.80) 34%,
+        rgba(18,30,28,.46) 62%,
+        rgba(18,30,28,.30) 100%);
+  }
+}
+
 .top{
   position:relative;
   display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
@@ -176,37 +188,27 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 }
 .top img{width:clamp(136px,13vw,180px)}
 .nav{display:flex; gap:2rem; font-size:.95rem; font-weight:500}
-.nav a{color:var(--soft)}
-.nav a:hover{color:var(--sage)}
+.nav a{color:#fff}
+.nav a:hover{color:var(--band)}
 .top-right{display:flex; align-items:center; gap:2.5rem}
 @media (max-width:900px){ .nav{display:none} }
 
+.hero .cta-ghost{border-color:rgba(255,255,255,.75); color:#fff}
+.hero .cta-ghost:hover{background:#fff; color:var(--ink)}
+.hero .kicker{color:#e4d9b4}
+.hero .kicker::before{background:var(--gold-rule)}
+
 .hero-body{
   position:relative; flex:1;
-  display:flex; align-items:center;
+  display:flex; align-items:flex-end;
   padding-block:clamp(2rem,5vw,4rem) clamp(3rem,7vw,5.5rem);
 }
-.hero-copy{display:flex; flex-direction:column; gap:clamp(1.1rem,1.8vw,1.75rem); align-items:flex-start; max-width:min(36rem,52vw)}
+.hero-copy{display:flex; flex-direction:column; gap:clamp(1.1rem,1.8vw,1.6rem); align-items:flex-start; max-width:min(46rem,100%)}
+.hero-copy h1{color:#fff}
+.hero-copy .lede{color:rgba(255,255,255,.88); max-width:36rem}
 .hero-actions{display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.5rem; margin-top:.5rem}
-.hero-actions .note{font-size:.95rem; color:var(--faint)}
+.hero-actions .note{font-size:.95rem; color:rgba(255,255,255,.82)}
 @media (max-width:560px){ .hero-actions .cta{width:100%} .hero-actions .note{width:100%; text-align:center} }
-
-/* Small screens: the photograph owns the top of the screen and the copy
-   sits on the wash beneath it, as on v1. Overrides come after the base
-   rules on purpose — same specificity, so source order decides.       */
-@media (max-width:900px){
-  .hero-copy{max-width:none; width:100%}
-  .hero-body{align-items:flex-end; padding-bottom:clamp(2.5rem,7vw,4rem)}
-  .hero::after{
-    background:linear-gradient(to bottom,
-      rgba(244,246,244,.70)  0%,
-      rgba(244,246,244,.26) 12%,
-      rgba(244,246,244,.20) 30%,
-      rgba(244,246,244,.82) 44%,
-      rgba(244,246,244,.95) 58%,
-      rgba(244,246,244,.97) 100%);
-  }
-}
 
 /* Example request card, drawn like a real request card in the app.
    It lives beside the leads copy now, never over a photograph.       */
@@ -221,11 +223,11 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 }
 .lc-top{display:flex; gap:.9rem; align-items:flex-start}
 .lc-date{flex:none; width:58px; border:1px solid #f0e6e1; border-radius:10px; background:#fdf7f5; padding:.4rem 0; text-align:center; line-height:1.2}
-.lc-date .m{display:block; font-size:.7rem; font-weight:600; color:#a9543c}
+.lc-date .m{display:block; font-size:.7rem; font-weight:600; color:#984932}
 .lc-date .d{display:block; font-family:"Newsreader",Georgia,serif; font-size:1.5rem; color:var(--ink)}
 .lc-date .y{display:block; font-size:.68rem; color:var(--faint)}
 .lc-ref{display:flex; flex-wrap:wrap; align-items:center; gap:.35rem; font-size:.76rem; color:var(--faint)}
-.lc-new{font-size:.62rem; font-weight:700; letter-spacing:.06em; color:#a9543c; background:#f7e4de; border-radius:4px; padding:.1rem .35rem}
+.lc-new{font-size:.69rem; font-weight:700; letter-spacing:.06em; color:#984932; background:#f7e4de; border-radius:4px; padding:.1rem .35rem}
 .lc-kind{font-family:"Newsreader",Georgia,serif; font-size:1.3rem; margin-top:.1rem}
 .lc-loc{display:flex; gap:.35rem; align-items:flex-start; font-size:.85rem; color:var(--soft); margin-top:.15rem}
 .lc-loc svg,.lc-facts svg{width:14px; height:14px; flex:none; margin-top:3px}
@@ -240,48 +242,76 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 .dots span.on{background:#4f7042}
 .lc-foot{display:flex; justify-content:space-between; gap:1rem; font-size:.78rem; color:var(--faint)}
 
-/* ═══ How it works ════════════════════════════════════════ */
-.how{background:var(--band); padding-block:clamp(2.5rem,4vw,4rem) clamp(3.5rem,7vw,7rem)}
-.how-head{display:flex; flex-direction:column; gap:1rem; max-width:48rem; margin-bottom:clamp(2rem,3.5vw,4rem)}
-.steps{display:grid; grid-template-columns:1fr; gap:1.25rem}
-@media (min-width:900px){ .steps{grid-template-columns:repeat(3,minmax(0,1fr)); gap:2rem} }
+/* ═══ How it works ════════════════════════════════════════
+   One row per step, each beside the screen it produces.        */
+.how{background:var(--band); padding-block:clamp(3rem,6vw,6rem)}
+.how-head{display:flex; flex-direction:column; gap:1rem; max-width:48rem; margin-bottom:clamp(2rem,3.5vw,3.5rem)}
+.steps{display:flex; flex-direction:column; gap:clamp(1.75rem,3vw,2.5rem)}
 .step{
-  background:var(--card); border-radius:clamp(14px,1.4vw,20px);
-  padding:clamp(1.5rem,2.4vw,2.25rem);
-  display:flex; gap:1.15rem; align-items:flex-start;
+  display:grid; grid-template-columns:1fr; gap:clamp(1.25rem,2.5vw,3.5rem);
+  align-items:center;
+  border-top:1px solid var(--gold-rule);
+  padding-top:clamp(1.5rem,2.5vw,2rem);
 }
+@media (min-width:1000px){
+  .step{grid-template-columns:1fr 460px}
+  .step:nth-child(even){grid-template-columns:460px 1fr}
+  .step:nth-child(even) .step-copy{order:2}
+  .step:nth-child(even) .shot-sm{order:1}
+}
+.step-copy{display:flex; gap:1.25rem; align-items:flex-start}
 .step .num{
-  flex:none; width:56px; height:56px; border-radius:50%;
-  border:1px solid var(--gold);
-  display:flex; align-items:center; justify-content:center;
+  flex:none; width:2.4rem; margin-top:.15rem;
   font-family:"Newsreader",Georgia,serif; font-style:italic; font-weight:300;
-  font-size:1.8rem; line-height:1; color:var(--gold-num);
+  font-size:2.6rem; line-height:1; color:var(--gold-num);
+  padding-bottom:.45rem; border-bottom:1px solid var(--gold-rule);
 }
-.step .txt{display:flex; flex-direction:column; gap:.6rem; padding-top:.4rem}
-.how-foot{margin-top:clamp(1.5rem,2.5vw,2.5rem)}
+.step .txt{display:flex; flex-direction:column; gap:.6rem; padding-top:.35rem}
+.shot-sm{background:var(--paper); border:1px solid #dde5e0; border-radius:16px; padding:.6rem; box-shadow:0 26px 50px -38px rgba(29,43,42,.45)}
+.shot-sm img{width:100%; height:clamp(170px,20vw,260px); object-fit:cover; object-position:50% 0; border-radius:8px}
+.how-foot{margin-top:clamp(1.25rem,2vw,2rem); font-size:.85rem; color:var(--faint)}
 
-/* ═══ Leads ═══════════════════════════════════════════════ */
+/* ═══ Tick list, inside step three ════════════════════════ */
+.ticks{display:flex; flex-direction:column; gap:.85rem; margin-top:.25rem}
+.tick{display:flex; gap:.85rem; align-items:flex-start; font-size:1rem; line-height:1.5; color:var(--soft)}
+.tick svg{width:20px; height:20px; flex:none; margin-top:2px}
+
+/* ═══ Leads ═══════════════════════════════════════════════
+   The leads screen itself, beside what a request carries.        */
 .leads{display:grid; grid-template-columns:1fr; gap:clamp(2rem,4vw,5rem); align-items:center; padding-block:clamp(3.5rem,7vw,7.5rem)}
 @media (min-width:1000px){ .leads{grid-template-columns:5fr 7fr} }
 .leads-copy{display:flex; flex-direction:column; gap:1.25rem}
-.ticks{display:flex; flex-direction:column; gap:1rem; margin-top:.5rem}
-.tick{display:flex; gap:.85rem; align-items:flex-start; font-size:1.02rem; line-height:1.5}
-.tick svg{width:22px; height:22px; flex:none; margin-top:1px}
 .shot{background:var(--paper); border:1px solid #dde5e0; border-radius:clamp(14px,1.6vw,22px); padding:clamp(.5rem,.9vw,.875rem); box-shadow:0 30px 60px -40px rgba(29,43,42,.4)}
-.shot img{border-radius:10px}
+.shot img{width:100%; height:auto; border-radius:10px; display:block}
 .caption{font-size:.82rem; color:var(--faint); margin-top:.7rem; padding-left:.5rem}
 
-/* ═══ Ahead of launch ═════════════════════════════════════ */
-.ahead{
-  display:grid; grid-template-columns:1fr; gap:clamp(1.75rem,3.5vw,5rem); align-items:start;
-  padding-block:clamp(3rem,6vw,6rem);
-}
-@media (min-width:1000px){ .ahead{grid-template-columns:5fr 7fr} }
-.ahead-copy{display:flex; flex-direction:column; gap:1rem}
+/* ═══ Ahead of launch ═════════════════════════════════════
+   One gold line with three stops on it, then the action on its own
+   row. On phones the line becomes a rule above each stop.          */
+.ahead-band{background:var(--band); padding-block:clamp(3rem,6vw,6rem)}
+.ahead{display:flex; flex-direction:column; gap:clamp(2rem,3.5vw,3.25rem)}
+.ahead-copy{display:flex; flex-direction:column; gap:1rem; max-width:44rem}
+.tl{position:relative}
+.tl-line{display:none}
 .timeline{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr; gap:1.75rem}
-@media (min-width:760px){ .timeline{grid-template-columns:repeat(3,minmax(0,1fr)); gap:2rem} }
 .timeline li{position:relative; border-top:1px solid var(--gold-rule); padding-top:1.6rem; display:flex; flex-direction:column; gap:.5rem}
-.timeline .dot{position:absolute; left:0; top:-6px; width:11px; height:11px; border-radius:50%; border:1px solid var(--gold); background:var(--mist)}
+.timeline .dot{position:absolute; left:0; top:-6px; width:11px; height:11px; border-radius:50%; border:1px solid var(--gold); background:var(--band)}
+.timeline li:first-child .dot{background:var(--sage); border-color:var(--sage)}
+@media (min-width:900px){
+  .tl{padding-top:2.9rem}
+  .tl-line{display:block; position:absolute; top:5px; left:0; right:0; height:1px; background:var(--gold)}
+  .timeline{grid-template-columns:repeat(3,minmax(0,1fr)); gap:3rem}
+  .timeline li{border-top:0; padding-top:0}
+  .timeline .dot{top:-2.90rem; box-shadow:0 0 0 5px var(--band)}
+}
+.timeline p{max-width:22rem}
+.ahead-act{
+  display:flex; flex-wrap:wrap; align-items:center; gap:1.5rem;
+  padding-top:clamp(1.5rem,2.5vw,2rem); border-top:1px solid var(--gold-rule);
+}
+.ahead-act .cta{box-shadow:0 12px 26px -8px rgba(29,43,42,.45)}
+.ahead-act .note{font-size:1rem; color:var(--soft); max-width:30rem}
+@media (max-width:560px){ .ahead-act .cta{width:100%} }
 
 /* ═══ Questions ═══════════════════════════════════════════ */
 .faq{display:grid; grid-template-columns:1fr; gap:clamp(1.75rem,4vw,5rem); padding-block:clamp(3.5rem,7vw,7.5rem)}
@@ -346,12 +376,12 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 
 /* ═══ Footer ══════════════════════════════════════════════ */
 footer .foot{
-  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem 2rem;
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.6rem 2rem;
   border-top:1px solid #dccb93;
-  padding-block:clamp(2rem,3.5vw,3.5rem);
+  padding-block:clamp(1.1rem,1.8vw,1.6rem);
 }
-footer img{width:150px}
-footer .fine{font-size:.85rem; color:var(--faint)}
+footer img{width:112px}
+footer .fine{font-size:.8rem; color:var(--faint)}
 
 /* ═══ Sticky CTA, phones only ══════════════════════════════
    Slides up once the hero button has scrolled away and drops
@@ -410,8 +440,8 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   <div class="wrap hero-body">
     <div class="hero-copy">
       <span class="kicker">For UK wedding professionals · Opening to couples soon</span>
-      <h1 class="serif">Meet couples looking for <em style="font-style:italic; color:var(--sage)">exactly what you offer.</em></h1>
-      <p class="lede">The Wedding Experts is opening to couples across the UK. Register your interest now and we will build your profile at no cost, ready for the day they arrive.</p>
+      <h1 class="serif">Connect with couples who need <em style="font-style: italic; color: #e4d9b4">what you do best.</em></h1>
+      <p class="lede">We are opening to couples and professionals across the UK. Register your interest now and we will build your profile at no cost.</p>
       <div class="hero-actions">
         <a class="cta" href="#signup" data-ga-cta="hero">
           Register your interest
@@ -428,32 +458,73 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   <div class="wrap">
     <div class="how-head rise">
       <span class="kicker">How it works</span>
-      <h2 class="serif">Three steps between you and the right couples.</h2>
+      <h2 class="serif">Three steps between you and the couples.</h2>
     </div>
 
     <div class="steps">
       <div class="step rise">
-        <span class="num" aria-hidden="true">1</span>
-        <div class="txt">
-          <h3 class="serif">Register your business</h3>
-          <p class="body">Tell us what you do and the areas you cover. We build your profile from the details you send.</p>
+        <div class="step-copy">
+          <span class="num" aria-hidden="true">1</span>
+          <div class="txt">
+            <h3 class="serif">Register your business</h3>
+            <p class="body">Tell us what you do and the areas you cover. We build your profile from the details you send, with your photos, services and starting price.</p>
+          </div>
         </div>
+        <figure class="shot-sm" style="margin:0">
+          <picture>
+            <source media="(max-width:780px)" srcset="../img/app/app-profile-phone.jpg">
+            <img src="../img/app/app-profile.jpg" loading="lazy" alt="A supplier profile in the app, with gallery, services and contact buttons">
+          </picture>
+        </figure>
       </div>
       <div class="step rise">
-        <span class="num" aria-hidden="true">2</span>
-        <div class="txt">
-          <h3 class="serif">Couples tell us what they need</h3>
-          <p class="body">Their date, place, guest numbers and the services they are looking for. Every couple is verified by mobile and email, so the requests you see are real.</p>
+        <div class="step-copy">
+          <span class="num" aria-hidden="true">2</span>
+          <div class="txt">
+            <h3 class="serif">Couples tell us what they need</h3>
+            <p class="body">Their date, place, guest numbers and the services they are looking for. Every couple is verified by mobile and email, so the requests you see are real.</p>
+          </div>
         </div>
+        <figure class="shot-sm" style="margin:0">
+          <picture>
+            <source media="(max-width:780px)" srcset="../img/app/app-lead-detail-phone.jpg">
+            <img src="../img/app/app-lead-detail.jpg" loading="lazy" alt="A couple's request in the app, with date, place and guest numbers">
+          </picture>
+        </figure>
       </div>
       <div class="step rise">
-        <span class="num" aria-hidden="true">3</span>
-        <div class="txt">
-          <h3 class="serif">We connect you with the couple</h3>
-          <p class="body">We match each request with the professionals who fit best. Couples can also call or message you straight from your profile.</p>
+        <div class="step-copy">
+          <span class="num" aria-hidden="true">3</span>
+          <div class="txt">
+            <h3 class="serif">We connect you with the couple</h3>
+            <p class="body">We match each request with the professionals who fit best, and it arrives on your leads screen. Couples can also call or message you straight from your profile.</p>
+          </div>
         </div>
+        <div class="lead-card">
+          <div class="lc-top">
+                    <div class="lc-date"><span class="m">Jun</span><span class="d">19</span><span class="y">2027</span></div>
+                    <div>
+                      <p class="lc-ref">Request #2417 · submitted 14-09-2026 <span class="lc-new">NEW</span></p>
+                      <p class="lc-kind">Wedding</p>
+                      <p class="lc-loc"><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Painswick, Gloucestershire</span></p>
+                    </div>
+          </div>
+          <div class="lc-facts">
+                    <span><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M17 11.5a3 3 0 0 0 0-6"/></svg>120 guests</span>
+                    <span><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V20H4z"/><path d="M12 5V2.5"/><path d="M10 20v-4.5h4V20"/></svg>St Mary's Church</span>
+                    <span><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>Contact: Afternoon</span>
+          </div>
+          <div class="lc-cat">
+                    <strong>Photographer</strong>
+                    <span class="dots" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span>
+                    <small>3 of 5 open</small>
+          </div>
+          <p class="lc-foot"><span>Anonymous until unlocked</span><span>Example</span></p>
+                </div>
       </div>
     </div>
+
+    <p class="how-foot rise">Screens from the app, shown with example UK data.</p>
   </div>
 </section>
 
@@ -464,41 +535,19 @@ footer .fine{font-size:.85rem; color:var(--faint)}
     <h2 class="serif">A request reaches a few professionals, not everyone.</h2>
     <p class="lede">Each category has a limited number of seats per request, so you are not one of hundreds replying to the same couple.</p>
     <div class="ticks">
-      <p class="tick">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#3d6a62" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
-        <span>Anonymous until you choose to unlock the couple's details</span>
-      </p>
-      <p class="tick">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#3d6a62" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
-        <span>Date, place, guest numbers and the best time to call, up front</span>
-      </p>
-      <p class="tick">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#3d6a62" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
-        <span>Message the couple directly once you have unlocked</span>
-      </p>
-    </div>
-
-    <div class="lead-card">
-      <div class="lc-top">
-        <div class="lc-date"><span class="m">Jun</span><span class="d">19</span><span class="y">2027</span></div>
-        <div>
-          <p class="lc-ref">Request #2417 · submitted 14-09-2026 <span class="lc-new">NEW</span></p>
-          <p class="lc-kind">Wedding</p>
-          <p class="lc-loc"><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Painswick, Gloucestershire</span></p>
-        </div>
-      </div>
-      <div class="lc-facts">
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M17 11.5a3 3 0 0 0 0-6"/></svg>120 guests</span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V20H4z"/><path d="M12 5V2.5"/><path d="M10 20v-4.5h4V20"/></svg>St Mary's Church</span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="#a9543c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>Contact: Afternoon</span>
-      </div>
-      <div class="lc-cat">
-        <strong>Photographer</strong>
-        <span class="dots" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span>
-        <small>3 of 5 open</small>
-      </div>
-      <p class="lc-foot"><span>Anonymous until unlocked</span><span>Example</span></p>
-    </div>
+              <p class="tick">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#3d6a62" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+                <span>Anonymous until you choose to unlock the couple's details</span>
+              </p>
+              <p class="tick">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#3d6a62" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+                <span>Date, place, guest numbers and the best time to call, up front</span>
+              </p>
+              <p class="tick">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#3d6a62" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+                <span>Message the couple directly once you have unlocked</span>
+              </p>
+            </div>
   </div>
 
   <figure class="rise" style="margin:0">
@@ -514,29 +563,42 @@ footer .fine{font-size:.85rem; color:var(--faint)}
 </section>
 
 <!-- ═══ Ahead of launch ══════════════════════════════════ -->
-<section class="wrap ahead rise">
+<section class="ahead-band rise">
+  <div class="wrap ahead">
   <div class="ahead-copy">
     <span class="kicker">Before launch</span>
     <h2 class="serif">Be there the day couples arrive.</h2>
-    <p class="lede">Register now and your profile is ready from the first day, when couples start searching and the professionals already listed are the ones they find.</p>
   </div>
-  <ol class="timeline">
-    <li>
-      <span class="dot" aria-hidden="true"></span>
-      <h3 class="serif">Now</h3>
-      <p class="body">We build your profile from your details, at no cost.</p>
-    </li>
-    <li>
-      <span class="dot" aria-hidden="true"></span>
-      <h3 class="serif">Launch day</h3>
-      <p class="body">Couples search the UK site and find you in the results.</p>
-    </li>
-    <li>
-      <span class="dot" aria-hidden="true"></span>
-      <h3 class="serif">First season</h3>
-      <p class="body">You keep priority placement in your county.</p>
-    </li>
-  </ol>
+
+  <div class="tl">
+    <span class="tl-line" aria-hidden="true"></span>
+    <ol class="timeline">
+      <li>
+        <span class="dot" aria-hidden="true"></span>
+        <h3 class="serif">Now</h3>
+        <p class="body">We build your profile from the details you send, at no cost.</p>
+      </li>
+      <li>
+        <span class="dot" aria-hidden="true"></span>
+        <h3 class="serif">Launch day</h3>
+        <p class="body">Couples search the UK site and find you in the results from the first day.</p>
+      </li>
+      <li>
+        <span class="dot" aria-hidden="true"></span>
+        <h3 class="serif">First season</h3>
+        <p class="body">You keep priority placement in your county through the season.</p>
+      </li>
+    </ol>
+  </div>
+
+  <div class="ahead-act">
+    <a class="cta" href="#signup" data-ga-cta="launch">
+      Register your interest
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <p class="note">Takes a minute. Free to list, and the first three months are free on a paid plan.</p>
+  </div>
+</div>
 </section>
 
 <!-- ═══ Questions ════════════════════════════════════════ -->
