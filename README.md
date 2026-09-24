@@ -7,9 +7,10 @@ dependencies. Served by GitHub Pages straight from `main`.
 
 | File | What it is |
 |---|---|
-| `index.html` | The entire page. CSS and JS are inline. |
+| `index.html` | The entire page. CSS and JS are inline. Its design is called v3 in analytics. |
+| `v2/index.html` | An earlier ad variant, kept out of search (`noindex`). |
 | `CNAME` | Tells GitHub Pages the custom domain. Do not delete. |
-| `img/` | Hero photograph (wide and portrait crops), two supporting photos, gold logo lockup and mark. |
+| `img/` | Hero photograph (`meadow-1600`/`-2400` for desktop, `meadow-sm` portrait crop for phones), app screenshots in `img/app/`, gold logo lockup and mark. `cotswolds*` is `/v2/`'s hero; `hero*`, `craft` and `detail` belong to the earlier main page. |
 | `robots.txt`, `sitemap.xml` | So the page can be indexed before launch. |
 | `.nojekyll` | Stops GitHub running Jekyll over the files. |
 
@@ -65,7 +66,7 @@ and nothing reaches Meta. While it is set, the page sends:
 | Meta event | When | Mirrors GA4 |
 |---|---|---|
 | `PageView` | Page load | `page_view` |
-| `CTAClick` (custom) | Any "Get listed first" button, with `cta_location` | `cta_click` |
+| `CTAClick` (custom) | Any button that jumps to the signup form, with `cta_location` | `cta_click` |
 | `FormStart` (custom) | First keystroke in the signup form | `form_start` |
 | `Lead` | Signup delivered successfully, with `content_category` and the hashed email | `generate_lead` |
 
@@ -87,15 +88,17 @@ Both pages report to the GA4 property **Weddings UK** (`G-RSM9TPGFJ1`), which is
 separate from the `.gr` site's property. Local testing reports there too, with
 hostname `localhost`, so filter on `hostName = theweddingexperts.uk` when you
 read the numbers. Every event on `/v2/` also carries `page_variant: 'v2'`, and
-every event on `/v3/` carries `page_variant: 'v3'`.
+every event on the main page carries `page_variant: 'v3'`, the name of its
+current design. That separates it from the earlier main page, whose events had
+no `page_variant`.
 
 | GA4 event | When | Parameters |
 |---|---|---|
 | `page_view` | Page load | |
 | `scroll_25`, `scroll_50`, `scroll_75` | The bottom of the screen passes that share of the page, once each per page load | `percent_scrolled` |
 | `scroll` | Same at 90%. Sent by GA4 enhanced measurement, not the page | `percent_scrolled` |
-| `cta_click` | Any button that jumps to the signup form | `cta_location`; on the v3 hero also `category` (`(none)` if not picked) |
-| `hero_category` | v3 only: a category is picked in the hero, which fills it in on the form | `category` |
+| `cta_click` | Any button that jumps to the signup form | `cta_location`; on the main page's hero also `category` (`(none)` if not picked) |
+| `hero_category` | Main page only: a category is picked in the hero, which fills it in on the form | `category` |
 | `form_view` | The signup form reaches the top 70% of the screen | `form_id` |
 | `form_field_focus` | First tap or tab into each field, before typing | `form_field` (`name`, `email`, `category`) |
 | `form_start` | First keystroke in the form | `form_id` |
@@ -112,35 +115,43 @@ The scroll, form view and field focus events go to GA4 only, not the Meta Pixel.
 
 ## Design notes
 
-The palette and type are sampled from the **live** production site, so the two
-read as one brand. Note that the main frontend repo's bundled `style.css`
-contains a crimson `#c10037` several hundred times: that is dead template CSS
-and appears nowhere on the rendered site. Do not reintroduce it.
+Green and gold on a warm paper, with a photographic hero under a night-green
+scrim. The tokens are at the top of the stylesheet in `index.html`. Note that
+the main frontend repo's bundled `style.css` contains a crimson `#c10037`
+several hundred times: that is dead template CSS and appears nowhere on the
+rendered site. Do not reintroduce it.
 
 | Token | Value | What it is |
 |---|---|---|
-| `--paper` | `#fcfaf7` | Ground. Same value the live site uses |
-| `--ink` | `#111826` | Headings |
-| `--ink-soft` | `#414651` | Body copy |
-| `--accent` | `#a85a42` | Brand terracotta. The only accent |
-| `--accent-dark` | `#8e4835` | CTA hover |
-| `--sage` | `#7d8a63` | Brand sage. List numerals only |
-| Display face | Playfair Display | Same as the production site |
-| Body face | Montserrat | Same as the production site |
+| `--paper` | `#f8f6f1` | Page ground |
+| `--band` | `#efece4` | Section band |
+| `--night` | `#121e1c` | Hero base, under the photograph |
+| `--deep` | `#1e332f` | Dark green panel |
+| `--ink` | `#1b2624` | Headings |
+| `--soft` | `#4a5552` | Body copy |
+| `--sage` | `#3d6a62` | The action colour on light grounds |
+| `--ivory` | `#fbf6ea` | Type, and the action colour, on dark grounds |
+| `--gold` | `#c4a24c` | Hairlines, rings, dividers |
+| `--gold-soft` | `#e2cf98` | Gold used as text on dark |
+| `--gold-ink` | `#8a6d22` | Gold used as text on paper |
+| Display face | Newsreader | |
+| Body face | Figtree | |
 
-Three rules worth keeping if you edit the CSS:
+Rules worth keeping if you edit the CSS:
 
-- **Terracotta is the only accent.** Sage appears solely in the list numerals.
-  Adding a third accent colour breaks the palette.
-- **The hero scrim gradients hardcode the paper colour** as `rgba(252,250,247,…)`
+- **The hero scrim gradients hardcode the night colour** as `rgba(18,30,28,…)`
   because CSS gradients cannot take a bare custom property with an alpha. If you
-  change `--paper`, change those eleven stops too or you get a visible seam.
-- **The hero mobile overrides must stay at the end of the stylesheet.** They
-  share specificity with the base hero rules, so source order decides the
-  winner. Moving them earlier silently breaks the mobile layout.
+  change `--night`, change every one of those stops too or you get a visible seam.
+- **The scrim is tuned to the photograph.** It runs deeper through the top band,
+  and on phones through the headline, where the couple's sunlit backs sit behind
+  the type. If you change the photo, recheck the headline and kicker contrast on
+  a phone before shipping.
+- **The hero mobile overrides must stay after the base hero rules.** They share
+  specificity, so source order decides the winner. Moving them earlier silently
+  breaks the mobile layout.
 
-Every text and background pair clears WCAG AA. The logo is used as supplied, in
-gold; logotypes are exempt from contrast minimums under WCAG 1.4.3.
+The logo is used as supplied, in gold; logotypes are exempt from contrast
+minimums under WCAG 1.4.3.
 
 ## Editing the copy
 
@@ -151,8 +162,12 @@ Two things worth knowing:
 
 - The page makes no claims about track record or supplier numbers. If you add
   any, make sure the figures are real and verifiable.
-- Categories in the signup form are a plain `<select>`. Add or remove `<option>`
-  lines to change them.
+- The category list appears twice, as plain `<select>`s: the hero picker
+  (`#quick-category`) and the signup form (`#category`). Picking one in the hero
+  fills in the form, so keep the two lists identical when you add or remove an
+  `<option>`.
+- Links to the earlier page's form, `/#get-listed`, still land on the signup
+  section through an empty anchor at its top.
 
 ## Swapping the form backend later
 
@@ -164,10 +179,13 @@ the `payload` object just below it.
 
 ## Notes
 
-- The photographs are AI generated placeholders. Swap them for real work when
-  you have it. Keep `img/hero.jpg` at 16:9, `img/hero-sm.jpg` at 3:4 (it is a
-  portrait crop of the same scene, used below 720px, because a 16:9 image crops
-  badly on a phone), `img/detail.jpg` at 3:4 and `img/craft.jpg` at 16:9.
+- The hero is a licensed Magnific stock photo (Premium licence, no attribution
+  needed). Keep the original and its licence PDF in Google Drive under
+  TheWeddingExperts → Stock images, next to the register of every stock purchase.
+  Do not commit originals here: the licence forbids redistributing the file.
+  `img/meadow-1600.jpg` and `img/meadow-2400.jpg` are the full frame (about
+  16:9); `img/meadow-sm.jpg` is a 10:16 portrait crop centred on the couple,
+  used up to 780px wide, because a wide frame crops badly on a phone.
 - Scroll reveals are hidden only when JavaScript is confirmed running, anything
   already on screen is revealed synchronously, and a timer catches the rest. The
   page cannot render blank if a script or observer fails.
