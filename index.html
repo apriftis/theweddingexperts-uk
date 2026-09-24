@@ -611,6 +611,40 @@ footer{border-top:1px solid var(--line); padding-block:clamp(2.5rem,4vw,3.5rem)}
   });
 })();
 
+/* ── Analytics: scroll depth and form view ──
+   GA4's enhanced measurement already sends `scroll` at 90%, so this adds the
+   steps below it. Each step is its own event name so it can be counted
+   straight away, without registering a custom dimension first. */
+(function(){
+  var steps = [25, 50, 75];
+  var ticking = false;
+  function check(){
+    ticking = false;
+    var reached = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+    while (steps.length && reached >= steps[0]){
+      var pct = steps.shift();
+      gtag('event', 'scroll_' + pct, { percent_scrolled: pct });
+    }
+    if (!steps.length) window.removeEventListener('scroll', onScroll);
+  }
+  /* Passive, one read per frame, and detached once the last step has fired. */
+  function onScroll(){
+    if (!ticking){ ticking = true; requestAnimationFrame(check); }
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+
+  /* form_view fires once the form is in the top 70% of the screen, so a sliver
+     peeking in at the bottom edge does not count. */
+  var form = document.getElementById('signup-form');
+  if (!form || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    if (!entries[entries.length - 1].isIntersecting) return;
+    io.disconnect();
+    gtag('event', 'form_view', { form_id: 'signup-form' });
+  }, { rootMargin: '0px 0px -30% 0px' });
+  io.observe(form);
+})();
+
 /* ── Form: validation, submit, success and failure states ── */
 (function(){
   /* Address that receives signups. FormSubmit emails a one-time activation
@@ -626,6 +660,9 @@ footer{border-top:1px solid var(--line); padding-block:clamp(2.5rem,4vw,3.5rem)}
   var required = ['name','email','category'];
   function fieldOf(id){ return document.getElementById('f-' + id); }
 
+  /* True while validate() moves focus, which is not the visitor choosing a field. */
+  var refocusing = false;
+
   function validate(){
     var good = true;
     required.forEach(function(id){
@@ -634,10 +671,21 @@ footer{border-top:1px solid var(--line); padding-block:clamp(2.5rem,4vw,3.5rem)}
       var isBad = !value;
       if (id === 'email' && value) isBad = !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
       fieldOf(id).setAttribute('data-invalid', isBad ? 'true' : 'false');
-      if (isBad){ if (good) input.focus(); good = false; }
+      if (isBad){ if (good){ refocusing = true; input.focus(); refocusing = false; } good = false; }
     });
     return good;
   }
+
+  /* form_field_focus: the first time the visitor taps or tabs into each field,
+     whether or not they go on to type. form_start still marks the first keystroke. */
+  var focused = {};
+  required.forEach(function(id){
+    document.getElementById(id).addEventListener('focus', function(){
+      if (refocusing || focused[id]) return;
+      focused[id] = true;
+      gtag('event', 'form_field_focus', { form_id: 'signup-form', form_field: id });
+    });
+  });
 
   var startedForm = false;
   required.forEach(function(id){
