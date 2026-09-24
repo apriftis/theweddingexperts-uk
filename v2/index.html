@@ -258,6 +258,8 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
   .step:nth-child(even){grid-template-columns:460px 1fr}
   .step:nth-child(even) .step-copy{order:2}
   .step:nth-child(even) .shot-sm{order:1}
+  .step:last-child{grid-template-columns:1fr}
+  .step:last-child .txt{max-width:46rem}
 }
 .step-copy{display:flex; gap:1.25rem; align-items:flex-start}
 .step .num{
@@ -275,6 +277,15 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 .ticks{display:flex; flex-direction:column; gap:.85rem; margin-top:.25rem}
 .tick{display:flex; gap:.85rem; align-items:flex-start; font-size:1rem; line-height:1.5; color:var(--soft)}
 .tick svg{width:20px; height:20px; flex:none; margin-top:2px}
+
+/* ═══ Leads ═══════════════════════════════════════════════
+   The leads screen itself, beside what a request carries.        */
+.leads{display:grid; grid-template-columns:1fr; gap:clamp(2rem,4vw,5rem); align-items:center; padding-block:clamp(3.5rem,7vw,7.5rem)}
+@media (min-width:1000px){ .leads{grid-template-columns:5fr 7fr} }
+.leads-copy{display:flex; flex-direction:column; gap:1.25rem}
+.shot{background:var(--paper); border:1px solid #dde5e0; border-radius:clamp(14px,1.6vw,22px); padding:clamp(.5rem,.9vw,.875rem); box-shadow:0 30px 60px -40px rgba(29,43,42,.4)}
+.shot img{width:100%; height:auto; border-radius:10px; display:block}
+.caption{font-size:.82rem; color:var(--faint); margin-top:.7rem; padding-left:.5rem}
 
 /* ═══ Ahead of launch ═════════════════════════════════════
    One gold line with three stops on it, then the action on its own
@@ -490,8 +501,23 @@ footer .fine{font-size:.8rem; color:var(--faint)}
           <span class="num" aria-hidden="true">3</span>
           <div class="txt">
             <h3 class="serif">We connect you with the couple</h3>
-            <p class="body">We match each request with the professionals who fit best. Each category has a limited number of seats per request, so you are not one of hundreds replying to the same couple. Couples can also call or message you straight from your profile.</p>
-            <div class="ticks">
+            <p class="body">We match each request with the professionals who fit best, and it arrives on your leads screen. Couples can also call or message you straight from your profile.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="how-foot rise">Screens from the app, shown with example UK data.</p>
+  </div>
+</section>
+
+<!-- ═══ Leads ════════════════════════════════════════════ -->
+<section class="wrap leads" id="leads">
+  <div class="leads-copy rise">
+    <span class="kicker">Your leads screen</span>
+    <h2 class="serif">A request reaches a few professionals, not everyone.</h2>
+    <p class="lede">Each category has a limited number of seats per request, so you are not one of hundreds replying to the same couple.</p>
+    <div class="ticks">
               <p class="tick">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#3d6a62" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
                 <span>Anonymous until you choose to unlock the couple's details</span>
@@ -505,7 +531,8 @@ footer .fine{font-size:.8rem; color:var(--faint)}
                 <span>Message the couple directly once you have unlocked</span>
               </p>
             </div>
-            <div class="lead-card">
+
+    <div class="lead-card">
               <div class="lc-top">
                 <div class="lc-date"><span class="m">Jun</span><span class="d">19</span><span class="y">2027</span></div>
                 <div>
@@ -526,19 +553,18 @@ footer .fine{font-size:.8rem; color:var(--faint)}
               </div>
               <p class="lc-foot"><span>Anonymous until unlocked</span><span>Example</span></p>
             </div>
-          </div>
-        </div>
-        <figure class="shot-sm" style="margin:0">
-          <picture>
-            <source media="(max-width:780px)" srcset="../img/app/app-leads-phone.jpg">
-            <img src="../img/app/app-leads.jpg" loading="lazy" alt="The Leads screen in the app, showing anonymous couple requests">
-          </picture>
-        </figure>
-      </div>
-    </div>
-
-    <p class="how-foot rise">Screens from the app, shown with example UK data.</p>
   </div>
+
+  <figure class="rise" style="margin:0">
+    <div class="shot">
+      <picture>
+        <source media="(max-width:780px)" srcset="../img/app/app-leads-phone.jpg" width="780" height="1688">
+        <img src="../img/app/app-leads.jpg" width="1800" height="1157" loading="lazy"
+             alt="The Leads screen in the app, showing four anonymous couple requests with their dates, places and open seats">
+      </picture>
+    </div>
+    <figcaption class="caption">The real Leads screen, shown with example UK data.</figcaption>
+  </figure>
 </section>
 
 <!-- ═══ Ahead of launch ══════════════════════════════════ -->
