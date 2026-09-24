@@ -39,6 +39,21 @@ gtag('js', new Date());
 gtag('config', 'G-RSM9TPGFJ1');
 </script>
 
+<!-- Meta Pixel. Same dataset as the live page; events carry page_variant 'v2'.
+     Set the ID to '' to switch it off: the script is then never loaded. -->
+<script>
+var META_PIXEL_ID = '1081044958136877';
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];if(!META_PIXEL_ID)return;
+t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+/* The CTAs jump to #signup; without this the Pixel counts each jump as a new PageView. */
+fbq.disablePushState = true;
+if (META_PIXEL_ID){ fbq('init', META_PIXEL_ID); fbq('track', 'PageView'); }
+</script>
+
 <style>
 /* ═══ Tokens ═══════════════════════════════════════════════
    Calm green palette with the brand gold kept for detail only.
@@ -289,11 +304,8 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
   display:grid; gap:1.4rem;
   box-shadow:0 30px 60px -44px rgba(29,43,42,.45);
 }
-.pair{display:grid; grid-template-columns:1fr; gap:1.4rem}
-@media (min-width:620px){ .pair{grid-template-columns:1fr 1fr} }
 .field{display:grid; gap:.5rem}
 .field label{font-size:.72rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--soft)}
-.field label .opt{text-transform:none; letter-spacing:0; font-weight:400; color:var(--faint)}
 .field input, .field select{
   width:100%; min-height:52px; padding:0 1rem;
   font-family:inherit; font-size:16px;      /* 16px min, or iOS Safari zooms on focus */
@@ -354,6 +366,7 @@ footer .fine{font-size:.85rem; color:var(--faint)}
 </head>
 
 <body>
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=1081044958136877&amp;ev=PageView&amp;noscript=1"></noscript>
 
 <!-- ═══ Header and hero ══════════════════════════════════ -->
 <header class="hero">
@@ -556,30 +569,16 @@ footer .fine{font-size:.85rem; color:var(--faint)}
       </div>
 
       <form id="signup-form" class="form-card" novalidate>
-        <div class="pair">
-          <div class="field" id="f-business">
-            <label for="business">Business name</label>
-            <input type="text" id="business" name="business" autocomplete="organization" required>
-            <span class="err">Please tell us your business name.</span>
-          </div>
-          <div class="field" id="f-name">
-            <label for="name">Your name</label>
-            <input type="text" id="name" name="name" autocomplete="name" required>
-            <span class="err">Please tell us your name.</span>
-          </div>
+        <div class="field" id="f-name">
+          <label for="name">Your name or business name</label>
+          <input type="text" id="name" name="name" autocomplete="organization" required>
+          <span class="err">Please tell us your name or business name.</span>
         </div>
 
-        <div class="pair">
-          <div class="field" id="f-email">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" autocomplete="email" required>
-            <span class="err">Please enter a valid email address.</span>
-          </div>
-          <div class="field" id="f-area">
-            <label for="area">Town or county you cover</label>
-            <input type="text" id="area" name="area" placeholder="For example, Surrey" required>
-            <span class="err">Please tell us where you work.</span>
-          </div>
+        <div class="field" id="f-email">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" required>
+          <span class="err">Please enter a valid email address.</span>
         </div>
 
         <div class="field" id="f-category">
@@ -605,11 +604,6 @@ footer .fine{font-size:.85rem; color:var(--faint)}
           </select>
           <span class="hint">Pick the closest fit. You can add more categories later.</span>
           <span class="err">Please choose a category.</span>
-        </div>
-
-        <div class="field" id="f-website">
-          <label for="website">Website or social page <span class="opt">(optional)</span></label>
-          <input type="text" id="website" name="website" placeholder="https://" autocomplete="url">
         </div>
 
         <!-- honeypot, hidden from people, catches bots -->
@@ -679,6 +673,7 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   document.querySelectorAll('[data-ga-cta]').forEach(function(el){
     el.addEventListener('click', function(){
       gtag('event', 'cta_click', { cta_location: el.getAttribute('data-ga-cta'), page_variant: 'v2' });
+      fbq('trackCustom', 'CTAClick', { cta_location: el.getAttribute('data-ga-cta'), page_variant: 'v2' });
     });
   });
 })();
@@ -696,7 +691,7 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   var ok    = document.getElementById('ok');
   var bad   = document.getElementById('bad');
 
-  var required = ['business','name','email','area','category'];
+  var required = ['name','email','category'];
   function fieldOf(id){ return document.getElementById('f-' + id); }
 
   function validate(){
@@ -716,7 +711,11 @@ footer .fine{font-size:.85rem; color:var(--faint)}
   required.forEach(function(id){
     document.getElementById(id).addEventListener('input', function(){
       fieldOf(id).setAttribute('data-invalid','false');
-      if (!startedForm){ startedForm = true; gtag('event', 'form_start', { form_id: 'signup-form', page_variant: 'v2' }); }
+      if (!startedForm){
+        startedForm = true;
+        gtag('event', 'form_start', { form_id: 'signup-form', page_variant: 'v2' });
+        fbq('trackCustom', 'FormStart', { form_id: 'signup-form', page_variant: 'v2' });
+      }
     });
   });
 
@@ -744,14 +743,11 @@ footer .fine{font-size:.85rem; color:var(--faint)}
     gtag('event', 'form_submit', { form_id: 'signup-form', page_variant: 'v2' });
 
     var payload = {
-      _subject:  'UK founding listing (v2): ' + document.getElementById('business').value,
+      _subject:  'UK founding listing (v2): ' + document.getElementById('name').value,
       _template: 'table',
-      business:  document.getElementById('business').value,
       name:      document.getElementById('name').value,
       email:     document.getElementById('email').value,
-      area:      document.getElementById('area').value,
-      category:  document.getElementById('category').value,
-      website:   document.getElementById('website').value
+      category:  document.getElementById('category').value
     };
 
     fetch(ENDPOINT, {
@@ -761,7 +757,15 @@ footer .fine{font-size:.85rem; color:var(--faint)}
     })
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(){
-      gtag('event', 'generate_lead', { category: document.getElementById('category').value, page_variant: 'v2' });
+      var category = document.getElementById('category').value;
+      gtag('event', 'generate_lead', { category: category, page_variant: 'v2' });
+      /* Advanced matching: re-init with the email so Meta can match the Lead
+         to an account (the Pixel hashes it in the browser before sending).
+         eventID lets a future Conversions API call send the same Lead
+         without Meta counting it twice, so reuse leadEventId there. */
+      var leadEventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+      if (META_PIXEL_ID) fbq('init', META_PIXEL_ID, { em: payload.email.trim().toLowerCase() });
+      fbq('track', 'Lead', { content_category: category, page_variant: 'v2' }, { eventID: leadEventId });
       form.style.display = 'none';
       ok.classList.add('on');
       ok.scrollIntoView({ behavior:'smooth', block:'center' });
