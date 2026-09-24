@@ -276,17 +276,35 @@ h3.serif{font-size:clamp(1.35rem,1.9vw,1.75rem); line-height:1.25; font-weight:4
 .tick{display:flex; gap:.85rem; align-items:flex-start; font-size:1rem; line-height:1.5; color:var(--soft)}
 .tick svg{width:20px; height:20px; flex:none; margin-top:2px}
 
-/* ═══ Ahead of launch ═════════════════════════════════════ */
+/* ═══ Ahead of launch ═════════════════════════════════════
+   One gold line with three stops on it, then the action on its own
+   row. On phones the line becomes a rule above each stop.          */
 .ahead{
-  display:grid; grid-template-columns:1fr; gap:clamp(1.75rem,3.5vw,5rem); align-items:start;
+  display:flex; flex-direction:column; gap:clamp(2rem,3.5vw,3.25rem);
   padding-block:clamp(3rem,6vw,6rem);
 }
-@media (min-width:1000px){ .ahead{grid-template-columns:5fr 7fr} }
-.ahead-copy{display:flex; flex-direction:column; gap:1rem}
+.ahead-copy{display:flex; flex-direction:column; gap:1rem; max-width:44rem}
+.tl{position:relative}
+.tl-line{display:none}
 .timeline{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr; gap:1.75rem}
-@media (min-width:760px){ .timeline{grid-template-columns:repeat(3,minmax(0,1fr)); gap:2rem} }
 .timeline li{position:relative; border-top:1px solid var(--gold-rule); padding-top:1.6rem; display:flex; flex-direction:column; gap:.5rem}
 .timeline .dot{position:absolute; left:0; top:-6px; width:11px; height:11px; border-radius:50%; border:1px solid var(--gold); background:var(--mist)}
+.timeline li:first-child .dot{background:var(--sage); border-color:var(--sage)}
+@media (min-width:760px){
+  .tl{padding-top:2.9rem}
+  .tl-line{display:block; position:absolute; top:5px; left:0; right:0; height:1px; background:var(--gold)}
+  .timeline{grid-template-columns:repeat(3,minmax(0,1fr)); gap:3rem}
+  .timeline li{border-top:0; padding-top:0}
+  .timeline .dot{top:-2.96rem; box-shadow:0 0 0 5px var(--mist)}
+}
+.timeline p{max-width:22rem}
+.ahead-act{
+  display:flex; flex-wrap:wrap; align-items:center; gap:1.5rem;
+  padding-top:clamp(1.5rem,2.5vw,2rem); border-top:1px solid var(--gold-rule);
+}
+.ahead-act .cta{box-shadow:0 12px 26px -8px rgba(29,43,42,.45)}
+.ahead-act .note{font-size:1rem; color:var(--soft); max-width:30rem}
+@media (max-width:560px){ .ahead-act .cta{width:100%} }
 
 /* ═══ Questions ═══════════════════════════════════════════ */
 .faq{display:grid; grid-template-columns:1fr; gap:clamp(1.75rem,4vw,5rem); padding-block:clamp(3.5rem,7vw,7.5rem)}
@@ -510,25 +528,36 @@ footer .fine{font-size:.8rem; color:var(--faint)}
   <div class="ahead-copy">
     <span class="kicker">Before launch</span>
     <h2 class="serif">Be there the day couples arrive.</h2>
-    <p class="lede">Register now and your profile is ready from the first day, when couples start searching and the professionals already listed are the ones they find.</p>
   </div>
-  <ol class="timeline">
-    <li>
-      <span class="dot" aria-hidden="true"></span>
-      <h3 class="serif">Now</h3>
-      <p class="body">We build your profile from your details, at no cost.</p>
-    </li>
-    <li>
-      <span class="dot" aria-hidden="true"></span>
-      <h3 class="serif">Launch day</h3>
-      <p class="body">Couples search the UK site and find you in the results.</p>
-    </li>
-    <li>
-      <span class="dot" aria-hidden="true"></span>
-      <h3 class="serif">First season</h3>
-      <p class="body">You keep priority placement in your county.</p>
-    </li>
-  </ol>
+
+  <div class="tl">
+    <span class="tl-line" aria-hidden="true"></span>
+    <ol class="timeline">
+      <li>
+        <span class="dot" aria-hidden="true"></span>
+        <h3 class="serif">Now</h3>
+        <p class="body">We build your profile from the details you send, at no cost.</p>
+      </li>
+      <li>
+        <span class="dot" aria-hidden="true"></span>
+        <h3 class="serif">Launch day</h3>
+        <p class="body">Couples search the UK site and find you in the results from the first day.</p>
+      </li>
+      <li>
+        <span class="dot" aria-hidden="true"></span>
+        <h3 class="serif">First season</h3>
+        <p class="body">You keep priority placement in your county through the season.</p>
+      </li>
+    </ol>
+  </div>
+
+  <div class="ahead-act">
+    <a class="cta" href="#signup" data-ga-cta="launch">
+      Register your interest
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <p class="note">Takes a minute. Free to list, and the first three months are free on a paid plan.</p>
+  </div>
 </section>
 
 <!-- ═══ Questions ════════════════════════════════════════ -->
