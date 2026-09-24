@@ -86,14 +86,16 @@ the form script), or Meta counts every signup twice.
 Both pages report to the GA4 property **Weddings UK** (`G-RSM9TPGFJ1`), which is
 separate from the `.gr` site's property. Local testing reports there too, with
 hostname `localhost`, so filter on `hostName = theweddingexperts.uk` when you
-read the numbers. Every event on `/v2/` also carries `page_variant: 'v2'`.
+read the numbers. Every event on `/v2/` also carries `page_variant: 'v2'`, and
+every event on `/v3/` carries `page_variant: 'v3'`.
 
 | GA4 event | When | Parameters |
 |---|---|---|
 | `page_view` | Page load | |
 | `scroll_25`, `scroll_50`, `scroll_75` | The bottom of the screen passes that share of the page, once each per page load | `percent_scrolled` |
 | `scroll` | Same at 90%. Sent by GA4 enhanced measurement, not the page | `percent_scrolled` |
-| `cta_click` | Any button that jumps to the signup form | `cta_location` |
+| `cta_click` | Any button that jumps to the signup form | `cta_location`; on the v3 hero also `category` (`(none)` if not picked) |
+| `hero_category` | v3 only: a category is picked in the hero, which fills it in on the form | `category` |
 | `form_view` | The signup form reaches the top 70% of the screen | `form_id` |
 | `form_field_focus` | First tap or tab into each field, before typing | `form_field` (`name`, `email`, `category`) |
 | `form_start` | First keystroke in the form | `form_id` |
