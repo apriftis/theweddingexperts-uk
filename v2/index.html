@@ -831,7 +831,7 @@ footer .fine{font-size:.8rem; color:var(--faint)}
 (function(){
   /* Address that receives signups. FormSubmit emails a one-time activation
      link here on the very first submission; nothing is delivered until it is clicked. */
-  var ENDPOINT = 'https://formsubmit.co/ajax/admin@theweddingexperts.gr';
+  var ENDPOINT = 'https://formsubmit.co/ajax/info@theweddingexperts.uk';
 
   var form  = document.getElementById('signup-form');
   var btn   = document.getElementById('submit');
@@ -919,7 +919,11 @@ footer .fine{font-size:.8rem; color:var(--faint)}
       body: JSON.stringify(payload)
     })
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
-    .then(function(){
+    .then(function(d){
+      /* FormSubmit answers 200 with success "false" when it has not delivered,
+         e.g. before the address is activated. Treat that as a failure, so the
+         visitor can retry and no Lead is counted for an email that never arrived. */
+      if (d && String(d.success) === 'false') throw new Error('rejected');
       var category = document.getElementById('category').value;
       gtag('event', 'generate_lead', { category: category, page_variant: 'v2' });
       /* Advanced matching: re-init with the email so Meta can match the Lead
@@ -933,8 +937,8 @@ footer .fine{font-size:.8rem; color:var(--faint)}
       ok.classList.add('on');
       ok.scrollIntoView({ behavior:'smooth', block:'center' });
     })
-    .catch(function(){
-      gtag('event', 'form_error', { error_reason: 'network', page_variant: 'v2' });
+    .catch(function(err){
+      gtag('event', 'form_error', { error_reason: err && err.message === 'rejected' ? 'rejected' : 'network', page_variant: 'v2' });
       busy(false);
       bad.classList.add('on');
     });

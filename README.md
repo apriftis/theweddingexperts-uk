@@ -16,17 +16,21 @@ dependencies. Served by GitHub Pages straight from `main`.
 
 ## Before you go live
 
-**1. Activate the form.** Signups go to `admin@theweddingexperts.gr`, set in
-`index.html`:
+**1. Activate the form.** Signups go to `info@theweddingexperts.uk`, set in
+`index.html` and `v2/index.html`:
 
 ```js
-var ENDPOINT = 'https://formsubmit.co/ajax/admin@theweddingexperts.gr';
+var ENDPOINT = 'https://formsubmit.co/ajax/info@theweddingexperts.uk';
 ```
 
-FormSubmit needs no account, but it does need activating once: the **first**
-submission sends a confirmation link to that mailbox, and nothing is delivered
-until someone clicks it. So make one test submission as soon as the page is
-live, click the link in the email, and confirm a second test arrives.
+FormSubmit needs no account, but each address needs activating once: the
+**first** submission sends a confirmation link to that mailbox, and nothing is
+delivered until someone clicks it. So whenever you change the address, make one
+test submission, click the link in the email, and confirm a second test arrives
+before the change goes live. Until then FormSubmit answers with
+`success: "false"`; the form shows its error message instead of the thank-you
+and sends `form_error` with `error_reason: 'rejected'`, so no Lead is counted
+for a signup that was never delivered.
 
 The address is not displayed anywhere on the page. It does appear in the page
 source, since a static form has to name its endpoint somewhere, but no contact
@@ -102,7 +106,7 @@ no `page_variant`.
 | `form_view` | The signup form reaches the top 70% of the screen | `form_id` |
 | `form_field_focus` | First tap or tab into each field, before typing | `form_field` (`name`, `email`, `category`) |
 | `form_start` | First keystroke in the form | `form_id` |
-| `form_error` | Validation failed or the network request failed | `error_reason` |
+| `form_error` | Validation failed, the network request failed, or FormSubmit did not deliver | `error_reason` (`validation`, `network`, `rejected`) |
 | `form_submit` | Form passed validation and is being sent | `form_id` |
 | `generate_lead` | Signup delivered | `category` |
 
