@@ -43,6 +43,20 @@
     });
   });
 
+  /* Reviews rail arrows: a port of ReviewsSection.tsx's scrollBy - nudges the track only, by
+     ~90% of its visible width, and is never disabled at the ends (the platform doesn't disable
+     them either). */
+  var reviewsTrack = document.querySelector('.listing-reviews__track');
+  if (reviewsTrack) {
+    var scrollReviews = function (direction) {
+      reviewsTrack.scrollBy({ left: direction * Math.round(reviewsTrack.clientWidth * 0.9), behavior: 'smooth' });
+    };
+    var reviewsPrev = document.querySelector('.listing-reviews__arrow--prev');
+    var reviewsNext = document.querySelector('.listing-reviews__arrow--next');
+    if (reviewsPrev) reviewsPrev.addEventListener('click', function () { scrollReviews(-1); });
+    if (reviewsNext) reviewsNext.addEventListener('click', function () { scrollReviews(1); });
+  }
+
   /* Phone-only sticky section tabs: a port of the platform's components/profile/ProfileSectionNav.tsx
      and lib/profileSectionNav.ts. Once the name/title block (section.details-description, the
      platform's triggerRef) has scrolled fully off the top, the bar is shown and body gets
@@ -55,7 +69,7 @@
   var TAP_LOCK_MS = 900; /* the spy ignores scroll positions this long after a tap */
   var SECTION_KEYS = {
     'listing-about': 'about', 'listing-faq': 'faq', 'listing-gallery': 'photos',
-    'listing-deals': 'deals', 'listing-reviews': 'reviews'
+    'listing-collections': 'collections', 'listing-deals': 'deals', 'listing-reviews': 'reviews'
   };
 
   /* lib/profileSectionNav.ts: the last section whose top has reached `offset`; at the very
