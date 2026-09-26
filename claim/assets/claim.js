@@ -8,26 +8,50 @@
   /* Platform links and buttons are inert: show what they will do instead. */
   var toast = document.getElementById('tw-toast');
   var toastTimer;
+  function showToast() {
+    toast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.hidden = true; }, 2600);
+  }
   document.addEventListener('click', function (ev) {
     var el = ev.target.closest('[data-inert]');
     if (!el) return;
     ev.preventDefault();
-    toast.hidden = false;
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toast.hidden = true; }, 2600);
+    showToast();
   });
+  /* The hero quote bar is a <form> on the platform; here nothing may submit (Enter in its date
+     field included), whatever the builder already did to its button. */
+  document.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    showToast();
+  }, true);
 
   /* Lightbox, as on the platform: Fancybox 6 bound to every [data-fancybox] anchor
-     (FancyboxWrapper.tsx), grouped by its value - "banner-gallery" for the photo header,
-     "professional-listing-gallery" for the Photos grid (ListingGalleryLightbox.tsx). */
+     (FancyboxWrapper.tsx), grouped by its value - "profile-hero-gallery" for the hero's hidden
+     anchors (ProfileHero.tsx), "professional-listing-gallery" for the Photos grid
+     (ListingGalleryLightbox.tsx). */
   var Fancybox = window.Fancybox;
   if (Fancybox) Fancybox.bind('[data-fancybox]', {});
 
-  /* "Show Photos" opens the banner gallery at its first photo (ProfessionalProfilePage.tsx). */
-  var showPhotos = document.querySelector('.gallery-slider .showphotos button');
-  if (showPhotos) showPhotos.addEventListener('click', function () {
-    var first = document.querySelector('[data-fancybox="banner-gallery"]');
-    if (first) first.click();
+  /* ProfileHero.tsx openGallery: the "All photos" pill and the invisible cover button both click
+     the first hero anchor, which opens the hero gallery at its first photo. */
+  document.querySelectorAll('.profile-hero__open, .profile-hero__pill:not(.profile-hero__pill--icon)')
+    .forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var first = document.querySelector('[data-fancybox="profile-hero-gallery"]');
+        if (first) first.click();
+      });
+    });
+
+  /* ProfessionalProfilePage.tsx's bio clamp: "Read more" drops .is-clamped, "Show less" puts it
+     back (listing:profileHero.readMore / readLess). */
+  var bioToggle = document.querySelector('.profile-bio__toggle');
+  var bio = document.querySelector('.profile-bio');
+  if (bioToggle && bio) bioToggle.addEventListener('click', function () {
+    var expanded = bioToggle.getAttribute('aria-expanded') !== 'true';
+    bio.classList.toggle('is-clamped', !expanded);
+    bioToggle.setAttribute('aria-expanded', String(expanded));
+    bioToggle.textContent = expanded ? 'Show less' : 'Read more';
   });
 
   /* Real-wedding cards link to a collection page on the platform; the preview has none, so each
@@ -58,8 +82,9 @@
   }
 
   /* Phone-only sticky section tabs: a port of the platform's components/profile/ProfileSectionNav.tsx
-     and lib/profileSectionNav.ts. Once the name/title block (section.details-description, the
-     platform's triggerRef) has scrolled fully off the top, the bar is shown and body gets
+     and lib/profileSectionNav.ts. Once the top section (section.profile-top - hero, quote bar and
+     action row - the editorial layout's triggerRef, detailsRef) has scrolled fully off the top,
+     the bar is shown and body gets
      has-profile-section-nav (which slides the site header away); the active pill follows the
      section being read. Scroll-position reads per animation frame rather than an
      IntersectionObserver, which never fires in a hidden browser pane. */
@@ -88,7 +113,7 @@
 
   var bar = document.querySelector('nav.profile-section-nav');
   var strip = bar && bar.querySelector('.profile-section-nav__strip');
-  var trigger = document.querySelector('section.details-description');
+  var trigger = document.querySelector('section.profile-top');
   var pills = bar ? Array.prototype.slice.call(bar.querySelectorAll('button[data-scroll-to]')) : [];
 
   if (bar && strip && trigger && pills.length) {
@@ -199,6 +224,48 @@
     window.addEventListener('resize', onScroll);
     if (mq.addEventListener) mq.addEventListener('change', onScroll);
     else if (mq.addListener) mq.addListener(onScroll);
+  }
+
+  /* Pinned phone contact bar: a port of components/leadCapture/MobileContactBar.tsx.
+     - body.has-mobile-contact-bar (set by the builder) pads the page by --mobile-contact-bar-h,
+       the bar's measured height, kept current with a ResizeObserver.
+     - Editorial layout (hideWhileVisibleRef = the hero quote bar's wrapper): the bar stays tucked
+       (slid down, aria-hidden, inert) while that wrapper is on screen (lib/mobileContactBar.ts
+       isOnScreen), and slides up once it has scrolled out of view; rAF-throttled rect reads on
+       scroll/resize, as the component does. */
+  var mobileBar = document.querySelector('.mobile-contact-bar');
+  var quoteWrap = document.querySelector('.profile-quote-bar-wrap');
+  if (mobileBar) {
+    var applyBarHeight = function () {
+      document.body.style.setProperty('--mobile-contact-bar-h', Math.ceil(mobileBar.offsetHeight) + 'px');
+    };
+    applyBarHeight();
+    if (window.ResizeObserver) new ResizeObserver(applyBarHeight).observe(mobileBar);
+
+    if (quoteWrap) {
+      var barFrame = 0;
+      var setTucked = function (tucked) {
+        mobileBar.classList.toggle('mobile-contact-bar--tucked', tucked);
+        if (tucked) {
+          mobileBar.setAttribute('aria-hidden', 'true');
+          mobileBar.setAttribute('inert', '');
+        } else {
+          mobileBar.removeAttribute('aria-hidden');
+          mobileBar.removeAttribute('inert');
+        }
+      };
+      var updateBar = function () {
+        barFrame = 0;
+        var r = quoteWrap.getBoundingClientRect();
+        setTucked(r.bottom >= 0 && r.top <= window.innerHeight);
+      };
+      var onBarScroll = function () {
+        if (!barFrame) barFrame = window.requestAnimationFrame(updateBar);
+      };
+      updateBar();
+      window.addEventListener('scroll', onBarScroll, { passive: true });
+      window.addEventListener('resize', onBarScroll);
+    }
   }
 
   /* FAQ: 4 shown, the 5th faded, the rest hidden, as on the platform. */
