@@ -2,8 +2,44 @@
   var ENDPOINT = 'https://formsubmit.co/ajax/info@theweddingexperts.uk';
   var cta = document.getElementById('tw-cta');
   var slug = cta ? cta.getAttribute('data-slug') : '';
-  function track(name) { if (window.gtag) window.gtag('event', name, { claim_slug: slug }); }
+  function track(name, extra) {
+    if (!window.gtag) return;
+    var params = { claim_slug: slug };
+    for (var k in extra) params[k] = extra[k];
+    window.gtag('event', name, params);
+  }
   track('claim_preview_view');
+
+  /* How far down the page people get: claim_scroll once per depth (25/50/75/90 % of the page), and
+     claim_section_view once per section when at least a third of it has been on screen. */
+  var depths = [25, 50, 75, 90];
+  var scrollQueued = false;
+  function checkDepth() {
+    scrollQueued = false;
+    var seen = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+    while (depths.length && seen >= depths[0]) track('claim_scroll', { percent_scrolled: depths.shift() });
+    if (!depths.length) window.removeEventListener('scroll', onScroll);
+  }
+  function onScroll() {
+    if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(checkDepth); }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  var SECTIONS = { 'listing-about': 'about', 'listing-gallery': 'photos', 'listing-collections': 'collections',
+    'listing-deals': 'offers', 'listing-faq': 'faq', 'listing-reviews': 'reviews', 'tw-claim': 'claim' };
+  if ('IntersectionObserver' in window) {
+    var sectionSeen = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        track('claim_section_view', { section: SECTIONS[en.target.id] });
+        sectionSeen.unobserve(en.target);
+      });
+    }, { threshold: 0.33 });
+    Object.keys(SECTIONS).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) sectionSeen.observe(el);
+    });
+  }
 
   /* Platform links and buttons are inert: show what they will do instead. */
   var toast = document.getElementById('tw-toast');
@@ -310,7 +346,7 @@
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(payload)
     })
-      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (r) { if (!r.ok) throw new Error('http_' + r.status); return r.json(); })
       .then(function (d) {
         /* FormSubmit can answer 200 with success "false" when it hasn't delivered. */
         if (d && String(d.success) === 'false') throw new Error('rejected');
@@ -320,7 +356,9 @@
         done.hidden = false;
         done.scrollIntoView({ behavior: 'smooth', block: 'center' });
       })
-      .catch(function () {
+      .catch(function (err) {
+        /* http_<status>, "rejected" (FormSubmit said success false) or the browser's network error. */
+        track('claim_failed', { error_reason: String((err && err.message) || err).slice(0, 100) });
         btn.disabled = false;
         fail("Sorry, that didn't send. Please try again, or email info@theweddingexperts.uk.");
       });
