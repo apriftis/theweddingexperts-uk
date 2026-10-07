@@ -329,10 +329,11 @@
   function fail(msg) { errorBox.textContent = msg; errorBox.hidden = false; }
 
   if (!btn) return;
-  btn.addEventListener('click', function () {
-    errorBox.hidden = true;
-    btn.disabled = true;
-    track('claim_click');
+  var mailto = 'mailto:info@theweddingexperts.uk?subject=' + encodeURIComponent('Claim: ' + venue) +
+    '&body=' + encodeURIComponent('Please keep our free listing for ' + venue + '.\n\nPage: ' + location.href + '\n');
+  var mailMode = false;
+
+  function send() {
     var payload = {
       _subject: 'Claim: ' + venue,
       _template: 'table',
@@ -340,7 +341,7 @@
       page: slug,
       message: venue + ' clicked "Claim my free listing" on their private preview.'
     };
-    fetch(ENDPOINT, {
+    return fetch(ENDPOINT, {
       method: 'POST',
       referrerPolicy: 'origin',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -350,6 +351,34 @@
       .then(function (d) {
         /* FormSubmit can answer 200 with success "false" when it hasn't delivered. */
         if (d && String(d.success) === 'false') throw new Error('rejected');
+      });
+  }
+
+  /* The reason goes into the event name as well: error_reason isn't a registered GA4 dimension, so
+     claim_failed_network / _rejected / _http are what the reports can actually show. */
+  function failKind(err) {
+    var m = String((err && err.message) || err);
+    return m === 'rejected' ? 'rejected' : (m.indexOf('http_') === 0 ? 'http' : 'network');
+  }
+
+  btn.addEventListener('click', function () {
+    if (mailMode) {
+      track('claim_mailto');
+      window.location.href = mailto;
+      return;
+    }
+    errorBox.hidden = true;
+    btn.disabled = true;
+    track('claim_click');
+    /* One automatic retry: most failures are a blocked or dropped request, not a refusal. If both
+       attempts fail, the button turns into a ready-written email, which gets past ad blockers and
+       office firewalls that block formsubmit.co. */
+    send()
+      .catch(function (err) {
+        track('claim_retry', { error_reason: String((err && err.message) || err).slice(0, 100) });
+        return new Promise(function (resolve) { setTimeout(resolve, 1200); }).then(send);
+      })
+      .then(function () {
         track('claim_sent');
         btn.hidden = true;
         unders.forEach(function (p) { p.hidden = true; });
@@ -357,10 +386,14 @@
         done.scrollIntoView({ behavior: 'smooth', block: 'center' });
       })
       .catch(function (err) {
-        /* http_<status>, "rejected" (FormSubmit said success false) or the browser's network error. */
+        var kind = failKind(err);
         track('claim_failed', { error_reason: String((err && err.message) || err).slice(0, 100) });
+        track('claim_failed_' + kind);
         btn.disabled = false;
-        fail("Sorry, that didn't send. Please try again, or email info@theweddingexperts.uk.");
+        mailMode = true;
+        btn.textContent = 'Email us to claim';
+        fail("Sorry, that didn't go through from this browser. Tap “Email us to claim” and send the " +
+          'ready-written email, or just reply to our email. Either way your page is kept.');
       });
   });
 })();
