@@ -1,0 +1,14 @@
+{
+  // The claim endpoint for the private claim previews: see src/index.js.
+  "name": "twe-uk-claim",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "theweddingexperts.uk/api/claim", "zone_name": "theweddingexperts.uk" }
+  ],
+  "kv_namespaces": [
+    { "binding": "CLAIMS", "id": "f5ec3fbbecb846ef8f2d0e50ef374ffa" }
+  ],
+  "observability": { "enabled": true }
+}
