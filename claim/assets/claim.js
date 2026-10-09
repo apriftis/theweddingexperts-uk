@@ -1,4 +1,5 @@
 (function () {
+  var CLAIM_API = '/api/claim';
   var ENDPOINT = 'https://formsubmit.co/ajax/info@theweddingexperts.uk';
   var cta = document.getElementById('tw-cta');
   var slug = cta ? cta.getAttribute('data-slug') : '';
@@ -333,7 +334,19 @@
     '&body=' + encodeURIComponent('Please keep our free listing for ' + venue + '.\n\nPage: ' + location.href + '\n');
   var mailMode = false;
 
-  function send() {
+  /* Our own endpoint (workers/claim) records the claim: it is on this site's domain, so blockers that
+     stop formsubmit.co can't stop it. FormSubmit then emails it to info@ as before. */
+  function record() {
+    return fetch(CLAIM_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ venue: venue, page: slug })
+    })
+      .then(function (r) { if (!r.ok) throw new Error('http_' + r.status); return r.json(); })
+      .then(function (d) { if (!d || d.ok !== true) throw new Error('rejected'); });
+  }
+
+  function email() {
     var payload = {
       _subject: 'Claim: ' + venue,
       _template: 'table',
@@ -354,6 +367,31 @@
       });
   }
 
+  function reason(err) { return String((err && err.message) || err).slice(0, 100); }
+
+  /* With one retry each; the email after a 1.2s pause, as most of its failures are a dropped request. */
+  function retry(fn, label) {
+    return fn().catch(function (err) {
+      track('claim_retry', { error_reason: label + ':' + reason(err) });
+      return new Promise(function (resolve) { setTimeout(resolve, 1200); }).then(fn);
+    });
+  }
+
+  /* The claim counts once either the record or the email has gone through: a recorded claim whose email
+     is blocked is still picked up from the record. claim_recorded / claim_emailed (and their _failed
+     twins) show how often each path works. */
+  function send() {
+    var recorded = retry(record, 'record').then(
+      function () { track('claim_recorded'); return true; },
+      function (err) { track('claim_record_failed', { error_reason: reason(err) }); return false; });
+    var emailed = retry(email, 'email').then(
+      function () { track('claim_emailed'); return true; },
+      function (err) { track('claim_email_failed', { error_reason: reason(err) }); return err; });
+    return Promise.all([recorded, emailed]).then(function (r) {
+      if (r[0] !== true && r[1] !== true) throw r[1];
+    });
+  }
+
   /* The reason goes into the event name as well: error_reason isn't a registered GA4 dimension, so
      claim_failed_network / _rejected / _http are what the reports can actually show. */
   function failKind(err) {
@@ -370,14 +408,9 @@
     errorBox.hidden = true;
     btn.disabled = true;
     track('claim_click');
-    /* One automatic retry: most failures are a blocked or dropped request, not a refusal. If both
-       attempts fail, the button turns into a ready-written email, which gets past ad blockers and
-       office firewalls that block formsubmit.co. */
+    /* If neither the record nor the email gets through, even after a retry each, the button turns into
+       a ready-written email. */
     send()
-      .catch(function (err) {
-        track('claim_retry', { error_reason: String((err && err.message) || err).slice(0, 100) });
-        return new Promise(function (resolve) { setTimeout(resolve, 1200); }).then(send);
-      })
       .then(function () {
         track('claim_sent');
         btn.hidden = true;
