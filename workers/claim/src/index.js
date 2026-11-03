@@ -9,7 +9,12 @@
 
    Each claim is one key in the CLAIMS KV namespace, "<ISO time>_<page slug>". Read them with
    hitched-vendors/cold-emails/claims.py, or:  npx wrangler kv key list --binding CLAIMS --remote
+
+   A claim is only stored for a page that really exists: the Worker fetches /claim/<slug>/ and checks
+   for that page's claim block (src/page.js), not just a 200. Tests: npm test (in workers/claim).
 */
+
+import { isClaimPage } from './page.js';
 
 const SITE = 'https://theweddingexperts.uk';
 const SLUG = /^[a-z0-9][a-z0-9-]{2,90}$/;
@@ -22,8 +27,12 @@ function json(body, status = 200) {
 }
 
 async function pageExists(slug) {
-  const r = await fetch(`${SITE}/claim/${slug}/`, { method: 'HEAD', cf: { cacheTtl: 300 } });
-  return r.ok;
+  const r = await fetch(`${SITE}/claim/${slug}/`, { cf: { cacheTtl: 300 } });
+  if (!r.ok) {
+    if (r.body) await r.body.cancel();
+    return false;
+  }
+  return isClaimPage(await r.text(), slug);
 }
 
 export default {
